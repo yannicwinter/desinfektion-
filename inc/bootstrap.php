@@ -186,28 +186,40 @@ function course_url(array $c): string
 /** Hochgeladenes Bild zu einem Bild-Platz (z. B. "home"), sonst null. */
 function slot_image(string $slot): ?string
 {
+    // 1. im Admin hochgeladenes Bild, 2. mitgeliefertes Platzhalter-Foto
     foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
         $f = UPLOAD_DIR . '/' . $slot . '.' . $ext;
         if (is_file($f)) {
             return url('uploads/' . $slot . '.' . $ext) . '?v=' . filemtime($f);
         }
     }
-    return null;
+    $d = ROOT . '/assets/img/fotos/' . $slot . '.jpg';
+    return is_file($d) ? asset('img/fotos/' . $slot . '.jpg') : null;
 }
 
-const IMAGE_SLOTS = [
-    'home' => ['Startseite – Unternehmen', 'Ausbilderin zeigt einer kleinen Gruppe in einem hellen Schulungsraum die Herzdruckmassage an einer Übungspuppe, natürliches Licht, dokumentarischer Fotostil, dezente rote Akzente, keine Logos, 4:3'],
-    'erste-hilfe' => ['Seite Erste Hilfe', 'Nahaufnahme: Hände legen einen Druckverband am Unterarm an, heller neutraler Hintergrund, weiche Schärfentiefe, professionelle Fotografie, 16:9'],
-    'brandschutz' => ['Seite Brandschutz', 'Mitarbeiterin in Arbeitskleidung löscht unter Anleitung eine kleine Übungsflamme mit einem Feuerlöscher, Außenbereich, Tageslicht, realistische Fotografie, keine Logos, 4:3'],
-    'unternehmen' => ['Seite Unternehmen', 'Sicherheitsfachkraft bespricht mit zwei Mitarbeitenden einen Flucht- und Rettungsplan in einer modernen Werkhalle, realistisch, ruhige Farben, 4:3'],
-];
+/** Bildplätze für den Admin: feste Seitenbilder + ein Bild je Kurs. */
+function image_slots(): array
+{
+    $slots = [
+        'hero' => 'Startseite – großes Bild oben',
+        'home' => 'Startseite – Arbeitssicherheit',
+        'erste-hilfe' => 'Seite Erste Hilfe',
+        'brandschutz' => 'Seite Brandschutz',
+        'unternehmen' => 'Seite Arbeitssicherheit',
+    ];
+    foreach (content()['courses'] ?? [] as $c) {
+        $slots['kurs-' . $c['slug']] = 'Kurs: ' . $c['title'];
+    }
+    return $slots;
+}
 
 function nav_items(): array
 {
     return [
+        '' => 'Start',
         'erste-hilfe' => 'Erste Hilfe',
         'brandschutz' => 'Brandschutz',
-        'unternehmen' => 'Unternehmen',
+        'arbeitssicherheit' => 'Arbeitssicherheit',
         'faq' => 'FAQ',
         'kontakt' => 'Kontakt',
     ];
@@ -288,6 +300,7 @@ function icon(string $name, string $class = 'i'): string
         'pin' => '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
         'clock' => '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
         'check' => '<path d="M20 6 9 17l-5-5"/>',
+        'home' => '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
         'shield' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',
         'hand' => '<path d="M18 11V6a2 2 0 0 0-4 0v5M14 10V4a2 2 0 0 0-4 0v6M10 10.5V6a2 2 0 0 0-4 0v8a8 8 0 0 0 16 0v-3a2 2 0 0 0-4 0"/>',
         'building' => '<path d="M3 21V8l6-4v17M9 21V10l6-3v14M15 21V11l6 2v8M2 21h20"/>',

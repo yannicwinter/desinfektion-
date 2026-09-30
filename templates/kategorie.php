@@ -21,6 +21,19 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
 <section class="section section--tight">
   <div class="wrap layout-aside">
     <div class="layout-aside__main">
+      <?php if (lines($P('vergleich'))): ?>
+      <div class="compare reveal">
+        <h2 class="group-title">Welcher Kurs passt?</h2>
+        <div class="compare__scroll"><table>
+          <thead><tr><?php foreach (array_map('trim', explode('|', lines($P('vergleich'))[0])) as $th): ?><th scope="col"><?= e($th) ?></th><?php endforeach; ?></tr></thead>
+          <tbody>
+          <?php foreach (array_slice(lines($P('vergleich')), 1) as $line): $cells = array_map('trim', explode('|', $line)); ?>
+            <tr><th scope="row"><?= e(array_shift($cells)) ?></th><?php foreach ($cells as $cell): $k = mb_strtolower($cell); ?><td class="<?= $k === 'ja' ? 'yes' : ($k === 'nein' ? 'no' : 'part') ?>"><?= $k === 'ja' ? icon('check') . '<span class="sr-only">ja</span>' : ($k === 'nein' ? '<span aria-hidden="true">–</span><span class="sr-only">nein</span>' : e($cell)) ?></td><?php endforeach; ?></tr>
+          <?php endforeach; ?>
+          </tbody>
+        </table></div>
+      </div>
+      <?php endif; ?>
       <?php foreach ($groups as $g => $items): ?>
       <h2 class="group-title reveal"><?= e($g) ?></h2>
       <div class="acc reveal">
@@ -49,11 +62,14 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
                 <ul class="checks checks--sm"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
                 <?php endif; ?>
               </div>
-              <?php if ($facts): ?>
-              <dl class="facts">
-                <?php foreach ($facts as [$k, $v]): ?><div><dt><?= e($k) ?></dt><dd><?= e($v) ?></dd></div><?php endforeach; ?>
-              </dl>
-              <?php endif; ?>
+              <div class="acc__side">
+                <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="acc__img" src="<?= e($img) ?>" alt="<?= e($c['title']) ?>" loading="lazy" decoding="async" width="1400" height="788"><?php endif; ?>
+                <?php if ($facts): ?>
+                <dl class="facts">
+                  <?php foreach ($facts as [$k, $v]): ?><div><dt><?= e($k) ?></dt><dd><?= e($v) ?></dd></div><?php endforeach; ?>
+                </dl>
+                <?php endif; ?>
+              </div>
             </div>
             <?php if (!empty($c['hiorg_id'])): ?>
             <div class="acc__dates" data-dates="<?= url('api/termine/' . $c['slug']) ?>?limit=3">

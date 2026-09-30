@@ -8,6 +8,7 @@ declare(strict_types=1);
 require __DIR__ . '/inc/bootstrap.php';
 require __DIR__ . '/inc/hiorg.php';
 require __DIR__ . '/inc/layout.php';
+require __DIR__ . '/inc/instagram.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rawurldecode(substr($path, strlen(base_path())));
@@ -25,6 +26,7 @@ $legacy = [
     'kurs-ersthelfer-betrieb' => 'erste-hilfe#erste-hilfe-ausbildung',
     'kurs-erste-hilfe-kind' => 'erste-hilfe#erste-hilfe-am-kind',
     'kurs-brandschutzhelfer' => 'brandschutz#brandschutzhelfer',
+    'unternehmen' => 'arbeitssicherheit',
 ];
 if (isset($legacy[$path])) {
     redirect($legacy[$path], 301);
@@ -44,7 +46,13 @@ switch ($route) {
         require __DIR__ . '/templates/kategorie.php';
         break;
 
-    case 'unternehmen':
+    case 'arbeitssicherheit':
+        if (count($parts) > 1) {
+            not_found();
+        }
+        require __DIR__ . '/templates/unternehmen.php';
+        break;
+
     case 'faq':
     case 'kontakt':
         if (count($parts) > 1) {

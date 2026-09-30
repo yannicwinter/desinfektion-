@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/xml; charset=utf-8');
-$urls = [['/', '1.0'], ['erste-hilfe', '0.9'], ['brandschutz', '0.9'], ['unternehmen', '0.8'], ['termine', '0.9']];
+$urls = [['/', '1.0'], ['erste-hilfe', '0.9'], ['brandschutz', '0.9'], ['arbeitssicherheit', '0.8'], ['termine', '0.9']];
 foreach (bookable_courses() as $c) {
     $urls[] = ['termine/' . $c['slug'], '0.8'];
 }

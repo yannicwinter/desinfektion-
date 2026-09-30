@@ -18,7 +18,6 @@ layout_start([
 ]);
 ?>
 <section class="hero">
-  <?= hero_art(true) ?>
   <div class="wrap hero__grid">
     <div class="hero__text">
       <span class="eyebrow reveal"><?= e($P('hero_eyebrow')) ?></span>
@@ -26,9 +25,12 @@ layout_start([
       <p class="lead reveal"><?= e($P('hero_lead')) ?></p>
       <div class="btn-row reveal">
         <a class="btn btn--red" href="<?= url('termine') ?>"><?= icon('calendar') ?> Kurstermine</a>
-        <a class="btn btn--ghost" href="<?= url('unternehmen') ?>">Für Unternehmen</a>
+        <a class="btn btn--ghost" href="<?= url('arbeitssicherheit') ?>">Für Unternehmen</a>
       </div>
     </div>
+    <?php if ($hero = slot_image('hero')): ?>
+    <figure class="hero__media"><img src="<?= e($hero) ?>" alt="Erste-Hilfe- und Brandschutz-Training beim DRK" width="2000" height="1125" fetchpriority="high"></figure>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -37,7 +39,6 @@ layout_start([
     <form class="finder reveal" action="<?= url('termine') ?>" method="get" data-finder>
       <div class="finder__head">
         <h2 class="h5">Kurstermin finden</h2>
-        <p class="finder__note"><?= icon('phone') ?> Lieber persönlich? <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a></p>
       </div>
       <label class="field">
         <span class="sr-only">Welcher Kurs?</span>
@@ -71,7 +72,8 @@ layout_start([
     </div>
     <div class="cards">
       <?php foreach ($featured as $c): ?>
-      <article class="card reveal">
+      <article class="card card--img reveal">
+        <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="card__img" src="<?= e($img) ?>" alt="" loading="lazy" decoding="async" width="1400" height="788"><?php endif; ?>
         <span class="card__tag"><?= $c['category'] === 'brandschutz' ? 'Brandschutz' : e($c['group']) ?></span>
         <h3 class="h4"><a href="<?= course_url($c) ?>" class="card__link"><?= e($c['title']) ?></a></h3>
         <p><?= e($c['teaser']) ?></p>
@@ -100,7 +102,7 @@ layout_start([
       <ul class="checks">
         <?php foreach (lines($P('firma_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?>
       </ul>
-      <div class="btn-row"><a class="btn btn--dark" href="<?= url('unternehmen') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a></div>
+      <div class="btn-row"><a class="btn btn--dark" href="<?= url('arbeitssicherheit') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a></div>
     </div>
   </div>
 </section>
@@ -118,6 +120,24 @@ layout_start([
       <details class="acc__item"><summary class="acc__sum"><span class="acc__title"><?= e($f['q']) ?></span><?= icon('chevron', 'i acc__chev') ?></summary><div class="acc__body"><div class="prose"><?= rich($f['a']) ?></div></div></details>
       <?php endforeach; ?>
     </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
+<section class="section section--tight insta">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div><span class="eyebrow">Instagram</span><h2 class="h2"><?= e($P('insta_title')) ?></h2></div>
+      <a class="link-arrow" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">@drk_kreisverband_verden folgen <?= icon('arrow') ?></a>
+    </div>
+    <?php if ($insta): ?>
+    <ul class="insta__row">
+      <?php foreach ($insta as $post): ?>
+      <li><a href="<?= e($post['link']) ?>" target="_blank" rel="noopener" title="<?= e($post['caption']) ?>"><img src="<?= e($post['img']) ?>" alt="<?= e($post['caption'] ?: 'Instagram-Beitrag DRK Verden') ?>" loading="lazy" decoding="async" width="600" height="600"></a></li>
+      <?php endforeach; ?>
+    </ul>
+    <?php endif; ?>
   </div>
 </section>
 <?php endif; ?>

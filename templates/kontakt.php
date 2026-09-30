@@ -37,10 +37,18 @@ $map = 'https://www.openstreetmap.org/search?query=' . rawurlencode(site('street
     <div class="section-head"><div><span class="eyebrow">Ansprechpersonen</span><h2 class="h2">Direkt zur richtigen Person</h2></div></div>
     <div class="people">
       <?php foreach (content()['contacts'] ?? [] as $p):
-          $ini = implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2))); ?>
+          $ini = implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2)));
+          $tel = preg_replace('/[^\d+]/', '', preg_replace('/\(.*\)/', '', (string) ($p['phone'] ?? ''))); ?>
       <div class="person reveal">
-        <span class="person__ini"><?= e($ini) ?></span>
-        <div><span class="person__role"><?= e($p['role']) ?></span><strong><?= e($p['name']) ?></strong><a href="mailto:<?= e($p['email']) ?>"><?= e($p['email']) ?></a></div>
+        <?php if (!empty($p['photo']) && is_file(ROOT . '/' . ltrim($p['photo'], '/'))): ?>
+        <img class="person__img" src="<?= e(url($p['photo'])) ?>" alt="<?= e($p['name']) ?>" loading="lazy" width="480" height="480">
+        <?php else: ?><span class="person__ini"><?= e($ini) ?></span><?php endif; ?>
+        <div>
+          <span class="person__role"><?= e($p['role']) ?></span>
+          <strong><?= e($p['name']) ?></strong>
+          <a href="mailto:<?= e($p['email']) ?>"><?= e($p['email']) ?></a>
+          <?php if (!empty($p['phone'])): ?><a class="person__tel" href="tel:<?= e(str_starts_with($tel, '0') ? '+49' . substr($tel, 1) : $tel) ?>"><?= e($p['phone']) ?></a><?php endif; ?>
+        </div>
       </div>
       <?php endforeach; ?>
     </div>

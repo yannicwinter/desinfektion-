@@ -60,14 +60,16 @@ function layout_start(array $meta): void
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header class="header">
   <div class="wrap header__top">
-    <a class="logo" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> – Startseite">
-      <?= cross_svg('logo__cross') ?>
-      <span class="logo__text"><strong>Deutsches Rotes Kreuz</strong><span><?= e(site('org')) ?></span></span>
+    <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
+      <picture>
+        <source media="(max-width: 1280px)" srcset="<?= asset('img/logo-drk-mittelweser-kurz.png') ?>" width="752" height="105">
+        <img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V.">
+      </picture>
     </a>
     <nav class="nav" aria-label="Hauptnavigation">
       <ul class="nav__list">
         <?php foreach (nav_items() as $slug => $label): ?>
-        <li><a href="<?= url($slug) ?>"<?= $active === $slug ? ' aria-current="page"' : '' ?>><?= nav_label($label) ?></a></li>
+        <li><a href="<?= url($slug === '' ? '/' : $slug) ?>"<?= $active === $slug || ($slug === '' && $active === '') ? ' aria-current="page"' : '' ?><?= $slug === '' ? ' class="nav__home" aria-label="Startseite"' : '' ?>><?= $slug === '' ? icon('home') . '<span>' . e($label) . '</span>' : nav_label($label) ?></a></li>
         <?php endforeach; ?>
       </ul>
     </nav>
@@ -89,8 +91,8 @@ function layout_end(): void
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="logo logo--light" href="<?= url('/') ?>" aria-label="Startseite"><?= cross_svg('logo__cross') ?><span class="logo__text"><strong>Deutsches Rotes Kreuz</strong><span><?= e(site('org')) ?></span></span></a>
-        <p><?= e(site('name')) ?><br><?= e(site('street')) ?> · <?= e(site('zip')) ?> <?= e(site('city')) ?></p>
+        <a class="brand brand--footer" href="<?= url('/') ?>" aria-label="Startseite"><img src="<?= asset('img/logo-drk-mittelweser-weiss.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V." loading="lazy"></a>
+        <p><?= e(site('name')) ?> · <?= e(site('org')) ?><br><?= e(site('street')) ?> · <?= e(site('zip')) ?> <?= e(site('city')) ?></p>
       </div>
       <div>
         <h2 class="footer__h">Kurse</h2>
@@ -105,7 +107,7 @@ function layout_end(): void
         <ul>
           <li><a href="<?= url('erste-hilfe') ?>">Erste Hilfe</a></li>
           <li><a href="<?= url('brandschutz') ?>">Brandschutz</a></li>
-          <li><a href="<?= url('unternehmen') ?>">Für Unternehmen</a></li>
+          <li><a href="<?= url('arbeitssicherheit') ?>">Für Unternehmen</a></li>
           <li><a href="<?= url('termine') ?>">Alle Termine</a></li>
           <li><a href="<?= url('faq') ?>">Häufige Fragen</a></li>
         </ul>
@@ -135,7 +137,7 @@ function layout_end(): void
 /** Auf sehr schmalen Displays kürzere Menübegriffe, damit alles nebeneinander passt. */
 function nav_label(string $label): string
 {
-    $short = ['Unternehmen' => 'Firmen'][$label] ?? null;
+    $short = ['Arbeitssicherheit' => 'Betriebe'][$label] ?? null;
     return $short ? '<span class="nav__long">' . e($label) . '</span><span class="nav__short">' . e($short) . '</span>' : e($label);
 }
 
@@ -202,7 +204,6 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
 {
     ?>
 <section class="phead">
-  <?= hero_art(false) ?>
   <div class="wrap phead__inner">
     <?php if ($crumbs): ?>
     <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><?php foreach ($crumbs as [$n, $p]): ?><span aria-hidden="true">/</span><a href="<?= url($p) ?>"><?= e($n) ?></a><?php endforeach; ?></nav>
@@ -214,16 +215,6 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
   </div>
 </section>
 <?php
-}
-
-/** Rotes Kreuz als ruhiges Hintergrundmotiv (einmaliges sanftes Einblenden, keine Dauer-Animation). */
-function hero_art(bool $big = true): string
-{
-    $cross = 'M15 2h14v13h13v14H29v13H15V29H2V15h13z';
-    return '<div class="art' . ($big ? ' art--big' : '') . '" aria-hidden="true"><div class="art__grid"></div>'
-        . '<svg class="art__cross" viewBox="-2 -2 48 48">'
-        . '<defs><linearGradient id="crossfill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FDE9E9"/><stop offset="1" stop-color="#FAD9DA"/></linearGradient></defs>'
-        . '<path class="art__fill" d="' . $cross . '"/><path class="art__line" d="' . $cross . '"/></svg></div>';
 }
 
 /** Bild-Platz: hochgeladenes Bild oder gestaltete Fläche mit Symbol. */

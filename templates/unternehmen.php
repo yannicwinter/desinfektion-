@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../inc/form.php';
-[$err, $old] = form_handle('unternehmen');
+[$err, $old] = form_handle('arbeitssicherheit');
 $P = fn($k) => page('unternehmen', $k);
 $services = [
     ['users', 'Ersthelfer ausbilden', 'Aus- und Fortbildung nach DGUV – Abrechnung über die BG möglich.', 'erste-hilfe#erste-hilfe-ausbildung'],
@@ -11,9 +11,9 @@ $services = [
 layout_start([
     'title' => $P('seo_title'),
     'description' => $P('seo_description'),
-    'path' => 'unternehmen',
-    'active' => 'unternehmen',
-    'breadcrumb' => [['Für Unternehmen', 'unternehmen']],
+    'path' => 'arbeitssicherheit',
+    'active' => 'arbeitssicherheit',
+    'breadcrumb' => [['Arbeitssicherheit', 'arbeitssicherheit']],
     'schema' => [[
         '@context' => 'https://schema.org',
         '@type' => 'Service',
@@ -24,7 +24,7 @@ layout_start([
         'areaServed' => 'Landkreis Verden',
     ]],
 ]);
-page_head($P('eyebrow'), $P('title'), $P('lead'), [['Für Unternehmen', 'unternehmen']],
+page_head($P('eyebrow'), $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit']],
     '<div class="btn-row"><a class="btn btn--red" href="#formular">Unverbindlich anfragen</a><a class="btn btn--ghost" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . ' ' . e(site('phone')) . '</a></div>');
 ?>
 <section class="section section--tight">
@@ -47,6 +47,9 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [['Für Unternehmen', 'unterne
       <h2 class="h2"><?= e($P('asi_title')) ?></h2>
       <p class="lead"><?= e($P('asi_text')) ?></p>
       <ul class="checks checks--2"><?php foreach (lines($P('asi_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
+      <?php if ($ben = lines($P('asi_benefits'))): ?>
+      <div class="needs"><strong>Ihr Nutzen:</strong><?php foreach ($ben as $b): ?><span class="pill pill--red"><?= e($b) ?></span><?php endforeach; ?></div>
+      <?php endif; ?>
       <div class="btn-row"><a class="btn btn--dark" href="#formular">Kostenlose Erstberatung</a></div>
     </div>
     <div class="split__media reveal"><?= image_slot('unternehmen', 'Sicherheitsfachkraft bei einer Betriebsbegehung', 'building') ?></div>

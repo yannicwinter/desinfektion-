@@ -39,6 +39,9 @@ const FIELD_LABELS = [
     'inhouse_needs' => ['Inhouse – Voraussetzungen', 'Ein Punkt pro Zeile.'],
     'form_title' => ['Formular – Überschrift', ''], 'form_text' => ['Formular – Text', ''],
     'hint' => ['Hinweis unter der Terminliste', ''], 'orte' => ['Kursorte', 'Ein Ort pro Zeile.'],
+    'vergleich' => ['Vergleichstabelle „Welcher Kurs passt?“', 'Erste Zeile = Überschriften. Spalten mit | trennen. „ja“/„nein“ werden als Symbol angezeigt.'],
+    'asi_benefits' => ['Arbeitssicherheit – Ihr Nutzen', 'Ein Punkt pro Zeile.'],
+    'insta_title' => ['Instagram – Überschrift', 'Der Feed erscheint, sobald unter „Allgemein“ ein Instagram-Token eingetragen ist.'],
     'body' => ['Seiteninhalt', 'Leerzeile = neuer Absatz · **fett** · [Linktext](https://…) · Zeilen mit „- “ = Liste'],
 ];
 
@@ -46,7 +49,8 @@ const SITE_LABELS = [
     'name' => 'Name der Website', 'org' => 'Träger', 'url' => 'Adresse der Website (für Google, ohne / am Ende)',
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
-    'instagram' => 'Instagram-Link', 'hiorg_ov' => 'HiOrg-Kürzel (ov)', 'hiorg_cache_minutes' => 'Termine zwischenspeichern (Minuten)',
+    'instagram' => 'Instagram-Link',
+    'instagram_token' => 'Instagram-Zugangstoken (für den Feed auf der Startseite, wird automatisch verlängert)', 'hiorg_ov' => 'HiOrg-Kürzel (ov)', 'hiorg_cache_minutes' => 'Termine zwischenspeichern (Minuten)',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
 ];
@@ -460,14 +464,14 @@ function admin_faq(): void
 
 function admin_contacts(): void
 {
-    admin_rows('contacts', 'Ansprechpersonen', 'kontakte', ['name' => ['Name', false], 'role' => ['Aufgabe', false], 'email' => ['E-Mail', false]]);
+    admin_rows('contacts', 'Ansprechpersonen', 'kontakte', ['name' => ['Name', false], 'role' => ['Aufgabe', false], 'email' => ['E-Mail', false], 'phone' => ['Telefon', false], 'photo' => ['Foto (Pfad, z. B. assets/img/team/jan-wille.jpg)', false]]);
 }
 
 function admin_images(): void
 {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $slot = (string) ($_POST['slot'] ?? '');
-        if (!isset(IMAGE_SLOTS[$slot])) {
+        if (!isset(image_slots()[$slot])) {
             redirect('admin/bilder');
         }
         if (!is_dir(UPLOAD_DIR)) {
@@ -503,14 +507,15 @@ function admin_images(): void
         redirect('admin/bilder');
     }
     admin_start('Bilder', 'bilder');
-    echo '<p class="muted">Bilder werden automatisch auf max. 1600 px verkleinert. Ohne Bild erscheint eine gestaltete Fläche mit Symbol. Unter jedem Platz steht ein Vorschlag für ein KI-Bild (z. B. für Adobe Firefly oder Midjourney).</p><div class="cards cards--2">';
-    foreach (IMAGE_SLOTS as $slot => [$label, $prompt]) {
+    echo '<p class="muted">Bilder werden automatisch auf max. 1600 px verkleinert. Ohne Bild erscheint eine gestaltete Fläche mit Symbol. Ohne eigenes Bild wird das mitgelieferte Platzhalter-Foto gezeigt. „Bild entfernen“ löscht nur Ihr hochgeladenes Bild.</p><div class="cards cards--2">';
+    foreach (image_slots() as $slot => $label) {
         $src = slot_image($slot);
+        $own = (bool) glob(UPLOAD_DIR . '/' . $slot . '.*');
         echo '<div class="panel stack"><h2 class="h5">' . e($label) . '</h2>';
         echo $src ? '<img class="admin__thumb" src="' . e($src) . '" alt="">' : '<div class="admin__thumb admin__thumb--empty">Kein Bild</div>';
-        echo '<details class="small"><summary>KI-Bildvorschlag</summary><p class="muted">' . e($prompt) . '</p></details>';
+        echo '<p class="muted small">' . ($own ? 'Eigenes Bild' : ($src ? 'Platzhalter-Foto' : 'Ohne Bild')) . '</p>';
         echo '<form method="post" enctype="multipart/form-data" class="btn-row">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><input type="file" name="img" accept="image/jpeg,image/png,image/webp" required><button class="btn btn--red btn--sm">Hochladen</button></form>';
-        if ($src) {
+        if ($own) {
             echo '<form method="post">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><button class="btn btn--ghost btn--sm" name="delete" value="1">Bild entfernen</button></form>';
         }
         echo '</div>';
