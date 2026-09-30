@@ -124,7 +124,7 @@ layout_start([
 </section>
 <?php endif; ?>
 
-<?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
+<?php $insta = instagram_posts(6); if ($insta): ?>
 <section class="section section--tight insta">
   <div class="wrap">
     <div class="section-head reveal">

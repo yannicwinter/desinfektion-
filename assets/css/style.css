@@ -544,3 +544,17 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
   .compare tbody th{padding-left:12px}
   .card__img{margin:0 -26px 4px}
 }
+
+/* Terminfilter */
+.dates-tools{justify-content:flex-start}
+.field--inline select{min-height:44px;border-radius:999px;padding:8px 40px 8px 16px;font-size:15px}
+.dates-tools__count{margin-left:auto}
+@media (max-width:480px){
+  .dates-tools .field--inline{flex:1 1 calc(50% - 8px)}
+  .dates-tools__count{margin-left:0;width:100%}
+}
+/* Menü: passt auf allen Breiten in eine Zeile */
+@media (min-width:1181px) and (max-width:1480px){ .nav a{padding:10px 10px} }
+@media (min-width:1001px) and (max-width:1180px){ .nav a{padding:10px 7px;font-size:14.5px} }
+@media (max-width:360px){ .nav a{padding:12px 3px} }
+@media (max-width:480px){ .h2{overflow-wrap:anywhere} }

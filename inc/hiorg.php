@@ -463,6 +463,34 @@ function hiorg_abs(string $href): string
     return HIORG_BASE . ltrim($href, '/');
 }
 
+/** Ort (Stadt) aus der Adresse, z. B. „…, 27283 Verden (Aller)“ → „Verden“. */
+function hiorg_town(string $details): string
+{
+    if (preg_match('/\b\d{5}\s+([^,(·]+)/u', $details, $m)) {
+        return trim($m[1]);
+    }
+    return '';
+}
+
+/** Auswahl-Optionen für den Terminfilter aus den vorhandenen Terminen. */
+function date_filter_options(array $items): array
+{
+    static $months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
+    static $days = [1 => 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
+    $o = ['ort' => [], 'monat' => [], 'wtag' => []];
+    foreach ($items as $it) {
+        if ($t = hiorg_town($it['details'])) {
+            $o['ort'][$t] = $t;
+        }
+        $o['monat'][$it['date']->format('Y-m')] = $months[(int) $it['date']->format('n')] . ' ' . $it['date']->format('Y');
+        $o['wtag'][(int) $it['date']->format('N')] = $days[(int) $it['date']->format('N')];
+    }
+    ksort($o['ort']);
+    ksort($o['monat']);
+    ksort($o['wtag']);
+    return $o;
+}
+
 /** Einzelnen Termin anhand der HiOrg-Kurs-ID (kid) finden. */
 function hiorg_find(array $course, string $kid): ?array
 {
@@ -493,7 +521,7 @@ function render_dates(array $items, array $opt = []): string
             $when .= ' bis ' . de_date($it['end'], 'WW D. MMM');
         }
         ?>
-<li class="date" data-kurs="<?= e($c['slug'] ?? '') ?>" data-search="<?= e(mb_strtolower(de_date($d, 'D. MMM YYYY WWW') . ' ' . $it['details'] . ' ' . ($c['title'] ?? ''))) ?>">
+<li class="date" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
   <time class="date__cal" datetime="<?= $d->format('Y-m-d') ?>"><span><?= de_date($d, 'MMM') ?></span><strong><?= $d->format('j') ?></strong></time>
   <div class="date__info">
     <?php if ($showCourse): ?><span class="date__course"><?= e($c['title'] ?? '') ?></span><?php endif; ?>

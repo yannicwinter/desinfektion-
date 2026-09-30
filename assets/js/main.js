@@ -89,24 +89,27 @@
     });
   }
 
-  // Terminsuche (Ort, Monat, Wochentag)
+  // Terminfilter (Ort, Monat, Wochentag)
   var filter = document.querySelector('[data-date-filter]');
   if (filter) {
     var rows = document.querySelectorAll('[data-date-list] .date');
     var count = document.querySelector('[data-date-count]');
     var empty = document.querySelector('[data-date-empty]');
-    filter.addEventListener('input', function () {
-      var terms = filter.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    var apply = function () {
+      var sel = {};
+      filter.querySelectorAll('select').forEach(function (s) { sel[s.name] = s.value; });
       var n = 0;
       rows.forEach(function (r) {
-        var hay = r.getAttribute('data-search');
-        var ok = terms.every(function (t) { return hay.indexOf(t) !== -1; });
+        var ok = Object.keys(sel).every(function (k) { return !sel[k] || r.getAttribute('data-' + k) === sel[k]; });
         r.hidden = !ok;
         if (ok) n++;
       });
       if (count) count.textContent = n + (n === 1 ? ' Termin' : ' Termine');
       if (empty) empty.hidden = n > 0;
-    });
+    };
+    filter.addEventListener('change', apply);
+    var reset = document.querySelector('[data-date-reset]');
+    if (reset) reset.addEventListener('click', function (e) { e.preventDefault(); filter.reset(); apply(); });
   }
 
   // Admin: Zeichenzähler für Google-Titel/-Beschreibung, Löschbestätigung

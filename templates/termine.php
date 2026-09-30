@@ -56,18 +56,19 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
   <div class="wrap layout-aside">
     <div class="layout-aside__main">
       <?php if ($items): ?>
-      <div class="dates-tools">
-        <label class="search">
-          <?= icon('search') ?>
-          <span class="sr-only">Termine filtern</span>
-          <input type="search" placeholder="Ort, Monat oder Wochentag …" data-date-filter>
+      <?php $fo = date_filter_options($items); ?>
+      <form class="dates-tools" data-date-filter onsubmit="return false">
+        <?php foreach (['ort' => ['Ort', 'Alle Orte'], 'monat' => ['Monat', 'Alle Monate'], 'wtag' => ['Wochentag', 'Alle Tage']] as $key => [$label, $all]): if (count($fo[$key]) < 2) continue; ?>
+        <label class="field field--inline"><span class="sr-only"><?= $label ?></span>
+          <select name="<?= $key ?>"><option value=""><?= $all ?></option><?php foreach ($fo[$key] as $v => $l): ?><option value="<?= e((string) $v) ?>"><?= e($l) ?></option><?php endforeach; ?></select>
         </label>
-        <span class="muted small" data-date-count><?= count($items) ?> Termine</span>
-      </div>
+        <?php endforeach; ?>
+        <span class="muted small dates-tools__count" data-date-count><?= count($items) ?> Termine</span>
+      </form>
       <ul class="dates" data-date-list>
         <?= render_dates($items, ['show_course' => $slug === '']) ?>
       </ul>
-      <p class="muted small empty" hidden data-date-empty>Keine Termine für diese Suche.</p>
+      <p class="notice empty" hidden data-date-empty>Keine Termine für diese Auswahl. <a href="#" data-date-reset>Filter zurücksetzen</a></p>
       <?php elseif ($failed): ?>
       <div class="notice">
         <h2 class="h5">Termine gerade nicht erreichbar</h2>
