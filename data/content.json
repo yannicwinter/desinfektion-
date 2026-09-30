@@ -346,82 +346,98 @@
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Gibt es eine Prüfung?",
-            "a": "Nein. Es gibt keinen Test – entscheidend ist, dass du aktiv mitmachst."
+            "a": "Nein. Es gibt keinen Test – entscheidend ist, dass du aktiv mitmachst.",
+            "start": ""
         },
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Ab welchem Alter kann ich teilnehmen?",
-            "a": "Für den Führerschein ab 14 Jahren."
+            "a": "Für den Führerschein ab 14 Jahren.",
+            "start": ""
         },
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Was muss ich mitbringen?",
-            "a": "Personalausweis, bequeme Kleidung (wir üben am Boden), Getränke und Snacks. Vorkenntnisse brauchst du nicht."
+            "a": "Personalausweis, bequeme Kleidung (wir üben am Boden), Getränke und Snacks. Vorkenntnisse brauchst du nicht.",
+            "start": ""
         },
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Führerschein oder Betrieb – was ist der Unterschied?",
-            "a": "Es ist dieselbe Ausbildung. Als Ersthelfer im Betrieb (BG-Lehrgang) liegt der Fokus zusätzlich auf Arbeitsunfällen, die Kosten übernimmt meist die Berufsgenossenschaft."
+            "a": "Es ist dieselbe Ausbildung. Als Ersthelfer im Betrieb (BG-Lehrgang) liegt der Fokus zusätzlich auf Arbeitsunfällen, die Kosten übernimmt meist die Berufsgenossenschaft.",
+            "start": "1"
         },
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Wie lange ist die Bescheinigung gültig?",
-            "a": "Für den Führerschein unbegrenzt – manche Behörden verlangen aber einen Nachweis, der höchstens 2 Jahre alt ist. Betriebliche Ersthelfer brauchen nach 2 Jahren eine Fortbildung. Vereine, Trainer und Studium erkennen meist 1–2 Jahre an."
+            "a": "Für den Führerschein unbegrenzt – manche Behörden verlangen aber einen Nachweis, der höchstens 2 Jahre alt ist. Betriebliche Ersthelfer brauchen nach 2 Jahren eine Fortbildung. Vereine, Trainer und Studium erkennen meist 1–2 Jahre an.",
+            "start": "1"
         },
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Darf ich Fotos machen?",
-            "a": "Teilweise ja – Videos von Übungen oder anderen Teilnehmenden aber nicht. Frag bitte vorher die Kursleitung."
+            "a": "Teilweise ja – Videos von Übungen oder anderen Teilnehmenden aber nicht. Frag bitte vorher die Kursleitung.",
+            "start": ""
         },
         {
             "group": "Buchung",
             "q": "Wie melde ich mich an?",
-            "a": "Online über unsere [Kurstermine](/termine) – die Anmeldung ist für die Teilnahme erforderlich."
+            "a": "Online über unsere [Kurstermine](/termine) – die Anmeldung ist für die Teilnahme erforderlich.",
+            "start": ""
         },
         {
             "group": "Buchung",
             "q": "Kann ich stornieren oder verschieben?",
-            "a": "Ja, meist bis zu einem bestimmten Zeitpunkt kostenlos. Die Frist steht in deiner Buchungsbestätigung."
+            "a": "Ja, meist bis zu einem bestimmten Zeitpunkt kostenlos. Die Frist steht in deiner Buchungsbestätigung.",
+            "start": ""
         },
         {
             "group": "Buchung",
             "q": "Findet der Kurs sicher statt?",
-            "a": "Wir brauchen eine Mindestteilnehmerzahl. Kommt ein Termin nicht zustande, melden wir uns rechtzeitig mit Alternativen."
+            "a": "Wir brauchen eine Mindestteilnehmerzahl. Kommt ein Termin nicht zustande, melden wir uns rechtzeitig mit Alternativen.",
+            "start": ""
         },
         {
             "group": "Buchung",
             "q": "Ist der Kurs barrierefrei? Gibt es Kurse auf Englisch?",
-            "a": "Sag uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich."
+            "a": "Sag uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich.",
+            "start": ""
         },
         {
             "group": "Brandschutzhelfer",
             "q": "Wie viele Brandschutzhelfer braucht mein Betrieb?",
-            "a": "Mindestens 5 % der Beschäftigten. Wie viele tatsächlich nötig sind, ergibt sich aus der Gefährdungsbeurteilung – in Produktion, Lager, Pflege oder Kita oft deutlich mehr, im Schichtbetrieb genug pro Schicht."
+            "a": "Mindestens 5 % der Beschäftigten. Wie viele tatsächlich nötig sind, ergibt sich aus der Gefährdungsbeurteilung – in Produktion, Lager, Pflege oder Kita oft deutlich mehr, im Schichtbetrieb genug pro Schicht.",
+            "start": ""
         },
         {
             "group": "Brandschutzhelfer",
             "q": "Wer bezahlt die Schulung?",
-            "a": "Das Unternehmen. Die Berufsgenossenschaft übernimmt die Kosten nicht."
+            "a": "Das Unternehmen. Die Berufsgenossenschaft übernimmt die Kosten nicht.",
+            "start": ""
         },
         {
             "group": "Brandschutzhelfer",
             "q": "Wie lange ist die Bescheinigung gültig?",
-            "a": "Empfohlen ist eine Auffrischung alle 3–5 Jahre, je nach Gefährdungsbeurteilung auch früher."
+            "a": "Empfohlen ist eine Auffrischung alle 3–5 Jahre, je nach Gefährdungsbeurteilung auch früher.",
+            "start": ""
         },
         {
             "group": "Brandschutzhelfer",
             "q": "Brauche ich Schutzkleidung?",
-            "a": "Nein. Bequeme Kleidung reicht – auch für die Löschübungen."
+            "a": "Nein. Bequeme Kleidung reicht – auch für die Löschübungen.",
+            "start": ""
         },
         {
             "group": "Für Unternehmen",
             "q": "Wer bezahlt die Ersthelfer-Ausbildung?",
-            "a": "In den meisten Fällen die Berufsgenossenschaft. Die Kostenübernahme bitte vorab klären und uns die Bestätigung im Original zusenden."
+            "a": "In den meisten Fällen die Berufsgenossenschaft. Die Kostenübernahme bitte vorab klären und uns die Bestätigung im Original zusenden.",
+            "start": "1"
         },
         {
             "group": "Für Unternehmen",
             "q": "Kommt ihr auch zu uns in den Betrieb?",
-            "a": "Ja. Nötig sind ein Raum ab 50 m², Stühle, Platz für Übungen, ein Flipchart und ein Parkplatz für die Kursleitung – für Brandschutz zusätzlich eine Außenfläche."
+            "a": "Ja. Nötig sind ein Raum ab 50 m², Stühle, Platz für Übungen, ein Flipchart und ein Parkplatz für die Kursleitung – für Brandschutz zusätzlich eine Außenfläche.",
+            "start": "1"
         }
     ],
     "contacts": [

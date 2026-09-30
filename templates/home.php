@@ -1,7 +1,10 @@
 <?php
 $P = fn($k) => page('home', $k);
 $featured = array_values(array_filter(courses(), fn($c) => !empty($c['featured'])));
-$faq = array_slice(content()['faq'] ?? [], 0, 4);
+$faq = array_values(array_filter(content()['faq'] ?? [], fn($f) => !empty($f['start'])));
+if (!$faq) {
+    $faq = array_slice(content()['faq'] ?? [], 0, 4);
+}
 
 layout_start([
     'title' => $P('seo_title'),

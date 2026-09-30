@@ -459,7 +459,7 @@ function admin_rows(string $key, string $title, string $section, array $fields):
 
 function admin_faq(): void
 {
-    admin_rows('faq', 'FAQ', 'faq', ['group' => ['Gruppe', false], 'q' => ['Frage', false], 'a' => ['Antwort', true]]);
+    admin_rows('faq', 'FAQ', 'faq', ['group' => ['Gruppe', false], 'q' => ['Frage', false], 'a' => ['Antwort', true], 'start' => ['Auf der Startseite zeigen? (1 = ja, leer = nein)', false]]);
 }
 
 function admin_contacts(): void
