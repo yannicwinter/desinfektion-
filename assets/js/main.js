@@ -100,7 +100,12 @@
       filter.querySelectorAll('select').forEach(function (s) { sel[s.name] = s.value; });
       var n = 0;
       rows.forEach(function (r) {
-        var ok = Object.keys(sel).every(function (k) { return !sel[k] || r.getAttribute('data-' + k) === sel[k]; });
+        var ok = Object.keys(sel).every(function (k) {
+          var v = sel[k], have = r.getAttribute('data-' + k);
+          if (!v) return true;
+          if (k === 'wtag' && (v === 'we' || v === 'wk')) return v === 'we' ? +have >= 6 : +have < 6;
+          return have === v;
+        });
         r.hidden = !ok;
         if (ok) n++;
       });
@@ -108,6 +113,7 @@
       if (empty) empty.hidden = n > 0;
     };
     filter.addEventListener('change', apply);
+    apply(); // Vorauswahl aus der Startseiten-Suche (?ort=…&wann=…) sofort anwenden
     var reset = document.querySelector('[data-date-reset]');
     if (reset) reset.addEventListener('click', function (e) { e.preventDefault(); filter.reset(); apply(); });
   }

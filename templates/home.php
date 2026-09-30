@@ -20,56 +20,33 @@ layout_start([
     ]],
 ]);
 ?>
-<section class="hero">
-  <div class="wrap hero__grid">
-    <div class="hero__text">
-      <span class="eyebrow reveal"><?= e($P('hero_eyebrow')) ?></span>
-      <h1 class="display reveal"><?= e($P('hero_title')) ?></h1>
-      <p class="lead reveal"><?= e($P('hero_lead')) ?></p>
-      <div class="btn-row reveal">
-        <a class="btn btn--red" href="<?= url('termine') ?>"><?= icon('calendar') ?> Kurstermine</a>
-        <a class="btn btn--ghost" href="<?= url('arbeitssicherheit') ?>">Für Unternehmen</a>
-      </div>
-    </div>
-    <?php if ($hero = slot_image('hero')): ?>
-    <figure class="hero__media"><img src="<?= e($hero) ?>" alt="Erste-Hilfe- und Brandschutz-Training beim DRK" width="2000" height="1125" fetchpriority="high"></figure>
-    <?php else: ?>
-    <div class="bento">
-      <a class="bento__tile bento__eh" href="<?= url('erste-hilfe') ?>">
-        <?= cross_svg('bento__cross', '#fff') ?>
-        <?= illus_heart('bento__heart', 'rgba(255,255,255,.16)', '#fff') ?>
-        <span class="bento__label"><strong>Erste Hilfe</strong><span>Führerschein · Betrieb · Familie</span></span>
-      </a>
-      <a class="bento__tile bento__bs" href="<?= url('brandschutz') ?>">
-        <?= illus_extinguisher('bento__ext') ?>
-        <span class="bento__label"><strong>Brandschutz</strong><span>Helfer · Übungen · Beratung</span></span>
-      </a>
-      <a class="bento__tile bento__as" href="<?= url('arbeitssicherheit') ?>">
-        <svg class="bento__shield" viewBox="0 0 120 140" aria-hidden="true"><path d="M60 4 112 22v44c0 36-24 58-52 70C32 124 8 102 8 66V22z" fill="#E60005"/><path d="M36 70l16 16 32-34" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <span class="bento__label"><strong>Arbeitssicherheit</strong><span>Fachkraft · Beratung · Dokumente</span></span>
-      </a>
-    </div>
-    <?php endif; ?>
+<section class="hero hero--search">
+  <div class="wrap hs">
+    <span class="eyebrow reveal"><?= e($P('hero_eyebrow')) ?></span>
+    <h1 class="display reveal"><?= e($P('hero_title')) ?></h1>
+    <p class="lead reveal"><?= e($P('hero_lead')) ?></p>
+    <?php include __DIR__ . '/partials/suche.php'; ?>
+    <p class="hs__help reveal">Unsicher, welcher Kurs passt? <a href="#kursfinder" data-kf-open>Kursfinder fragen</a></p>
   </div>
 </section>
 
-<section class="finder-wrap">
-  <div class="wrap">
-    <form class="finder reveal" action="<?= url('termine') ?>" method="get" data-finder>
-      <div class="finder__head">
-        <h2 class="h5">Kurstermin finden</h2>
-      </div>
-      <label class="field">
-        <span class="sr-only">Welcher Kurs?</span>
-        <select name="kurs" aria-label="Kurs wählen">
-          <?php foreach (bookable_courses() as $c): ?>
-          <option value="<?= e($c['slug']) ?>"><?= e($c['title']) ?></option>
-          <?php endforeach; ?>
-        </select>
-      </label>
-      <button class="btn btn--red" type="submit">Termine anzeigen <?= icon('arrow') ?></button>
-      <p class="finder__help">Unsicher, welcher Kurs passt? <a href="#kursfinder" data-kf-open>Kursfinder fragen</a></p>
-    </form>
+<section class="themes">
+  <div class="wrap themes__grid">
+    <a class="theme reveal" href="<?= url('erste-hilfe') ?>">
+      <span class="theme__art theme__art--red"><?= illus_heart('theme__heart', 'rgba(255,255,255,.2)', '#fff') ?></span>
+      <span class="theme__txt"><strong>Erste Hilfe</strong><span>Führerschein · Betrieb · Familie</span></span>
+      <?= icon('arrow', 'i theme__go') ?>
+    </a>
+    <a class="theme reveal" href="<?= url('brandschutz') ?>">
+      <span class="theme__art theme__art--rose"><?= illus_extinguisher('theme__ext') ?></span>
+      <span class="theme__txt"><strong>Brandschutz</strong><span>Helfer · Übungen · Beratung</span></span>
+      <?= icon('arrow', 'i theme__go') ?>
+    </a>
+    <a class="theme reveal" href="<?= url('arbeitssicherheit') ?>">
+      <span class="theme__art theme__art--soft"><svg class="theme__shield" viewBox="0 0 120 140" aria-hidden="true"><path d="M60 4 112 22v44c0 36-24 58-52 70C32 124 8 102 8 66V22z" fill="#E60005"/><path d="M36 70l16 16 32-34" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="theme__txt"><strong>Arbeitssicherheit</strong><span>Fachkraft · Beratung · Dokumente</span></span>
+      <?= icon('arrow', 'i theme__go') ?>
+    </a>
   </div>
 </section>
 

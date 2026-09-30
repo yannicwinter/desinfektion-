@@ -15,3 +15,4 @@
 - Instagram nur über Behold.so-Feed-Link (`site.instagram_feed_url`), Bilder lokal gecacht; ohne Link Platzhalter-Kacheln.
 - Mobil (≤1000 px): Tab-Leiste unten (Start · Erste Hilfe · Termine · Brandschutz · Mehr), oberes Menü ausgeblendet.
 - Keine Stockfotos: Seiten und Kurse nutzen SVG-Motive (`inc/illus.php`); im Admin hochgeladene Bilder ersetzen sie. Team-Fotos in `assets/img/team/`.
+- Startseite: zentrale Terminsuche (`templates/partials/suche.php`, `assets/js/suche.js`): Desktop Suchleiste Kurs · Ort · Wann, Handy große Suchfläche + Menü von unten; zählt freie Termine live und leitet auf /termine/{kurs}?ort=…&wann=we|wk (Terminfilter übernimmt das).

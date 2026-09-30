@@ -58,9 +58,13 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
       <?php if ($items): ?>
       <?php $fo = date_filter_options($items); ?>
       <form class="dates-tools" data-date-filter onsubmit="return false">
-        <?php foreach (['ort' => ['Ort', 'Alle Orte'], 'monat' => ['Monat', 'Alle Monate'], 'wtag' => ['Wochentag', 'Alle Tage']] as $key => [$label, $all]): if (count($fo[$key]) < 2) continue; ?>
+        <?php foreach (['ort' => ['Ort', 'Alle Orte'], 'monat' => ['Monat', 'Alle Monate'], 'wtag' => ['Wochentag', 'Alle Tage']] as $key => [$label, $all]): if (count($fo[$key]) < 2 && !($key === 'wtag' && !empty($_GET['wann'])) && !($key === 'ort' && !empty($_GET['ort']))) continue; ?>
         <label class="field field--inline"><span class="sr-only"><?= $label ?></span>
-          <select name="<?= $key ?>"><option value=""><?= $all ?></option><?php foreach ($fo[$key] as $v => $l): ?><option value="<?= e((string) $v) ?>"><?= e($l) ?></option><?php endforeach; ?></select>
+          <?php $pre = $key === 'ort' ? (string) ($_GET['ort'] ?? '') : ($key === 'wtag' ? (string) ($_GET['wann'] ?? '') : ''); ?>
+          <select name="<?= $key ?>"><option value=""><?= $all ?></option>
+            <?php if ($key === 'wtag'): ?><option value="wk"<?= $pre === 'wk' ? ' selected' : '' ?>>Unter der Woche</option><option value="we"<?= $pre === 'we' ? ' selected' : '' ?>>Am Wochenende</option><?php endif; ?>
+            <?php foreach ($fo[$key] as $v => $l): ?><option value="<?= e((string) $v) ?>"<?= $pre !== '' && $pre === (string) $v ? ' selected' : '' ?>><?= e($l) ?></option><?php endforeach; ?>
+          </select>
         </label>
         <?php endforeach; ?>
         <span class="muted small dates-tools__count" data-date-count><?= count($items) ?> Termine</span>
