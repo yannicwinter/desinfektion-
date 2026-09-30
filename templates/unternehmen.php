@@ -48,7 +48,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeit
       <p class="lead"><?= e($P('asi_text')) ?></p>
       <ul class="checks checks--2"><?php foreach (lines($P('asi_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
       <?php if ($ben = lines($P('asi_benefits'))): ?>
-      <div class="needs"><strong>Ihr Nutzen:</strong><?php foreach ($ben as $b): ?><span class="pill pill--red"><?= e($b) ?></span><?php endforeach; ?></div>
+      <div class="needs"><strong>Der Nutzen:</strong><?php foreach ($ben as $b): ?><span class="pill pill--red"><?= e($b) ?></span><?php endforeach; ?></div>
       <?php endif; ?>
       <div class="btn-row"><a class="btn btn--dark" href="#formular">Kostenlose Erstberatung</a></div>
     </div>
@@ -65,7 +65,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeit
       <?php endforeach; ?>
     </ol>
     <div class="needs reveal">
-      <strong>Das brauchen Sie:</strong>
+      <strong>Voraussetzungen:</strong>
       <?php foreach (lines($P('inhouse_needs')) as $n): ?><span class="pill"><?= icon('check') ?><?= e($n) ?></span><?php endforeach; ?>
     </div>
   </div>

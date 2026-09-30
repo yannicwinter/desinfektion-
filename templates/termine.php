@@ -72,7 +72,7 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
       <?php elseif ($failed): ?>
       <div class="notice">
         <h2 class="h5">Termine gerade nicht erreichbar</h2>
-        <p>Unser Buchungssystem antwortet im Moment nicht. Sie können die Termine direkt dort aufrufen:</p>
+        <p>Unser Buchungssystem antwortet gerade nicht. Die Termine gibt es direkt dort:</p>
         <div class="btn-row">
           <?php foreach ($slug ? [$current] : $all as $c): ?>
           <a class="btn btn--ghost btn--sm" href="<?= e(hiorg_list_url((string) $c['hiorg_id'])) ?>" target="_blank" rel="noopener"><?= e($c['title']) ?> <?= icon('external') ?></a>
@@ -82,7 +82,7 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
       <?php else: ?>
       <div class="notice">
         <h2 class="h5">Aktuell keine freien Termine</h2>
-        <p>Neue Termine werden laufend eingestellt. Rufen Sie uns gern an – für Gruppen und Betriebe finden wir auch einen eigenen Termin.</p>
+        <p>Neue Termine kommen laufend dazu. Für Gruppen und Betriebe finden wir auch einen eigenen Termin.</p>
         <div class="btn-row"><a class="btn btn--red btn--sm" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> <?= e(site('phone')) ?></a></div>
       </div>
       <?php endif; ?>
@@ -103,7 +103,7 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
       <?php endif; ?>
       <div class="box box--rose">
         <h2 class="h5">Kein passender Termin?</h2>
-        <p>Für Gruppen und Betriebe kommen wir auch zu Ihnen.</p>
+        <p>Für Gruppen und Betriebe kommen wir auch vor Ort.</p>
         <a class="btn btn--red btn--block" href="<?= url('kontakt' . ($slug ? '?thema=' . $slug : '')) ?>">Inhouse anfragen</a>
       </div>
     </aside>

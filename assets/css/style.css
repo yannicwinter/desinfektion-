@@ -558,3 +558,60 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 @media (min-width:1001px) and (max-width:1180px){ .nav a{padding:10px 7px;font-size:14.5px} }
 @media (max-width:360px){ .nav a{padding:12px 3px} }
 @media (max-width:480px){ .h2{overflow-wrap:anywhere} }
+
+/* ---------- Illustrationen Startseite ---------- */
+.bento{display:grid;grid-template-columns:1.15fr 1fr;grid-template-rows:1fr 1fr;gap:14px;aspect-ratio:16/12}
+.bento__tile{position:relative;overflow:hidden;border-radius:22px;padding:22px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;transition:transform .25s var(--ease),box-shadow .25s}
+.bento__tile:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg)}
+.bento__label{position:relative;display:flex;flex-direction:column;gap:2px}
+.bento__label strong{font-size:clamp(20px,1.8vw,26px);font-weight:500;letter-spacing:-.02em}
+.bento__label span{font-size:14px;opacity:.8}
+.bento__eh{grid-row:1/3;background:linear-gradient(160deg,#F2141A 0%,#C70004 100%);color:#fff}
+.bento__cross{position:absolute;top:22px;left:22px;width:44px;height:44px}
+.bento__heart{position:absolute;right:-8%;top:22%;width:92%;height:auto}
+.bento__bs{background:linear-gradient(160deg,#FFF1F1 0%,#FBDADB 100%);color:var(--ink)}
+.bento__ext{position:absolute;right:14px;top:14px;height:78%;width:auto;transform:rotate(-8deg)}
+.bento__next{background:var(--ink);color:#fff;justify-content:space-between}
+.bento__kicker{font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#FF8A8D}
+.bento__date{font-size:clamp(24px,2.4vw,34px);font-weight:500;letter-spacing:-.02em;line-height:1.1}
+.bento__next>span:not(.bento__kicker):not(.bento__go){font-size:14px;color:#C9CCD2}
+.bento__go{display:inline-flex;align-items:center;gap:6px;font-size:14.5px;font-weight:500}
+.bento__go .i{width:16px;height:16px;transition:transform .2s var(--ease)}
+.bento__next:hover .bento__go .i{transform:translateX(3px)}
+
+.card__art{position:relative;overflow:hidden;margin:0 -26px 6px;height:150px;border-radius:var(--radius) var(--radius) 0 0;display:grid;place-items:center}
+.card__art--red{background:linear-gradient(160deg,#F2141A,#C70004)}
+.card__art--rose{background:linear-gradient(160deg,#FFF1F1,#FBDADB)}
+.card__art--soft{background:linear-gradient(160deg,#F6F6F7,#E9EAED)}
+.card__art--fire{background:linear-gradient(160deg,#FFF1F1,#FBDADB)}
+.card__art-heart{width:96px;height:auto}
+.card__art-kit{width:120px;height:auto;filter:drop-shadow(0 10px 18px rgba(21,23,28,.12))}
+.card__art-icon{width:84px;height:84px}
+.card__art-ext{height:124px;width:auto;transform:rotate(-8deg);margin-top:30px}
+.card__art .card__art-heart path:first-child{fill:rgba(255,255,255,.18)}
+.card__art .card__art-heart path:last-child{stroke:#fff}
+
+.illus-safety{position:relative;aspect-ratio:4/3.4;border-radius:var(--radius);background:linear-gradient(160deg,#FFF1F1 0%,#FBDADB 100%);overflow:hidden}
+.illus-safety__doc{position:absolute;left:12%;top:10%;width:44%;height:auto;transform:rotate(-4deg);filter:drop-shadow(0 18px 30px rgba(21,23,28,.12))}
+.illus-safety__shield{position:absolute;left:46%;top:14%;width:20%;height:auto;filter:drop-shadow(0 12px 20px rgba(230,0,5,.3))}
+.illus-safety__ext{position:absolute;right:12%;bottom:8%;height:62%;width:auto;transform:rotate(6deg);filter:drop-shadow(0 16px 24px rgba(21,23,28,.18))}
+.illus-safety__badge{position:absolute;left:8%;bottom:8%;display:flex;gap:12px;align-items:center;max-width:62%;background:#fff;border-radius:14px;box-shadow:var(--shadow-lg);padding:12px 16px}
+.illus-safety__badge strong{font-size:28px;font-weight:500;color:var(--red);white-space:nowrap;line-height:1}
+.illus-safety__badge span{font-size:13px;color:var(--muted);line-height:1.35}
+@media (max-width:1000px){ .bento{aspect-ratio:16/11} }
+@media (max-width:480px){
+  .bento{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;aspect-ratio:auto}
+  .bento__eh{grid-row:auto;grid-column:1/-1;min-height:170px}
+  .bento__heart{width:54%;right:-4%;top:10%}
+  .bento__bs,.bento__next{min-height:170px}
+  .bento__ext{height:56%}
+  .bento__tile{padding:16px}
+  .card__art{margin:0 -26px 4px}
+  .illus-safety__badge{max-width:84%}
+}
+@media (max-width:480px){
+  .bento__ext{height:50%;right:10px;top:10px}
+  .bento__bs .bento__label strong,.bento__next .bento__date{font-size:20px}
+  .bento__label span{font-size:12.5px}
+  .bento__next>span:not(.bento__kicker):not(.bento__go){font-size:12.5px}
+}

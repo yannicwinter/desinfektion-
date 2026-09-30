@@ -25,23 +25,23 @@
             "seo_description": "Erste-Hilfe-Kurse, Brandschutzhelfer-Ausbildung und Arbeitssicherheit vom DRK-Kreisverband Verden e.V. – für Unternehmen und privat, in Verden, Achim und der Region Mittelweser.",
             "hero_eyebrow": "DRK Arbeitssicherheit Mittelweser",
             "hero_title": "Sicher helfen können – im Betrieb und im Alltag.",
-            "hero_lead": "Deutschlands größte Hilfsorganisation – für Ihr Unternehmen und für Sie privat. In Verden, Achim und der ganzen Region Mittelweser.",
+            "hero_lead": "Deutschlands größte Hilfsorganisation – für Unternehmen und für dich privat. In Verden, Achim und der ganzen Region Mittelweser.",
             "usp1_title": "Anerkannt",
             "usp1_text": "Nach DGUV-Vorgaben, vom Unfallversicherungsträger geprüft.",
             "usp2_title": "Praxisnah",
             "usp2_text": "Realistische Fallbeispiele, Übungen am Phantom und Brandsimulator.",
             "usp3_title": "Flexibel",
-            "usp3_text": "In unseren Trainingszentren oder direkt in Ihrem Betrieb.",
+            "usp3_text": "In unseren Trainingszentren oder direkt im Betrieb.",
             "kurse_title": "Beliebte Kurse",
             "kurse_lead": "Termin wählen, online anmelden, fertig.",
             "firma_eyebrow": "Arbeitssicherheit für Unternehmen",
             "firma_title": "Arbeitssicherheit aus einer Hand.",
-            "firma_text": "Als Ausbildungspartner und Dienstleister übernehmen wir das komplette Paket – Termine und Orte richten wir nach Ihnen.",
+            "firma_text": "Ausbildungspartner und Dienstleister in einem: Wir übernehmen das komplette Paket – Termine und Orte nach Wunsch.",
             "firma_list": "Ersthelfer im Betrieb\nBrandschutz- & Evakuierungshelfer\nVorbeugender Brandschutz\nFachkraft für Arbeitssicherheit",
             "stat_value": "5 %",
             "stat_text": "der Beschäftigten müssen mindestens als Brandschutzhelfer ausgebildet sein (ASR A2.2).",
-            "cta_title": "Fragen? Wir sind für Sie da.",
-            "cta_text": "Wir beraten Sie gern – telefonisch oder per E-Mail.",
+            "cta_title": "Fragen? Wir sind für dich da.",
+            "cta_text": "Wir beraten gern – telefonisch oder per E-Mail.",
             "insta_title": "Aktuelles vom DRK Verden"
         },
         "erste-hilfe": {
@@ -51,7 +51,7 @@
             "title": "Erste Hilfe",
             "lead": "Für Führerschein, Beruf, Familie und Hund – praxisnah, verständlich und ohne Prüfung.",
             "outro_title": "Welcher Kurs passt zu mir?",
-            "outro_text": "Rufen Sie uns an – wir beraten Sie gern.",
+            "outro_text": "Ruf uns an – wir beraten dich gern.",
             "vergleich": "Kurs | Führerschein | Selbstzahler | Abrechnung über BG\nErste-Hilfe-Ausbildung | ja | ja | ja\nErste-Hilfe-Fortbildung | nein | ja | ja\nErste Hilfe am Kind | nein | ja | nur Kita & Schule"
         },
         "brandschutz": {
@@ -59,24 +59,24 @@
             "seo_description": "Brandschutz- und Evakuierungshelfer nach ASR A2.2 mit Löschübung, Feuerlöschertraining, Brandschutzordnung, Flucht- und Rettungspläne und externer Brandschutzbeauftragter.",
             "eyebrow": "Betrieb",
             "title": "Brandschutz",
-            "lead": "Ausbildung, Unterlagen und Beratung – damit Ihr Betrieb im Brandfall vorbereitet ist.",
-            "contact_title": "Ihr Ansprechpartner Brandschutz",
+            "lead": "Ausbildung, Unterlagen und Beratung – damit der Betrieb im Brandfall vorbereitet ist.",
+            "contact_title": "Ansprechpartner Brandschutz",
             "contact_text": "Matthias True, Brandschutzbeauftragter"
         },
         "unternehmen": {
             "seo_title": "Arbeitssicherheit für Unternehmen | Ersthelfer & Brandschutz | DRK Mittelweser",
-            "seo_description": "Ersthelfer im Betrieb, Brandschutz- und Evakuierungshelfer, vorbeugender Brandschutz und Fachkraft für Arbeitssicherheit – vom DRK-Kreisverband Verden, bei uns oder in Ihrem Betrieb.",
+            "seo_description": "Ersthelfer im Betrieb, Brandschutz- und Evakuierungshelfer, vorbeugender Brandschutz und Fachkraft für Arbeitssicherheit – vom DRK-Kreisverband Verden, bei uns oder direkt im Betrieb.",
             "eyebrow": "Für Unternehmen",
             "title": "Arbeitssicherheit aus einer Hand",
-            "lead": "Ausbildungspartner und Dienstleister für Ihren Betrieb – Termine und Orte richten wir nach Ihnen.",
-            "asi_title": "Ihre Fachkraft für Arbeitssicherheit",
-            "asi_text": "Eine Fachkraft für Arbeitssicherheit unterstützt Sie in allen Bereichen des Arbeitsschutzes – Betreuung nach DGUV Vorschrift 2, als Pauschale, nach Stunden oder als Projekt.",
+            "lead": "Ausbildungspartner und Dienstleister für Betriebe – Termine und Orte nach Wunsch.",
+            "asi_title": "Fachkraft für Arbeitssicherheit",
+            "asi_text": "Unterstützung in allen Bereichen des Arbeitsschutzes – Betreuung nach DGUV Vorschrift 2, als Pauschale, nach Stunden oder als Projekt.",
             "asi_list": "Beratung nach ASiG\nGefährdungsbeurteilungen\nBetriebsbegehungen\nUnterweisungen & Schulungen\nUnfallanalyse & Prävention\nDokumentation & Rechtssicherheit",
-            "inhouse_title": "Schulung in Ihrem Betrieb",
-            "inhouse_steps": "Anfrage stellen | Kurs und Teilnehmerzahl nennen.\nTermin abstimmen | Passend zu Ihrem Betriebsablauf.\nWir kommen | Mit komplettem Übungsmaterial.",
+            "inhouse_title": "Schulung direkt im Betrieb",
+            "inhouse_steps": "Anfrage stellen | Kurs und Teilnehmerzahl nennen.\nTermin abstimmen | Passend zum Betriebsablauf.\nWir kommen | Mit komplettem Übungsmaterial.",
             "inhouse_needs": "Raum ab 50 m²\nStühle im Halbkreis\nPlatz für Übungen\nFlipchart oder Whiteboard\nParkplatz für die Kursleitung\nBrandschutz: Außenfläche fürs Löschtraining",
             "form_title": "Unverbindlich anfragen",
-            "form_text": "Wir melden uns schnellstmöglich bei Ihnen.",
+            "form_text": "Wir melden uns schnellstmöglich.",
             "asi_benefits": "Gesetzeskonformität\nWeniger Unfälle & Ausfälle\nEntlastung der Führungskräfte"
         },
         "termine": {
@@ -85,7 +85,7 @@
             "eyebrow": "Online buchen",
             "title": "Kurstermine",
             "lead": "Kurs wählen, Termin aussuchen, direkt online anmelden.",
-            "hint": "Die Anmeldung erfolgt über unser Buchungssystem HiOrg-Server. Sie erhalten dort direkt Ihre Bestätigung."
+            "hint": "Die Anmeldung läuft über unser Buchungssystem HiOrg-Server – die Bestätigung kommt direkt per E-Mail."
         },
         "faq": {
             "seo_title": "Häufige Fragen zu Erste-Hilfe-Kurs & Brandschutz | DRK Verden",
@@ -96,11 +96,11 @@
         },
         "kontakt": {
             "seo_title": "Kontakt | DRK Arbeitssicherheit Mittelweser",
-            "seo_description": "So erreichen Sie das Team Erste Hilfe & Brandschutz des DRK-Kreisverbands Verden: Telefon, E-Mail, Kursorte und Kontaktformular.",
+            "seo_description": "So erreichst du das Team Erste Hilfe & Brandschutz des DRK-Kreisverbands Verden: Telefon, E-Mail, Kursorte und Kontaktformular.",
             "eyebrow": "Kontakt",
-            "title": "Wir sind für Sie da",
-            "lead": "Fragen zu Kursen, Terminen oder einer Schulung in Ihrem Betrieb?",
-            "orte": "DRK-Zentrum Verden · Lindhooper Str. 20/22\nAller-Weser-Zentrum · Lindhooper Str. 57, Verden\nDRK-Zentrum Achim · Bahnhofstraße 31\nOder direkt in Ihrem Betrieb"
+            "title": "Wir sind für dich da",
+            "lead": "Fragen zu Kursen, Terminen oder einer Schulung im Betrieb?",
+            "orte": "DRK-Zentrum Verden · Lindhooper Str. 20/22\nAller-Weser-Zentrum · Lindhooper Str. 57, Verden\nDRK-Zentrum Achim · Bahnhofstraße 31\nOder direkt bei euch im Betrieb"
         },
         "impressum": {
             "seo_title": "Impressum | DRK Arbeitssicherheit Mittelweser",
@@ -112,7 +112,7 @@
             "seo_title": "Datenschutz | DRK Arbeitssicherheit Mittelweser",
             "seo_description": "Datenschutzerklärung des DRK-Kreisverbands Verden e.V.",
             "title": "Datenschutz",
-            "body": "[PLATZHALTER: Offizielle Datenschutzerklärung des Kreisverbands einfügen. Hinweise: Die Website setzt keine Tracking-Cookies und lädt keine externen Schriften. Kurstermine werden serverseitig von HiOrg-Server abgerufen; erst beim Klick auf „Buchen“ wechseln Sie zu HiOrg-Server. Das Kontaktformular versendet Ihre Angaben per E-Mail an uns.]"
+            "body": "[PLATZHALTER: Offizielle Datenschutzerklärung des Kreisverbands einfügen. Hinweise: Die Website setzt keine Tracking-Cookies und lädt keine externen Schriften. Kurstermine werden serverseitig von HiOrg-Server abgerufen; erst beim Klick auf „Buchen“ wird das HiOrg-Formular geladen. Das Kontaktformular versendet die Angaben per E-Mail an uns.]"
         }
     },
     "courses": [
@@ -122,7 +122,7 @@
             "group": "Führerschein & Beruf",
             "title": "Erste-Hilfe-Ausbildung",
             "teaser": "Für Führerschein, Trainerlizenz und Studium – und als Ersthelfer im Betrieb (BG-Lehrgang).",
-            "text": "In 9 Unterrichtseinheiten lernen Sie, was im Notfall zählt – im Straßenverkehr, zu Hause oder im Betrieb. Viel Praxis, realistische Fallbeispiele, keine Prüfung. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft die Kosten.",
+            "text": "In 9 Unterrichtseinheiten lernst du, was im Notfall zählt – im Straßenverkehr, zu Hause oder im Betrieb. Viel Praxis, realistische Fallbeispiele, keine Prüfung. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft die Kosten.",
             "learn": "Notruf & Eigenschutz\nBewusstlosigkeit & stabile Seitenlage\nHerz-Lungen-Wiederbelebung & AED\nWunden & starke Blutungen\nHerzinfarkt, Schlaganfall, Schock",
             "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nPreis: 60 € (Selbstzahler)\nBetriebe: Abrechnung über BG möglich\nTeilnahme: ab 14 Jahren",
             "price": "60 €",
@@ -166,10 +166,10 @@
             "category": "erste-hilfe",
             "group": "Familie & Kinder",
             "title": "Erste-Hilfe-Party",
-            "teaser": "Ihr privater Kurs bei Ihnen zu Hause.",
-            "text": "Kein fester Termin passt? Wir kommen zu Ihnen – locker, ohne Druck und mit Ihren Schwerpunkten, z. B. Babys und Kleinkinder oder Haushaltsunfälle. Ort, Tag und Uhrzeit bestimmen Sie.",
+            "teaser": "Dein privater Kurs bei dir zu Hause.",
+            "text": "Kein fester Termin passt? Wir kommen zu dir – locker, ohne Druck und mit deinen Schwerpunkten, z. B. Babys und Kleinkinder oder Haushaltsunfälle. Ort, Tag und Uhrzeit bestimmst du.",
             "learn": "",
-            "facts": "Dauer: 2–3 Stunden\nOrt: bei Ihnen zu Hause\nKosten: auf Anfrage",
+            "facts": "Dauer: 2–3 Stunden\nOrt: bei dir zu Hause\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -199,7 +199,7 @@
             "teaser": "Wiederbelebung lernen nach norwegischem Vorbild.",
             "text": "In Norwegen gehört Erste Hilfe zum Schulalltag – mit hervorragenden Ergebnissen bei der Laien-Reanimation. Klassen lernen bei uns in 90-Minuten-Modulen; jedes erreichte Level wird im Førstehjelp-Heft gestempelt.",
             "learn": "Bronze: Notruf & Herzdruckmassage\nSilber: Herz-Lungen-Wiederbelebung\nGold: Wiederbelebung mit AED\nPlatin: kompletter Erste-Hilfe-Kurs (Führerschein)",
-            "facts": "Module: je 90 Minuten\nOrt: in Ihrer Schule\nKosten: auf Anfrage",
+            "facts": "Module: je 90 Minuten\nOrt: direkt in der Schule\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -212,7 +212,7 @@
             "group": "Erste Hilfe am Tier",
             "title": "Erste Hilfe am Hund",
             "teaser": "Notfälle beim Hund erkennen und richtig handeln.",
-            "text": "Schnitt an der Pfote, verschluckter Fremdkörper, Hitze oder Vergiftung: Sie lernen, ruhig zu bleiben und das Richtige zu tun. Geübt wird am realistischen Dummy-Hund – Ihr Hund bleibt zu Hause.",
+            "text": "Schnitt an der Pfote, verschluckter Fremdkörper, Hitze oder Vergiftung: Du lernst, ruhig zu bleiben und das Richtige zu tun. Geübt wird am realistischen Dummy-Hund – dein Hund bleibt zu Hause.",
             "learn": "Notfälle erkennen & einschätzen\nWundversorgung & Verbände\nHerz-Lungen-Wiederbelebung\nVergiftung, Überhitzung, Insektenstiche\nSicherer Transport zum Tierarzt",
             "facts": "Dauer: ca. 3 Stunden\nPreis: 50 €\nÜbung: am Dummy-Hund",
             "price": "50 €",
@@ -227,7 +227,7 @@
             "group": "Erste Hilfe am Tier",
             "title": "Erste Hilfe am Welpen",
             "teaser": "Für neue Hundehalter – Welpen dürfen mitkommen.",
-            "text": "Welpen verschlucken schneller etwas und reagieren empfindlicher auf Gift. Sie lernen die typischen Welpen-Notfälle, und Ihr Welpe gewöhnt sich ganz entspannt an Handgriffe. Für mitgebrachte Welpen übernehmen wir keine Haftung.",
+            "text": "Welpen verschlucken schneller etwas und reagieren empfindlicher auf Gift. Du lernst die typischen Welpen-Notfälle, und dein Welpe gewöhnt sich ganz entspannt an Handgriffe. Für mitgebrachte Welpen übernehmen wir keine Haftung.",
             "learn": "Typische Welpen-Notfälle\nGiftiges im Haushalt\nWann sofort zum Tierarzt?",
             "facts": "Dauer: ca. 3 Stunden\nPreis: 50 €\nWelpen: dürfen mitkommen",
             "price": "50 €",
@@ -241,10 +241,10 @@
             "category": "erste-hilfe",
             "group": "Für Teams & Praxen",
             "title": "Erste Hilfe Fresh Up für Arztpraxen",
-            "teaser": "Notfalltraining für Ihr Praxisteam – direkt in Ihrer Praxis.",
-            "text": "Kompaktes Praxistraining, um Routine im Notfall zu festigen. Schwerpunkte stimmen wir vorab mit Ihnen ab, das Material bringen wir mit. Hinweis: kein vollständiger Erste-Hilfe-Kurs, als BG-Fortbildung ggf. nicht anerkannt.",
+            "teaser": "Notfalltraining fürs Praxisteam – direkt in der Praxis.",
+            "text": "Kompaktes Praxistraining, um Routine im Notfall zu festigen. Die Schwerpunkte stimmen wir vorab gemeinsam ab, das Material bringen wir mit. Hinweis: kein vollständiger Erste-Hilfe-Kurs, als BG-Fortbildung ggf. nicht anerkannt.",
             "learn": "Atemnot, Herzinfarkt, Schlaganfall\nKrampfanfall & Unterzuckerung\nBewusstsein & Atmung prüfen\nHerz-Lungen-Wiederbelebung\nWundversorgung & Blutstillung",
-            "facts": "Dauer: ca. 3 Stunden\nOrt: in Ihrer Praxis\nBescheinigung: für jede Person\nKosten: auf Anfrage",
+            "facts": "Dauer: ca. 3 Stunden\nOrt: direkt in der Praxis\nBescheinigung: für jede Person\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -257,9 +257,9 @@
             "group": "Für Teams & Praxen",
             "title": "AED- & Reanimationstraining",
             "teaser": "Wiederbelebung und Defibrillator – sicher in 1–2 Stunden.",
-            "text": "Bei plötzlichem Herz-Kreislauf-Stillstand zählt jede Sekunde. In Kleingruppen trainieren Sie realitätsnah die Wiederbelebung und den Einsatz eines AED – mehr Praxis als Theorie.",
+            "text": "Bei plötzlichem Herz-Kreislauf-Stillstand zählt jede Sekunde. In Kleingruppen wird realitätsnah trainiert: Wiederbelebung und Einsatz eines AED – mehr Praxis als Theorie.",
             "learn": "Herz-Kreislauf-Stillstand erkennen\nBewusstsein & Atmung prüfen\nHerz-Lungen-Wiederbelebung\nAED sicher einsetzen",
-            "facts": "Dauer: 1–2 Stunden\nGruppe: Kleingruppen\nOrt: bei Ihnen vor Ort\nKosten: auf Anfrage",
+            "facts": "Dauer: 1–2 Stunden\nGruppe: Kleingruppen\nOrt: direkt vor Ort\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -287,9 +287,9 @@
             "group": "Schulungen",
             "title": "Feuerlöschertraining",
             "teaser": "Sicherer Umgang mit dem Feuerlöscher – für alle weiteren Mitarbeitenden.",
-            "text": "Zusätzlich zu Ihren Brandschutzhelfern schulen wir weitere Beschäftigte: kurze Theorie, vor allem Praxis am Brandsimulator.",
+            "text": "Zusätzlich zu den Brandschutzhelfern schulen wir weitere Beschäftigte: kurze Theorie, vor allem Praxis am Brandsimulator.",
             "learn": "",
-            "facts": "Dauer: 60–90 Minuten\nFormat: bei uns oder in Ihrem Betrieb\nKosten: auf Anfrage",
+            "facts": "Dauer: 60–90 Minuten\nFormat: bei uns oder im Betrieb\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -302,9 +302,9 @@
             "group": "Schulungen",
             "title": "Evakuierungsübung",
             "teaser": "Den Ernstfall realistisch proben.",
-            "text": "Auf Wunsch organisieren wir eine Räumungsübung in Ihrem Betrieb – mit Nachbesprechung und konkreten Verbesserungsvorschlägen.",
+            "text": "Auf Wunsch organisieren wir eine Räumungsübung im Betrieb – mit Nachbesprechung und konkreten Verbesserungsvorschlägen.",
             "learn": "Start durch Alarmierung\nKontrolle der Räumung\nSammelplatzkontrolle\nNachbesprechung",
-            "facts": "Ort: in Ihrem Betrieb\nKosten: auf Anfrage",
+            "facts": "Ort: direkt im Betrieb\nKosten: auf Anfrage",
             "price": "",
             "hiorg_id": "",
             "cta": "anfrage",
@@ -317,7 +317,7 @@
             "group": "Beratung & Dienstleistung",
             "title": "Vorbeugender Brandschutz",
             "teaser": "Brandschutzordnung, Flucht- und Rettungspläne, Gefährdungsbeurteilung.",
-            "text": "Wir erstellen Ihre Unterlagen passend zu Gebäude und Betrieb – rechtssicher nach ArbStättV sowie ASR A1.3, A2.2 und A2.3.",
+            "text": "Wir erstellen die Unterlagen passend zu Gebäude und Betrieb – rechtssicher nach ArbStättV sowie ASR A1.3, A2.2 und A2.3.",
             "learn": "Brandschutzordnung (Teil A–C) nach DIN 14096\nFlucht- und Rettungspläne nach DIN ISO 23601\nGefährdungsbeurteilung Brandschutz nach ArbSchG",
             "facts": "Format: Projekt\nKosten: individuelles Angebot",
             "price": "",
@@ -332,7 +332,7 @@
             "group": "Beratung & Dienstleistung",
             "title": "Übernahme von Brandschutzpflichten",
             "teaser": "Wir übernehmen die Aufgaben des Brandschutzbeauftragten – ganz oder teilweise.",
-            "text": "Sie erhalten einen festen Ansprechpartner und ein individuelles Angebot für Ihren Betrieb.",
+            "text": "Ein fester Ansprechpartner und ein individuelles Angebot für den Betrieb.",
             "learn": "",
             "facts": "Format: laufende Betreuung\nKosten: individuelles Angebot",
             "price": "",
@@ -346,7 +346,7 @@
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Gibt es eine Prüfung?",
-            "a": "Nein. Es gibt keinen Test – entscheidend ist Ihre aktive Teilnahme."
+            "a": "Nein. Es gibt keinen Test – entscheidend ist, dass du aktiv mitmachst."
         },
         {
             "group": "Erste-Hilfe-Kurse",
@@ -356,7 +356,7 @@
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Was muss ich mitbringen?",
-            "a": "Personalausweis, bequeme Kleidung (wir üben am Boden), Getränke und Snacks. Vorkenntnisse brauchen Sie nicht."
+            "a": "Personalausweis, bequeme Kleidung (wir üben am Boden), Getränke und Snacks. Vorkenntnisse brauchst du nicht."
         },
         {
             "group": "Erste-Hilfe-Kurse",
@@ -371,7 +371,7 @@
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Darf ich Fotos machen?",
-            "a": "Teilweise ja – Videos von Übungen oder anderen Teilnehmenden aber nicht. Fragen Sie bitte vorher die Kursleitung."
+            "a": "Teilweise ja – Videos von Übungen oder anderen Teilnehmenden aber nicht. Frag bitte vorher die Kursleitung."
         },
         {
             "group": "Buchung",
@@ -381,17 +381,17 @@
         {
             "group": "Buchung",
             "q": "Kann ich stornieren oder verschieben?",
-            "a": "Ja, meist bis zu einem bestimmten Zeitpunkt kostenlos. Die Frist steht in Ihrer Buchungsbestätigung."
+            "a": "Ja, meist bis zu einem bestimmten Zeitpunkt kostenlos. Die Frist steht in deiner Buchungsbestätigung."
         },
         {
             "group": "Buchung",
             "q": "Findet der Kurs sicher statt?",
-            "a": "Wir brauchen eine Mindestteilnehmerzahl. Kommt ein Termin nicht zustande, informieren wir Sie rechtzeitig über Alternativen."
+            "a": "Wir brauchen eine Mindestteilnehmerzahl. Kommt ein Termin nicht zustande, melden wir uns rechtzeitig mit Alternativen."
         },
         {
             "group": "Buchung",
             "q": "Ist der Kurs barrierefrei? Gibt es Kurse auf Englisch?",
-            "a": "Sagen Sie uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich."
+            "a": "Sag uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich."
         },
         {
             "group": "Brandschutzhelfer",
@@ -416,12 +416,12 @@
         {
             "group": "Für Unternehmen",
             "q": "Wer bezahlt die Ersthelfer-Ausbildung?",
-            "a": "In den meisten Fällen die Berufsgenossenschaft. Klären Sie die Kostenübernahme bitte vorab und senden Sie uns die Bestätigung im Original zu."
+            "a": "In den meisten Fällen die Berufsgenossenschaft. Die Kostenübernahme bitte vorab klären und uns die Bestätigung im Original zusenden."
         },
         {
             "group": "Für Unternehmen",
-            "q": "Kommen Sie auch in unseren Betrieb?",
-            "a": "Ja. Sie brauchen einen Raum ab 50 m², Stühle, Platz für Übungen, ein Flipchart und einen Parkplatz für die Kursleitung – für Brandschutz zusätzlich eine Außenfläche."
+            "q": "Kommt ihr auch zu uns in den Betrieb?",
+            "a": "Ja. Nötig sind ein Raum ab 50 m², Stühle, Platz für Übungen, ein Flipchart und ein Parkplatz für die Kursleitung – für Brandschutz zusätzlich eine Außenfläche."
         }
     ],
     "contacts": [

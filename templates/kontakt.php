@@ -28,7 +28,7 @@ $map = 'https://www.openstreetmap.org/search?query=' . rawurlencode(site('street
         <ul class="checks checks--sm"><?php foreach (lines($P('orte')) as $o): ?><li><?= icon('pin') ?><?= e($o) ?></li><?php endforeach; ?></ul>
       </div>
     </div>
-    <div class="panel"><h2 class="h4">Schreiben Sie uns</h2><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'sonstiges')); ?></div>
+    <div class="panel"><h2 class="h4">Schreib uns</h2><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'sonstiges')); ?></div>
   </div>
 </section>
 

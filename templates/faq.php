@@ -37,8 +37,8 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [['FAQ', 'faq']]);
     </div>
     <aside class="layout-aside__side">
       <div class="box box--rose">
-        <h2 class="h5">Ihre Frage ist nicht dabei?</h2>
-        <p>Rufen Sie uns an oder schreiben Sie uns.</p>
+        <h2 class="h5">Deine Frage ist nicht dabei?</h2>
+        <p>Ruf uns an oder schreib uns.</p>
         <ul class="contact-list">
           <li><a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a></li>
           <li><a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a></li>

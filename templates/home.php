@@ -30,6 +30,36 @@ layout_start([
     </div>
     <?php if ($hero = slot_image('hero')): ?>
     <figure class="hero__media"><img src="<?= e($hero) ?>" alt="Erste-Hilfe- und Brandschutz-Training beim DRK" width="2000" height="1125" fetchpriority="high"></figure>
+    <?php else:
+        $next = null;
+        foreach (hiorg_dates_all(bookable_courses()) as $it) {
+            if ($it['status'] !== 'full' && !empty($it['kid'])) { $next = $it; break; }
+        } ?>
+    <div class="bento">
+      <a class="bento__tile bento__eh" href="<?= url('erste-hilfe') ?>">
+        <?= cross_svg('bento__cross', '#fff') ?>
+        <?= illus_heart('bento__heart', 'rgba(255,255,255,.16)', '#fff') ?>
+        <span class="bento__label"><strong>Erste Hilfe</strong><span>Führerschein · Betrieb · Familie</span></span>
+      </a>
+      <a class="bento__tile bento__bs" href="<?= url('brandschutz') ?>">
+        <?= illus_extinguisher('bento__ext') ?>
+        <span class="bento__label"><strong>Brandschutz</strong><span>Helfer · Übungen · Beratung</span></span>
+      </a>
+      <?php if ($next): ?>
+      <a class="bento__tile bento__next" href="<?= url('termine/' . $next['course']['slug'] . '/anmeldung/' . $next['kid']) ?>">
+        <span class="bento__kicker">Nächster freier Kurs</span>
+        <strong class="bento__date"><?= e(de_date($next['date'], 'WW, D. MMM')) ?></strong>
+        <span><?= e($next['course']['title']) ?><?= hiorg_town($next['details']) ? ' · ' . e(hiorg_town($next['details'])) : '' ?></span>
+        <span class="bento__go"><?= $next['free'] ? e($next['free']) : 'Jetzt anmelden' ?> <?= icon('arrow') ?></span>
+      </a>
+      <?php else: ?>
+      <a class="bento__tile bento__next" href="<?= url('termine') ?>">
+        <span class="bento__kicker">Kurstermine</span>
+        <strong class="bento__date">Alle Termine</strong>
+        <span class="bento__go">Jetzt ansehen <?= icon('arrow') ?></span>
+      </a>
+      <?php endif; ?>
+    </div>
     <?php endif; ?>
   </div>
 </section>
@@ -73,7 +103,7 @@ layout_start([
     <div class="cards">
       <?php foreach ($featured as $c): ?>
       <article class="card card--img reveal">
-        <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="card__img" src="<?= e($img) ?>" alt="" loading="lazy" decoding="async" width="1400" height="788"><?php endif; ?>
+        <?= illus_course($c) ?>
         <span class="card__tag"><?= $c['category'] === 'brandschutz' ? 'Brandschutz' : e($c['group']) ?></span>
         <h3 class="h4"><a href="<?= course_url($c) ?>" class="card__link"><?= e($c['title']) ?></a></h3>
         <p><?= e($c['teaser']) ?></p>
@@ -92,8 +122,12 @@ layout_start([
 <section class="section section--soft">
   <div class="wrap split">
     <div class="split__media reveal">
-      <?= image_slot('home', 'Erste-Hilfe-Ausbildung in einer kleinen Gruppe', 'building') ?>
+      <?php if ($img = slot_image('home')): ?>
+      <?= image_slot('home', 'Arbeitssicherheit beim DRK', 'building') ?>
       <div class="stat"><strong><?= e($P('stat_value')) ?></strong><span><?= e($P('stat_text')) ?></span></div>
+      <?php else: ?>
+      <?= illus_safety() ?>
+      <?php endif; ?>
     </div>
     <div class="stack reveal">
       <span class="eyebrow"><?= e($P('firma_eyebrow')) ?></span>

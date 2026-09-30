@@ -32,24 +32,24 @@ function form_handle(string $returnPath): array
     }
     // Signiertes Zeitstempel-Token statt Session: keine Cookies auf der öffentlichen Seite
     if (!hash_equals(hash_hmac('sha256', 'form' . $started, app_secret()), (string) ($_POST['sig'] ?? '')) || time() - $started > 86400) {
-        $err[] = 'Das Formular ist abgelaufen. Bitte senden Sie es erneut.';
+        $err[] = 'Das Formular ist abgelaufen – bitte noch einmal absenden.';
     }
     if ($in['name'] === '') {
-        $err[] = 'Bitte geben Sie Ihren Namen an.';
+        $err[] = 'Bitte einen Namen angeben.';
     }
     if (!filter_var($in['email'], FILTER_VALIDATE_EMAIL)) {
-        $err[] = 'Bitte geben Sie eine gültige E-Mail-Adresse an.';
+        $err[] = 'Bitte eine gültige E-Mail-Adresse angeben.';
     }
     if (mb_strlen($in['nachricht']) > 5000) {
         $err[] = 'Die Nachricht ist zu lang.';
     }
     if (empty($_POST['datenschutz'])) {
-        $err[] = 'Bitte stimmen Sie der Datenschutzerklärung zu.';
+        $err[] = 'Bitte der Datenschutzerklärung zustimmen.';
     }
     $ipFile = CACHE_DIR . '/form-' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . date('YmdH')) . '.cnt';
     $count = is_file($ipFile) ? (int) file_get_contents($ipFile) : 0;
     if ($count >= 5) {
-        $err[] = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut oder rufen Sie uns an.';
+        $err[] = 'Zu viele Anfragen – bitte später noch einmal versuchen oder anrufen.';
     }
     if ($err) {
         return [$err, $in];
@@ -79,7 +79,7 @@ function form_handle(string $returnPath): array
     $sent = @mail($to, $subject, $body, implode("\r\n", $headers));
     @file_put_contents($ipFile, (string) ($count + 1));
     if (!$sent) {
-        return [['Die Nachricht konnte leider nicht versendet werden. Bitte schreiben Sie uns direkt an ' . site('email') . '.'], $in];
+        return [['Die Nachricht konnte leider nicht versendet werden. Bitte direkt an ' . site('email') . ' schreiben.'], $in];
     }
     redirect($returnPath . '?gesendet=1#formular');
     return [[], []];
@@ -91,7 +91,7 @@ function form_render(array $err, array $old, string $preset = ''): void
     $sel = $old['thema'] ?? $preset;
     $v = fn($k) => e($old[$k] ?? '');
     if (!empty($_GET['gesendet'])): ?>
-<div class="notice notice--ok" role="status"><h3 class="h5">Vielen Dank!</h3><p>Ihre Anfrage ist bei uns angekommen. Wir melden uns schnellstmöglich.</p></div>
+<div class="notice notice--ok" role="status"><h3 class="h5">Vielen Dank!</h3><p>Die Anfrage ist angekommen. Wir melden uns schnellstmöglich.</p></div>
 <?php return; endif; ?>
 <form class="form" method="post" action="#formular" novalidate>
   <?php if ($err): ?><div class="notice notice--err" role="alert"><ul><?php foreach ($err as $x): ?><li><?= e($x) ?></li><?php endforeach; ?></ul></div><?php endif; ?>

@@ -9,6 +9,7 @@ require __DIR__ . '/inc/bootstrap.php';
 require __DIR__ . '/inc/hiorg.php';
 require __DIR__ . '/inc/layout.php';
 require __DIR__ . '/inc/instagram.php';
+require __DIR__ . '/inc/illus.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rawurldecode(substr($path, strlen(base_path())));

@@ -193,6 +193,9 @@ function slot_image(string $slot): ?string
             return url('uploads/' . $slot . '.' . $ext) . '?v=' . filemtime($f);
         }
     }
+    if (in_array($slot, ['hero', 'home'], true)) {
+        return null; // Startseite: ohne eigenes Bild werden die Illustrationen gezeigt
+    }
     $d = ROOT . '/assets/img/fotos/' . $slot . '.jpg';
     return is_file($d) ? asset('img/fotos/' . $slot . '.jpg') : null;
 }
