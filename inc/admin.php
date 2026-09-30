@@ -20,6 +20,9 @@ const PAGE_NAMES = [
 ];
 
 const FIELD_LABELS = [
+    'hero_badge' => ['Hinweis über der Überschrift', 'z. B. Anerkennung durch die Berufsgenossenschaften. Leer = ausgeblendet.'],
+    'hero_trust' => ['Vorteile unter der Suche', 'Eine Zeile je Punkt.'],
+    'inhouse_text' => ['Schulung im Betrieb – Text', ''],
     'seo_title' => ['Google-Titel', 'Erscheint als Überschrift in Suchergebnissen. Ideal: 50–60 Zeichen, wichtigster Begriff vorne.'],
     'seo_description' => ['Google-Beschreibung', 'Kurzer Text unter dem Titel in Suchergebnissen. Ideal: 120–155 Zeichen.'],
     'eyebrow' => ['Dachzeile', ''], 'title' => ['Überschrift', ''], 'lead' => ['Einleitung', ''],

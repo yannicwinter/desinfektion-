@@ -33,7 +33,7 @@ layout_start([
     ]],
 ]);
 page_head('', $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit']],
-    '<div class="btn-row"><a class="btn btn--red" href="#formular">Unverbindlich anfragen</a><a class="btn btn--ghost" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . ' ' . e(site('phone')) . '</a></div>');
+    '<div class="btn-row"><a class="btn btn--red" href="#formular">Unverbindlich anfragen</a><a class="btn btn--ghost" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . ' ' . e(site('phone')) . '</a></div>', 'unternehmen');
 ?>
 <section class="section section--tight">
   <div class="wrap apage">
@@ -44,7 +44,7 @@ page_head('', $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit
         <ul class="alist">
           <?php foreach ($list as $it): ?>
           <li><a href="<?= e(str_starts_with($it['url'], '#') ? $it['url'] : $it['url']) ?>">
-            <span class="acc__ico" aria-hidden="true"><?= illus_course($it['c']) ?></span>
+            <span class="acc__ico" aria-hidden="true"><?= $it['url'] === '#fachkraft' ? (photo('fachkraft', $it['title'], 'acc__photo') ?: illus_course($it['c'])) : course_media($it['c'], 'acc__photo') ?></span>
             <span class="alist__txt"><strong><?= e($it['title']) ?></strong><span><?= e($it['teaser']) ?></span></span>
             <?= icon('arrow', 'i alist__go') ?>
           </a></li>
@@ -62,8 +62,10 @@ page_head('', $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit
 
 <section class="section section--soft" id="fachkraft">
   <div class="wrap apage">
-    <h2 class="h2 reveal"><?= e($P('asi_title')) ?></h2>
-    <p class="lead reveal"><?= e($P('asi_text')) ?></p>
+    <div class="apage__intro reveal">
+      <div><h2 class="h2"><?= e($P('asi_title')) ?></h2><p class="lead"><?= e($P('asi_text')) ?></p></div>
+      <?php if ($img = photo('fachkraft', $P('asi_title'), 'apage__img')): ?><figure class="apage__media"><?= $img ?></figure><?php endif; ?>
+    </div>
     <div class="apage__three reveal">
       <?php foreach ([['Leistungen', 'asi_list'], ['Nutzen', 'asi_benefits'], ['Angebot', 'asi_offer']] as [$h, $k]): ?>
       <div><h3 class="h6"><?= $h ?></h3><ul class="checks checks--sm"><?php foreach (lines($P($k)) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul></div>
@@ -74,7 +76,10 @@ page_head('', $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit
 
 <section class="section" id="inhouse">
   <div class="wrap apage">
-    <h2 class="h2 reveal"><?= e($P('inhouse_title')) ?></h2>
+    <div class="apage__intro apage__intro--flip reveal">
+      <div><h2 class="h2"><?= e($P('inhouse_title')) ?></h2><?php if ($P('inhouse_text')): ?><p class="lead"><?= e($P('inhouse_text')) ?></p><?php endif; ?></div>
+      <?php if ($img = photo('inhouse', $P('inhouse_title'), 'apage__img')): ?><figure class="apage__media"><?= $img ?></figure><?php endif; ?>
+    </div>
     <ol class="asteps reveal">
       <?php foreach (pairs($P('inhouse_steps'), '|') as $i => [$t, $d]): ?>
       <li><span class="asteps__n"><?= $i + 1 ?></span><strong><?= e($t) ?></strong><span><?= e($d) ?></span></li>

@@ -1031,3 +1031,99 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
   .apage__cols,.apage__three,.asteps{grid-template-columns:1fr}
   .apage__cols{gap:8px}
 }
+
+/* ===== Profi-Startseite: Topbar, Foto-Hero, Kacheln, Zahlen ===== */
+.topbar{background:var(--ink);color:rgba(255,255,255,.78);font-size:13px}
+.topbar__in{display:flex;justify-content:space-between;align-items:center;gap:20px;height:34px}
+.topbar span,.topbar a{display:inline-flex;align-items:center;gap:7px}
+.topbar a{color:rgba(255,255,255,.86)}.topbar a:hover{color:#fff}
+.topbar .i{width:14px;height:14px;opacity:.7}
+.topbar__r{gap:22px!important}
+@media (min-width:1001px){.header{top:-34px}}
+@media (max-width:1000px){.topbar{display:none}}
+
+.hero2{position:relative;isolation:isolate;overflow:hidden;background:#2a2d33;color:#fff;padding:clamp(56px,8vw,120px) 0 clamp(120px,12vw,170px)}
+.hero2__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%;z-index:-2}
+.hero2__shade{position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(16,18,22,.86) 0%,rgba(16,18,22,.66) 45%,rgba(16,18,22,.25) 100%),linear-gradient(0deg,rgba(16,18,22,.5),transparent 45%)}
+.hero2__in{display:flex;flex-direction:column;align-items:flex-start;gap:18px}
+.hero2 .display{color:#fff;max-width:16ch;font-size:clamp(36px,5vw,68px)}
+.hero2 .lead{color:rgba(255,255,255,.86);max-width:54ch}
+.hero2__badge{display:inline-flex;align-items:center;gap:8px;padding:7px 14px 7px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px);font-size:14px;font-weight:500}
+.hero2__badge .i{width:17px;height:17px}
+.hero2 .hsearch{max-width:1040px}
+.hero2 .sbar{border-color:transparent;box-shadow:0 20px 50px -18px rgba(0,0,0,.55)}
+.hero2__trust{display:flex;flex-wrap:wrap;gap:8px 26px;font-size:15px;color:rgba(255,255,255,.9)}
+.hero2__trust li{display:flex;align-items:center;gap:8px}
+.hero2__trust .i{width:18px;height:18px;padding:3px;border-radius:50%;background:var(--red);color:#fff;stroke-width:3}
+
+.tiles{position:relative;z-index:2;margin-top:clamp(-110px,-8vw,-70px)}
+.tiles__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tile{position:relative;display:flex;align-items:flex-end;min-height:260px;border-radius:20px;overflow:hidden;color:#fff;box-shadow:var(--shadow-lg);background:#2a2d33;isolation:isolate}
+.tile__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s var(--ease)}
+.tile::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,rgba(16,18,22,.85) 0%,rgba(16,18,22,.25) 55%,rgba(16,18,22,0) 100%)}
+.tile:hover .tile__img{transform:scale(1.04)}
+.tile__txt{display:flex;flex-direction:column;gap:2px;padding:22px 70px 22px 22px}
+.tile__txt strong{font-size:22px;font-weight:600;letter-spacing:-.01em}
+.tile__txt span{font-size:14.5px;color:rgba(255,255,255,.82)}
+.tile__go{position:absolute;right:18px;bottom:22px;width:42px;height:42px;border-radius:50%;background:var(--red);display:grid;place-items:center;transition:transform .2s var(--ease)}
+.tile__go .i{width:19px;height:19px;color:#fff}
+.tile:hover .tile__go{transform:translateX(3px)}
+
+.nextd .dates{max-width:none}
+.figures{background:var(--red);color:#fff;padding:clamp(28px,4vw,44px) 0;margin-top:clamp(32px,4vw,56px)}
+.figures__grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.figure{display:flex;flex-direction:column;gap:4px;padding-left:18px;border-left:1px solid rgba(255,255,255,.3)}
+.figure strong{font-size:clamp(30px,3.6vw,46px);font-weight:500;letter-spacing:-.03em;line-height:1}
+.figure span{font-size:14.5px;color:rgba(255,255,255,.88)}
+
+.card__media{margin:0 -26px 6px;height:190px;border-radius:var(--radius) var(--radius) 0 0;overflow:hidden}
+.card__media .card__art{margin:0;height:100%;border-radius:0}
+.card__photo{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
+.card:hover .card__photo{transform:scale(1.04)}
+
+@media (max-width:1000px){
+  .tiles__grid{grid-template-columns:1fr 1fr 1fr;gap:12px}
+  .tile{min-height:200px}
+  .tile__txt{padding:16px 16px 60px}
+  .tile__go{left:16px;right:auto;bottom:16px;width:36px;height:36px}
+  .figures__grid{grid-template-columns:1fr 1fr;gap:22px 16px}
+}
+@media (max-width:720px){
+  .hero2{padding:36px 0 104px}
+  .hero2__shade{background:linear-gradient(180deg,rgba(16,18,22,.55) 0%,rgba(16,18,22,.78) 60%,rgba(16,18,22,.9) 100%)}
+  .hero2 .display{font-size:clamp(32px,8.6vw,44px)}
+  .hero2__in{align-items:stretch}
+  .hero2__badge{align-self:flex-start;font-size:13px}
+  .hero2__trust{flex-direction:column;gap:8px;font-size:14.5px}
+  .tiles{margin-top:-76px}
+  .tiles__grid{grid-template-columns:1fr;gap:12px}
+  .tile{min-height:128px}
+  .tile__txt{padding:18px 70px 18px 18px}
+  .tile__go{left:auto;right:16px;bottom:18px}
+}
+
+/* Unterseiten: Kopf mit Foto, Kurs-Vorschaubilder */
+.phead--photo{padding:clamp(28px,4vw,56px) 0}
+.phead__grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(28px,4vw,64px);align-items:center}
+.phead--photo .phead__inner{max-width:none!important;padding:0}
+.phead__media{margin:0;border-radius:22px;overflow:hidden;aspect-ratio:4/3;box-shadow:var(--shadow-lg);background:var(--rose)}
+.phead__img{width:100%;height:100%;object-fit:cover}
+.acc__photo{display:block;width:64px;height:64px;border-radius:14px;object-fit:cover}
+.alist .acc__photo{width:56px;height:56px}
+.apage__intro{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(24px,4vw,56px);align-items:center;margin-bottom:clamp(24px,3vw,36px)}
+.apage__intro .lead{margin-top:12px}
+.apage__intro--flip .apage__media{order:-1}
+.apage__media{margin:0;border-radius:20px;overflow:hidden;aspect-ratio:16/10;box-shadow:var(--shadow)}
+.apage__img{width:100%;height:100%;object-fit:cover}
+.tiles + .section{padding-top:clamp(40px,5vw,64px)}
+.nextd + *{margin-top:0}
+@media (max-width:1000px){
+  .phead__grid{grid-template-columns:1fr}
+  .phead__media{aspect-ratio:16/8;border-radius:18px}
+  .acc__photo{width:52px;height:52px;border-radius:12px}
+  .apage__intro{grid-template-columns:1fr}
+  .apage__intro--flip .apage__media{order:0}
+}
+.page-erste-hilfe .phead__grid,.page-brandschutz .phead__grid{max-width:calc(900px + 2*var(--gutter))}
+.page-arbeitssicherheit .phead__grid{max-width:calc(1000px + 2*var(--gutter))}
+@media (min-width:1001px){.phead__media{aspect-ratio:3/2}}

@@ -60,6 +60,16 @@ function layout_start(array $meta): void
 <body class="page-<?= e($active ?: 'home') ?>">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header class="header">
+  <div class="topbar">
+    <div class="wrap topbar__in">
+      <span><?= icon('pin') ?><?= e(site('org')) ?> · <?= e(site('street')) ?>, <?= e(site('city')) ?></span>
+      <span class="topbar__r">
+        <a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a>
+        <a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a>
+        <?php if (site('instagram')): ?><a href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">Instagram</a><?php endif; ?>
+      </span>
+    </div>
+  </div>
   <div class="wrap header__top">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
       <picture>
@@ -230,11 +240,13 @@ function course_schema(array $c, array $dates = []): array
 }
 
 /** Wiederverwendbarer Seitenkopf (Unterseiten). */
-function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = ''): void
+function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = ''): void
 {
+    $img = $photo ? photo($photo, $title, 'phead__img', false) : '';
     ?>
-<section class="phead">
-  <div class="wrap phead__inner">
+<section class="phead<?= $img ? ' phead--photo' : '' ?>">
+  <?php if ($img): ?><div class="wrap phead__grid"><?php endif; ?>
+  <div class="<?= $img ? '' : 'wrap ' ?>phead__inner">
     <?php if ($crumbs): ?>
     <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><?php foreach ($crumbs as [$n, $p]): ?><span aria-hidden="true">/</span><a href="<?= url($p) ?>"><?= e($n) ?></a><?php endforeach; ?></nav>
     <?php endif; ?>
@@ -242,6 +254,7 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
     <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
     <?= $extra ?>
   </div>
+  <?php if ($img): ?><figure class="phead__media"><?= $img ?></figure></div><?php endif; ?>
 </section>
 <?php
 }
@@ -284,4 +297,20 @@ function image_slot(string $slot, string $alt, string $icon = 'heart', string $c
         return '<figure class="media ' . e($class) . '"><img src="' . e($src) . '" alt="' . e($alt) . '" loading="lazy" decoding="async"></figure>';
     }
     return '<figure class="media media--empty ' . e($class) . '" role="img" aria-label="' . e($alt) . '">' . cross_svg('media__cross', 'currentColor') . icon($icon, 'media__icon') . '</figure>';
+}
+
+/** Foto eines Bildplatzes als <img> (Upload oder Standardfoto), sonst leer. */
+function photo(string $slot, string $alt, string $class = '', bool $lazy = true): string
+{
+    $src = slot_image($slot);
+    if (!$src) {
+        return '';
+    }
+    return '<img class="' . e($class) . '" src="' . e($src) . '" alt="' . e($alt) . '"' . ($lazy ? ' loading="lazy"' : ' fetchpriority="high"') . ' decoding="async">';
+}
+
+/** Kursbild: Foto, sonst gezeichnetes Motiv. */
+function course_media(array $c, string $class = 'card__photo'): string
+{
+    return photo('kurs-' . $c['slug'], $c['title'], $class) ?: illus_course($c);
 }

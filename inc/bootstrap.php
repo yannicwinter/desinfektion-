@@ -193,7 +193,9 @@ function slot_image(string $slot): ?string
             return url('uploads/' . $slot . '.' . $ext) . '?v=' . filemtime($f);
         }
     }
-    return null; // ohne eigenes Bild zeigen die Seiten gezeichnete Motive (inc/illus.php)
+    // Standardfoto (assets/img/foto), sonst gezeichnetes Motiv (inc/illus.php)
+    $f = ROOT . '/assets/img/foto/' . $slot . '.jpg';
+    return is_file($f) ? asset('img/foto/' . $slot . '.jpg') : null;
 }
 
 /** Bildplätze für den Admin: feste Seitenbilder + ein Bild je Kurs. */
@@ -201,11 +203,12 @@ function image_slots(): array
 {
     $slots = [
         'hero' => 'Startseite – großes Bild oben',
-        'grid' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
         'home' => 'Startseite – Arbeitssicherheit',
         'erste-hilfe' => 'Seite Erste Hilfe',
         'brandschutz' => 'Seite Brandschutz',
         'unternehmen' => 'Seite Arbeitssicherheit',
+        'fachkraft' => 'Arbeitssicherheit – Fachkraft',
+        'inhouse' => 'Arbeitssicherheit – Schulung im Betrieb',
     ];
     foreach (content()['courses'] ?? [] as $c) {
         $slots['kurs-' . $c['slug']] = 'Kurs: ' . $c['title'];

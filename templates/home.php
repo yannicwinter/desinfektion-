@@ -20,32 +20,55 @@ layout_start([
     ]],
 ]);
 ?>
-<section class="hero hero--search">
-  <div class="wrap hs">
-    <h1 class="display reveal"><?= e($P('hero_title')) ?></h1>
-    <p class="lead reveal"><?= e($P('hero_lead')) ?></p>
+<section class="hero2">
+  <?= photo('hero', 'Erste-Hilfe-Kurs beim DRK: Teilnehmende üben die Herzdruckmassage', 'hero2__bg', false) ?>
+  <div class="hero2__shade" aria-hidden="true"></div>
+  <div class="wrap hero2__in">
+    <?php if ($P('hero_badge')): ?><span class="hero2__badge"><?= icon('shield') ?><?= e($P('hero_badge')) ?></span><?php endif; ?>
+    <h1 class="display"><?= e($P('hero_title')) ?></h1>
+    <p class="lead"><?= e($P('hero_lead')) ?></p>
     <?php include __DIR__ . '/partials/suche.php'; ?>
-    <p class="hs__help reveal">Unsicher, welcher Kurs passt? <a href="#kursfinder" data-kf-open>Kursfinder fragen</a></p>
+    <ul class="hero2__trust">
+      <?php foreach (lines($P('hero_trust')) as $t): ?><li><?= icon('check') ?><?= e($t) ?></li><?php endforeach; ?>
+    </ul>
   </div>
 </section>
 
-<section class="themes">
-  <div class="wrap themes__grid">
-    <a class="theme reveal" href="<?= url('erste-hilfe') ?>">
-      <span class="theme__art theme__art--red"><?= illus_heart('theme__heart', 'rgba(255,255,255,.2)', '#fff') ?></span>
-      <span class="theme__txt"><strong>Erste Hilfe</strong><span>Führerschein · Betrieb · Familie</span></span>
-      <?= icon('arrow', 'i theme__go') ?>
+<section class="tiles">
+  <div class="wrap tiles__grid">
+    <?php foreach ([['erste-hilfe', 'Erste Hilfe', 'Führerschein · Betrieb · Familie'], ['brandschutz', 'Brandschutz', 'Helfer · Löschtraining · Beratung'], ['arbeitssicherheit', 'Arbeitssicherheit', 'Fachkraft · Beratung · Dokumente']] as [$slug, $t, $sub]): ?>
+    <a class="tile reveal" href="<?= url($slug) ?>">
+      <?= photo($slug === 'arbeitssicherheit' ? 'unternehmen' : $slug, $t, 'tile__img') ?>
+      <span class="tile__txt"><strong><?= e($t) ?></strong><span><?= e($sub) ?></span></span>
+      <span class="tile__go"><?= icon('arrow') ?></span>
     </a>
-    <a class="theme reveal" href="<?= url('brandschutz') ?>">
-      <span class="theme__art theme__art--rose"><?= illus_extinguisher('theme__ext') ?></span>
-      <span class="theme__txt"><strong>Brandschutz</strong><span>Helfer · Übungen · Beratung</span></span>
-      <?= icon('arrow', 'i theme__go') ?>
-    </a>
-    <a class="theme reveal" href="<?= url('arbeitssicherheit') ?>">
-      <span class="theme__art theme__art--soft"><svg class="theme__shield" viewBox="0 0 120 140" aria-hidden="true"><path d="M60 4 112 22v44c0 36-24 58-52 70C32 124 8 102 8 66V22z" fill="#E60005"/><path d="M36 70l16 16 32-34" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="theme__txt"><strong>Arbeitssicherheit</strong><span>Fachkraft · Beratung · Dokumente</span></span>
-      <?= icon('arrow', 'i theme__go') ?>
-    </a>
+    <?php endforeach; ?>
+  </div>
+</section>
+
+<?php
+$next = array_values(array_filter(hiorg_dates_all(bookable_courses()), fn($it) => $it['status'] !== 'full' && !empty($it['kid'])));
+?>
+<?php if ($next): ?>
+<section class="section section--tight">
+  <div class="wrap nextd">
+    <div class="section-head reveal">
+      <div><h2 class="h2">Nächste freie Termine</h2><p class="lead">Platz sichern und direkt online anmelden.</p></div>
+      <a class="link-arrow" href="<?= url('termine') ?>">Alle <?= count($next) ?> Termine <?= icon('arrow') ?></a>
+    </div>
+    <ul class="dates dates--list reveal">
+      <?= render_dates($next, ['limit' => 5, 'show_course' => true]) ?>
+    </ul>
+  </div>
+</section>
+<?php endif; ?>
+
+<section class="figures">
+  <div class="wrap figures__grid">
+    <div class="figure"><strong><?= count($next) ?></strong><span>freie Termine</span></div>
+    <div class="figure"><strong><?= count($orte) ?></strong><span>Kursorte in der Region</span></div>
+    <div class="figure"><strong><?= count(courses()) ?></strong><span>Kurse &amp; Leistungen</span></div>
+    <div class="figure"><strong>1 Tag</strong><span>Erste-Hilfe-Kurs – für Führerschein und Betrieb</span></div>
   </div>
 </section>
 
@@ -69,7 +92,7 @@ layout_start([
     <div class="cards">
       <?php foreach ($featured as $c): ?>
       <article class="card card--img reveal">
-        <?= illus_course($c) ?>
+        <div class="card__media"><?= course_media($c) ?></div>
         <span class="card__tag"><?= $c['category'] === 'brandschutz' ? 'Brandschutz' : e($c['group']) ?></span>
         <h3 class="h4"><a href="<?= course_url($c) ?>" class="card__link"><?= e($c['title']) ?></a></h3>
         <p><?= e($c['teaser']) ?></p>

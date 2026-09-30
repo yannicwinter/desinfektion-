@@ -16,7 +16,7 @@ layout_start([
     'breadcrumb' => [[$P('title'), $category]],
     'schema' => array_map(fn($c) => course_schema($c), $list),
 ]);
-page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
+page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]], '', $category);
 ?>
 <section class="section section--tight">
   <div class="wrap cpage">
@@ -37,7 +37,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
       ?>
       <details class="acc__item" id="<?= e($c['slug']) ?>">
         <summary class="acc__sum">
-          <span class="acc__ico" aria-hidden="true"><?= illus_course($c) ?></span>
+          <span class="acc__ico" aria-hidden="true"><?= course_media($c, 'acc__photo') ?></span>
           <span class="acc__head">
             <span class="acc__title"><?= e($c['title']) ?></span>
             <span class="acc__teaser"><?= e($c['teaser']) ?></span>
