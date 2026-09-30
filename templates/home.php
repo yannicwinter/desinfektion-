@@ -33,11 +33,7 @@ layout_start([
     </div>
     <?php if ($hero = slot_image('hero')): ?>
     <figure class="hero__media"><img src="<?= e($hero) ?>" alt="Erste-Hilfe- und Brandschutz-Training beim DRK" width="2000" height="1125" fetchpriority="high"></figure>
-    <?php else:
-        $next = null;
-        foreach (hiorg_dates_all(bookable_courses()) as $it) {
-            if ($it['status'] !== 'full' && !empty($it['kid'])) { $next = $it; break; }
-        } ?>
+    <?php else: ?>
     <div class="bento">
       <a class="bento__tile bento__eh" href="<?= url('erste-hilfe') ?>">
         <?= cross_svg('bento__cross', '#fff') ?>
@@ -48,20 +44,10 @@ layout_start([
         <?= illus_extinguisher('bento__ext') ?>
         <span class="bento__label"><strong>Brandschutz</strong><span>Helfer · Übungen · Beratung</span></span>
       </a>
-      <?php if ($next): ?>
-      <a class="bento__tile bento__next" href="<?= url('termine/' . $next['course']['slug'] . '/anmeldung/' . $next['kid']) ?>">
-        <span class="bento__kicker">Nächster freier Kurs</span>
-        <strong class="bento__date"><?= e(de_date($next['date'], 'WW, D. MMM')) ?></strong>
-        <span><?= e($next['course']['title']) ?><?= hiorg_town($next['details']) ? ' · ' . e(hiorg_town($next['details'])) : '' ?></span>
-        <span class="bento__go"><?= $next['free'] ? e($next['free']) : 'Jetzt anmelden' ?> <?= icon('arrow') ?></span>
+      <a class="bento__tile bento__as" href="<?= url('arbeitssicherheit') ?>">
+        <svg class="bento__shield" viewBox="0 0 120 140" aria-hidden="true"><path d="M60 4 112 22v44c0 36-24 58-52 70C32 124 8 102 8 66V22z" fill="#E60005"/><path d="M36 70l16 16 32-34" fill="none" stroke="#fff" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="bento__label"><strong>Arbeitssicherheit</strong><span>Fachkraft · Beratung · Dokumente</span></span>
       </a>
-      <?php else: ?>
-      <a class="bento__tile bento__next" href="<?= url('termine') ?>">
-        <span class="bento__kicker">Kurstermine</span>
-        <strong class="bento__date">Alle Termine</strong>
-        <span class="bento__go">Jetzt ansehen <?= icon('arrow') ?></span>
-      </a>
-      <?php endif; ?>
     </div>
     <?php endif; ?>
   </div>
@@ -82,6 +68,7 @@ layout_start([
         </select>
       </label>
       <button class="btn btn--red" type="submit">Termine anzeigen <?= icon('arrow') ?></button>
+      <p class="finder__help">Unsicher, welcher Kurs passt? <a href="#kursfinder" data-kf-open>Kursfinder fragen</a></p>
     </form>
   </div>
 </section>

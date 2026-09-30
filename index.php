@@ -10,6 +10,7 @@ require __DIR__ . '/inc/hiorg.php';
 require __DIR__ . '/inc/layout.php';
 require __DIR__ . '/inc/instagram.php';
 require __DIR__ . '/inc/illus.php';
+require __DIR__ . '/inc/kursfinder.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rawurldecode(substr($path, strlen(base_path())));
@@ -86,6 +87,11 @@ switch ($route) {
         break;
 
     case 'api':
+        // /api/kursfinder?kurs={slug} → freie Termine als JSON für den Kursfinder
+        if (($parts[1] ?? '') === 'kursfinder') {
+            kursfinder_api((string) ($_GET['kurs'] ?? ''));
+            exit;
+        }
         // /api/termine/{slug}?limit=3 → HTML-Fragment für Akkordeon-Vorschau
         if (($parts[1] ?? '') === 'termine' && ($c = course($parts[2] ?? '')) && !empty($c['hiorg_id'])) {
             header('Content-Type: text/html; charset=utf-8');

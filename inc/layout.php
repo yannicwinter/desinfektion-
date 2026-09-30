@@ -11,6 +11,7 @@ function layout_start(array $meta): void
     $desc = $meta['description'] ?? '';
     $canonical = abs_url($meta['path'] ?? '/');
     $active = $meta['active'] ?? '';
+    $GLOBALS['__active'] = $active;
     $og = site('default_og_image') ?: (slot_image('home') ? abs_url(ltrim(strtok((string) slot_image('home'), '?'), '/')) : '');
 
     $schema = $meta['schema'] ?? [];
@@ -128,6 +129,36 @@ function layout_end(): void
     </div>
   </div>
 </footer>
+<?php
+    $tabs = [['', 'Start', 'home'], ['erste-hilfe', 'Erste Hilfe', 'heart'], ['termine', 'Termine', 'calendar'], ['brandschutz', 'Brandschutz', 'flame']];
+    $moreActive = in_array($GLOBALS['__active'] ?? '', ['arbeitssicherheit', 'faq', 'kontakt'], true);
+?>
+<nav class="tabbar" aria-label="Schnellnavigation">
+  <?php foreach ($tabs as [$slug, $label, $ic]): $on = ($GLOBALS['__active'] ?? '') === $slug || ($slug === 'termine' && ($GLOBALS['__active'] ?? '') === 'anmeldung'); ?>
+  <a class="tabbar__item<?= $slug === 'termine' ? ' tabbar__item--main' : '' ?>" href="<?= url($slug === '' ? '/' : $slug) ?>"<?= $on ? ' aria-current="page"' : '' ?>><span class="tabbar__icon"><?= icon($ic) ?></span><span><?= $label ?></span></a>
+  <?php endforeach; ?>
+  <button class="tabbar__item" type="button" data-more-open aria-haspopup="dialog" aria-controls="mehr"<?= $moreActive ? ' aria-current="page"' : '' ?>><span class="tabbar__icon"><?= icon('grid') ?></span><span>Mehr</span></button>
+</nav>
+<div class="more" id="mehr" role="dialog" aria-modal="true" aria-label="Weitere Seiten" hidden>
+  <div class="more__backdrop" data-more-close></div>
+  <div class="more__sheet">
+    <span class="more__grip" aria-hidden="true"></span>
+    <ul class="more__list">
+      <li><a href="<?= url('arbeitssicherheit') ?>"><?= icon('building') ?><span><strong>Arbeitssicherheit</strong><small>Für Betriebe · Fachkraft · Beratung</small></span></a></li>
+      <li><a href="<?= url('faq') ?>"><?= icon('search') ?><span><strong>Häufige Fragen</strong><small>Prüfung, Gültigkeit, Kosten</small></span></a></li>
+      <li><a href="<?= url('kontakt') ?>"><?= icon('users') ?><span><strong>Kontakt</strong><small>Ansprechpersonen & Formular</small></span></a></li>
+    </ul>
+    <div class="more__actions">
+      <a class="btn btn--ghost" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> Anrufen</a>
+      <a class="btn btn--ghost" href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?> E-Mail</a>
+    </div>
+    <button class="more__close" type="button" data-more-close>Schließen</button>
+  </div>
+</div>
+<?php if (($GLOBALS['__active'] ?? '') !== 'anmeldung'): ?>
+<?= kursfinder_markup() ?>
+<script src="<?= asset('js/kursfinder.js') ?>" defer></script>
+<?php endif; ?>
 <script src="<?= asset('js/main.js') ?>" defer></script>
 </body>
 </html>

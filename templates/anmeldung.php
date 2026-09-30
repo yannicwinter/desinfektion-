@@ -16,7 +16,7 @@ layout_start([
     'title' => 'Anmeldung: ' . $current['title'] . ' am ' . de_date($d, 'D. MMM YYYY') . ' | ' . site('name'),
     'description' => '',
     'path' => 'termine/' . $current['slug'],
-    'active' => 'termine',
+    'active' => 'anmeldung',
     'noindex' => true,
 ]);
 ?>

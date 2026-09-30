@@ -128,5 +128,28 @@
   document.querySelectorAll('[data-confirm]').forEach(function (b) {
     b.addEventListener('click', function (e) { if (!confirm(b.getAttribute('data-confirm'))) e.preventDefault(); });
   });
-})();
 
+  // Mobil: „Mehr“-Menü der Tab-Leiste
+  var more = document.getElementById('mehr');
+  var moreBtn = document.querySelector('[data-more-open]');
+  if (more && moreBtn) {
+    var openMore = function () {
+      more.hidden = false;
+      requestAnimationFrame(function () { more.classList.add('is-open'); });
+      document.body.classList.add('more-open');
+      moreBtn.setAttribute('aria-expanded', 'true');
+      var first = more.querySelector('a');
+      if (first) first.focus();
+    };
+    var closeMore = function () {
+      more.classList.remove('is-open');
+      document.body.classList.remove('more-open');
+      moreBtn.setAttribute('aria-expanded', 'false');
+      setTimeout(function () { more.hidden = true; }, reduce ? 0 : 250);
+      moreBtn.focus();
+    };
+    moreBtn.addEventListener('click', openMore);
+    more.querySelectorAll('[data-more-close]').forEach(function (b) { b.addEventListener('click', closeMore); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !more.hidden) closeMore(); });
+  }
+})();
