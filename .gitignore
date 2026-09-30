@@ -1,0 +1,9 @@
+cache/*
+!cache/.htaccess
+!cache/.gitkeep
+data/admin.json
+data/backups/*
+!data/backups/.gitkeep
+data/content.json.tmp
+.DS_Store
+data/secret.key

@@ -1,0 +1,398 @@
+{
+    "site": {
+        "name": "DRK Arbeitssicherheit Mittelweser",
+        "org": "DRK-Kreisverband Verden e.V.",
+        "url": "https://www.drk-sicherheit.de",
+        "phone": "04231 / 9245-0",
+        "phone_link": "+49423192450",
+        "email": "kontakt@drk-sicherheit.de",
+        "form_recipient": "kontakt@drk-sicherheit.de",
+        "street": "Lindhooper Str. 20/22",
+        "zip": "27283",
+        "city": "Verden (Aller)",
+        "region": "Niedersachsen",
+        "instagram": "https://www.instagram.com/drk_kreisverband_verden/",
+        "hiorg_ov": "drkv",
+        "hiorg_cache_minutes": "30",
+        "default_og_image": ""
+    },
+    "pages": {
+        "home": {
+            "seo_title": "Erste-Hilfe-Kurse & Brandschutzhelfer in Verden | DRK Arbeitssicherheit",
+            "seo_description": "Erste-Hilfe-Kurse für Führerschein, Betrieb und Familie, Brandschutzhelfer-Ausbildung und Arbeitssicherheit vom DRK-Kreisverband Verden. Jetzt Termin finden.",
+            "hero_eyebrow": "DRK-Kreisverband Verden e.V.",
+            "hero_title": "Erste Hilfe und Brandschutz, die im Ernstfall sitzen.",
+            "hero_lead": "Kurse für Führerschein, Beruf und Familie – in der Region Mittelweser oder direkt in Ihrem Betrieb.",
+            "usp1_title": "Anerkannt",
+            "usp1_text": "Für Führerschein, Berufsgenossenschaft und Studium.",
+            "usp2_title": "Praxisnah",
+            "usp2_text": "Üben am Phantom und am Brandsimulator. Keine Prüfung.",
+            "usp3_title": "Vor Ort",
+            "usp3_text": "Viele Kurse auch als Inhouse-Schulung in Ihrem Betrieb.",
+            "kurse_title": "Beliebte Kurse",
+            "kurse_lead": "Termin wählen, online buchen, fertig.",
+            "firma_eyebrow": "Für Unternehmen",
+            "firma_title": "Arbeitsschutz aus einer Hand.",
+            "firma_text": "Wir bilden Ihre Ersthelfer und Brandschutzhelfer aus, erstellen Ihre Unterlagen und übernehmen auf Wunsch die sicherheitstechnische Betreuung.",
+            "firma_list": "Ersthelfer & Brandschutzhelfer\nBrandschutzordnung & Rettungspläne\nExterner Brandschutzbeauftragter\nFachkraft für Arbeitssicherheit",
+            "stat_value": "5 %",
+            "stat_text": "der Beschäftigten müssen als Brandschutzhelfer ausgebildet sein (ASR A2.2).",
+            "cta_title": "Fragen? Wir sind für Sie da.",
+            "cta_text": "Wir beraten Sie gern – telefonisch oder per E-Mail."
+        },
+        "erste-hilfe": {
+            "seo_title": "Erste-Hilfe-Kurse in Verden & Achim | DRK Arbeitssicherheit",
+            "seo_description": "Erste-Hilfe-Kurs für Führerschein und Betrieb, Fortbildung, Erste Hilfe am Kind, am Hund und am Welpen. DRK-Kurse in Verden und Umgebung – online buchen.",
+            "eyebrow": "Kurse",
+            "title": "Erste Hilfe",
+            "lead": "Vom Führerschein bis zum Welpen: praxisnah, kompakt und ohne Prüfung.",
+            "outro_title": "Welcher Kurs passt zu mir?",
+            "outro_text": "Rufen Sie uns an – wir beraten Sie gern."
+        },
+        "brandschutz": {
+            "seo_title": "Brandschutzhelfer-Ausbildung & Brandschutz | DRK Verden",
+            "seo_description": "Brandschutz- und Evakuierungshelfer nach ASR A2.2 mit Löschübung, Feuerlöschertraining, Brandschutzordnung, Flucht- und Rettungspläne und externer Brandschutzbeauftragter.",
+            "eyebrow": "Betrieb",
+            "title": "Brandschutz",
+            "lead": "Ausbildung, Unterlagen und Beratung – damit Ihr Betrieb im Brandfall vorbereitet ist.",
+            "contact_title": "Ihr Ansprechpartner Brandschutz",
+            "contact_text": "Matthias True"
+        },
+        "unternehmen": {
+            "seo_title": "Arbeitssicherheit für Unternehmen | Ersthelfer, Brandschutz, Fachkraft | DRK",
+            "seo_description": "Betriebliche Ersthelfer, Brandschutzhelfer, Fachkraft für Arbeitssicherheit und Inhouse-Schulungen für Unternehmen in der Region Mittelweser.",
+            "eyebrow": "Für Unternehmen",
+            "title": "Arbeitsschutz aus einer Hand",
+            "lead": "Schulungen bei uns oder direkt bei Ihnen – plus Beratung und Dokumentation.",
+            "asi_title": "Ihre Fachkraft für Arbeitssicherheit",
+            "asi_text": "Wir übernehmen Ihre Pflichten nach ASiG und DGUV Vorschrift 2 – als Pauschale, nach Stunden oder als Projekt.",
+            "asi_list": "Beratung nach ASiG\nGefährdungsbeurteilungen\nBetriebsbegehungen\nUnterweisungen\nUnfallanalyse\nDokumentation",
+            "inhouse_title": "Schulung in Ihrem Betrieb",
+            "inhouse_steps": "Anfrage stellen | Kurs und Teilnehmerzahl nennen.\nTermin abstimmen | Passend zu Ihrem Betriebsablauf.\nWir kommen | Mit komplettem Übungsmaterial.",
+            "inhouse_needs": "Raum ab 50 m²\nStühle & Platz für Übungen\nFlipchart oder Whiteboard\nParkmöglichkeit",
+            "form_title": "Unverbindlich anfragen",
+            "form_text": "Wir melden uns schnellstmöglich bei Ihnen."
+        },
+        "termine": {
+            "seo_title": "Kurstermine Erste Hilfe & Brandschutz | DRK Verden",
+            "seo_description": "Aktuelle Termine für Erste-Hilfe-Kurse, Fortbildung, Erste Hilfe am Kind, am Hund und Brandschutzhelfer beim DRK Verden. Freie Plätze sehen und direkt online buchen.",
+            "eyebrow": "Online buchen",
+            "title": "Kurstermine",
+            "lead": "Kurs wählen, Termin aussuchen, direkt online anmelden.",
+            "hint": "Die Anmeldung erfolgt über unser Buchungssystem HiOrg-Server. Sie erhalten dort direkt Ihre Bestätigung."
+        },
+        "faq": {
+            "seo_title": "Häufige Fragen zu Erste-Hilfe-Kurs & Brandschutz | DRK Verden",
+            "seo_description": "Antworten zu Prüfung, Mindestalter, Stornierung, Gültigkeit der Bescheinigung und Kostenübernahme für Betriebe.",
+            "eyebrow": "FAQ",
+            "title": "Häufige Fragen",
+            "lead": "Kurz und klar beantwortet."
+        },
+        "kontakt": {
+            "seo_title": "Kontakt | DRK Arbeitssicherheit Mittelweser",
+            "seo_description": "So erreichen Sie das Team Erste Hilfe & Brandschutz des DRK-Kreisverbands Verden: Telefon, E-Mail, Kursorte und Kontaktformular.",
+            "eyebrow": "Kontakt",
+            "title": "Wir sind für Sie da",
+            "lead": "Fragen zu Kursen, Terminen oder einer Schulung in Ihrem Betrieb?",
+            "orte": "DRK-Zentrum Verden · Lindhooper Str. 20/22\nDRK-Zentrum Achim-Baden · Bahnhofstraße 31\nOder direkt in Ihrem Betrieb"
+        },
+        "impressum": {
+            "seo_title": "Impressum | DRK Arbeitssicherheit Mittelweser",
+            "seo_description": "Impressum des DRK-Kreisverbands Verden e.V.",
+            "title": "Impressum",
+            "body": "**DRK-Kreisverband Verden e.V.**\nLindhooper Str. 20/22\n27283 Verden (Aller)\n\n[PLATZHALTER: Vertretungsberechtigter Vorstand, Registergericht, Registernummer, USt-IdNr. – bitte im Admin-Bereich ergänzen.]"
+        },
+        "datenschutz": {
+            "seo_title": "Datenschutz | DRK Arbeitssicherheit Mittelweser",
+            "seo_description": "Datenschutzerklärung des DRK-Kreisverbands Verden e.V.",
+            "title": "Datenschutz",
+            "body": "[PLATZHALTER: Offizielle Datenschutzerklärung des Kreisverbands einfügen. Hinweise: Die Website setzt keine Tracking-Cookies und lädt keine externen Schriften. Kurstermine werden serverseitig von HiOrg-Server abgerufen; erst beim Klick auf „Buchen“ wechseln Sie zu HiOrg-Server. Das Kontaktformular versendet Ihre Angaben per E-Mail an uns.]"
+        }
+    },
+    "courses": [
+        {
+            "slug": "erste-hilfe-ausbildung",
+            "category": "erste-hilfe",
+            "group": "Grundausbildung",
+            "title": "Erste-Hilfe-Ausbildung",
+            "teaser": "Für Führerschein, Studium, Verein – und für betriebliche Ersthelfer.",
+            "text": "An einem Tag lernen Sie, im Notfall ruhig und richtig zu handeln – vom Notruf bis zur Wiederbelebung. Gilt für alle Führerscheinklassen und als Ersthelfer-Ausbildung im Betrieb (DGUV). Keine Prüfung.",
+            "learn": "Notruf & Eigenschutz\nStabile Seitenlage\nWiederbelebung & AED\nWunden & starke Blutungen\nHerzinfarkt, Schlaganfall, Schock",
+            "facts": "Dauer: 9 UE · 1 Tag\nPreis: 55 €\nAb: 14 Jahren\nBetriebe: Abrechnung über BG möglich",
+            "price": "55 €",
+            "hiorg_id": "3871",
+            "cta": "termine",
+            "featured": "1",
+            "active": "1"
+        },
+        {
+            "slug": "erste-hilfe-fortbildung",
+            "category": "erste-hilfe",
+            "group": "Grundausbildung",
+            "title": "Erste-Hilfe-Fortbildung",
+            "teaser": "Auffrischung für betriebliche Ersthelfer – alle 2 Jahre Pflicht.",
+            "text": "Wissen auffrischen, Handgriffe üben, Neues aus der Notfallmedizin. Hält Ihre Ersthelfer-Qualifikation im Betrieb gültig.",
+            "learn": "Wiederbelebung & AED\nTypische Notfälle am Arbeitsplatz\nPraktische Fallbeispiele",
+            "facts": "Dauer: 9 UE · 1 Tag\nIntervall: alle 24 Monate (BG)\nFormat: Offen oder Inhouse",
+            "price": "",
+            "hiorg_id": "3872",
+            "cta": "termine",
+            "featured": "1",
+            "active": "1"
+        },
+        {
+            "slug": "erste-hilfe-am-kind",
+            "category": "erste-hilfe",
+            "group": "Familie & Tier",
+            "title": "Erste Hilfe am Kind",
+            "teaser": "Für Eltern, Großeltern, Babysitter und Erzieher.",
+            "text": "Notfälle bei Säuglingen und Kindern sicher erkennen und richtig handeln – plus Tipps, wie Sie Unfälle im Alltag vermeiden.",
+            "learn": "Wiederbelebung am Kind\nVerschlucken & Atemnot\nVerletzungen & Wundversorgung\nUnfälle vorbeugen",
+            "facts": "Dauer: 9 UE · 1 Tag\nPreis: 55 €\nKitas: Abrechnung über UV-Träger möglich",
+            "price": "55 €",
+            "hiorg_id": "4007",
+            "cta": "termine",
+            "featured": "1",
+            "active": "1"
+        },
+        {
+            "slug": "erste-hilfe-am-hund",
+            "category": "erste-hilfe",
+            "group": "Familie & Tier",
+            "title": "Erste Hilfe am Hund",
+            "teaser": "Notfälle beim Hund erkennen und richtig reagieren.",
+            "text": "Wunden versorgen, Vergiftungen erkennen, Wiederbelebung – geübt wird am Dummy-Hund.",
+            "learn": "Notfallcheck am Hund\nWundversorgung & Verbände\nVergiftungen & Hitzschlag\nWiederbelebung",
+            "facts": "Dauer: ca. 3 Stunden\nÜbung: am Dummy-Hund",
+            "price": "",
+            "hiorg_id": "4007",
+            "cta": "termine",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "erste-hilfe-am-welpen",
+            "category": "erste-hilfe",
+            "group": "Familie & Tier",
+            "title": "Erste Hilfe am Welpen",
+            "teaser": "Speziell für junge Hunde und ihre Menschen.",
+            "text": "Die typischen Gefahren im ersten Hundejahr – und was Sie im Notfall tun. Welpen dürfen mitkommen.",
+            "learn": "Typische Welpen-Notfälle\nGiftiges im Haushalt\nErstversorgung & Transport",
+            "facts": "Dauer: ca. 3 Stunden\nWelpen: dürfen mitkommen",
+            "price": "",
+            "hiorg_id": "4310",
+            "cta": "termine",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "aed-reanimationstraining",
+            "category": "erste-hilfe",
+            "group": "Für Teams & Praxen",
+            "title": "AED- & Reanimationstraining",
+            "teaser": "Wiederbelebung und Defibrillator – kompakt für Ihr Team.",
+            "text": "Herz-Kreislauf-Stillstand erkennen, Herzdruckmassage und AED-Einsatz in Kleingruppen üben. Wir kommen zu Ihnen.",
+            "learn": "",
+            "facts": "Dauer: 1–2 Stunden\nFormat: Bei Ihnen vor Ort\nKosten: auf Anfrage",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "fresh-up-arztpraxen",
+            "category": "erste-hilfe",
+            "group": "Für Teams & Praxen",
+            "title": "Fresh Up für Arztpraxen",
+            "teaser": "Notfalltraining für Ihr Praxisteam.",
+            "text": "Individuelles Training in Ihrer Praxis – abgestimmt auf Ihre Abläufe und Ausstattung. Wir bringen alles mit.",
+            "learn": "",
+            "facts": "Dauer: ca. 3 Stunden\nKosten: auf Anfrage",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "erste-hilfe-party",
+            "category": "erste-hilfe",
+            "group": "Familie & Tier",
+            "title": "Erste-Hilfe-Party",
+            "teaser": "Privatkurs bei Ihnen zu Hause.",
+            "text": "Sie bestimmen Ort, Zeit und Schwerpunkt – ideal für junge Eltern und Freundeskreise.",
+            "learn": "",
+            "facts": "Dauer: 2–3 Stunden\nTermin: nach Absprache",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "kinder-helfen-kindern",
+            "category": "erste-hilfe",
+            "group": "Kita & Schule",
+            "title": "Kinder helfen Kindern",
+            "teaser": "Erste Hilfe spielerisch für Kita und Grundschule.",
+            "text": "Pflaster kleben, stabile Seitenlage, Notruf – und ein Blick in den Rettungswagen. Jedes Kind erhält eine Urkunde.",
+            "learn": "",
+            "facts": "Für: Kita & Grundschule\nKosten: nach Absprache",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "forstehjelp-schulen",
+            "category": "erste-hilfe",
+            "group": "Kita & Schule",
+            "title": "Førstehjelp an Schulen",
+            "teaser": "Erste Hilfe in Leveln nach norwegischem Vorbild.",
+            "text": "Aufbauende Module von Bronze bis Platin – vom Herzdruck bis zum kompletten Kurs, direkt im Klassenverband.",
+            "learn": "",
+            "facts": "Module: je 90 Minuten\nLevel: Bronze · Silber · Gold · Platin",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "brandschutzhelfer",
+            "category": "brandschutz",
+            "group": "Schulungen",
+            "title": "Brandschutz- & Evakuierungshelfer",
+            "teaser": "Pflichtausbildung nach ASR A2.2 – mit Löschübung.",
+            "text": "Mindestens 5 % Ihrer Beschäftigten müssen Brandschutzhelfer sein. In einem halben Tag werden Ihre Mitarbeitenden Brandschutz- und Evakuierungshelfer – mit echter Übung am Brandsimulator.",
+            "learn": "Rechtliche Grundlagen\nBrandentstehung & Löschmittel\nUmgang mit Feuerlöschern\nVerhalten im Brandfall & Evakuierung\nLöschübung am Brandsimulator",
+            "facts": "Dauer: 5 UE\nGrundlage: DGUV Information 205-023\nKosten: trägt der Arbeitgeber",
+            "price": "",
+            "hiorg_id": "3870",
+            "cta": "termine",
+            "featured": "1",
+            "active": "1"
+        },
+        {
+            "slug": "feuerloeschertraining",
+            "category": "brandschutz",
+            "group": "Schulungen",
+            "title": "Feuerlöschertraining",
+            "teaser": "Sicherer Umgang mit dem Feuerlöscher – für die ganze Belegschaft.",
+            "text": "Kurze Theorie, viel Praxis: Jede und jeder löscht selbst. Ideal als Ergänzung zur Brandschutzhelfer-Ausbildung.",
+            "learn": "",
+            "facts": "Dauer: 60–90 Minuten\nFormat: Inhouse",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "brandschutzordnung-rettungsplaene",
+            "category": "brandschutz",
+            "group": "Beratung & Dokumente",
+            "title": "Brandschutzordnung & Rettungspläne",
+            "teaser": "Rechtssichere Unterlagen für Ihren Betrieb.",
+            "text": "Wir erstellen Ihre Dokumente passend zu Ihrem Gebäude und Betrieb – nach ASR A2.2, ASR A1.3 und ASR A2.3.",
+            "learn": "Brandschutzordnung nach DIN 14096\nFlucht- und Rettungspläne nach DIN ISO 23601\nGefährdungsbeurteilung Brandschutz",
+            "facts": "Format: Projekt\nKosten: individuelles Angebot",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        },
+        {
+            "slug": "brandschutzbeauftragter",
+            "category": "brandschutz",
+            "group": "Beratung & Dokumente",
+            "title": "Externer Brandschutzbeauftragter",
+            "teaser": "Wir übernehmen die Aufgaben – ganz oder teilweise.",
+            "text": "Begehungen, Beratung, Dokumentation: Sie erhalten einen festen Ansprechpartner und ein individuelles Angebot.",
+            "learn": "",
+            "facts": "Format: laufende Betreuung\nKosten: individuelles Angebot",
+            "price": "",
+            "hiorg_id": "",
+            "cta": "anfrage",
+            "featured": "",
+            "active": "1"
+        }
+    ],
+    "faq": [
+        {
+            "group": "Zum Kurs",
+            "q": "Gibt es eine Prüfung?",
+            "a": "Nein. Entscheidend ist Ihre aktive Teilnahme an allen Unterrichtseinheiten."
+        },
+        {
+            "group": "Zum Kurs",
+            "q": "Ab welchem Alter kann ich teilnehmen?",
+            "a": "Die Erste-Hilfe-Ausbildung ist ab 14 Jahren möglich."
+        },
+        {
+            "group": "Zum Kurs",
+            "q": "Was muss ich mitbringen?",
+            "a": "Personalausweis, bequeme Kleidung sowie Getränke und Snacks. Vorkenntnisse sind nicht nötig."
+        },
+        {
+            "group": "Buchung & Gültigkeit",
+            "q": "Wie melde ich mich an?",
+            "a": "Online über unsere [Terminseite](/termine). Die Buchung läuft über unser Buchungssystem HiOrg-Server."
+        },
+        {
+            "group": "Buchung & Gültigkeit",
+            "q": "Kann ich stornieren?",
+            "a": "Ja, bis zur Frist in Ihrer Buchungsbestätigung kostenfrei."
+        },
+        {
+            "group": "Buchung & Gültigkeit",
+            "q": "Wie lange ist die Bescheinigung gültig?",
+            "a": "Für den Führerschein unbegrenzt. Betriebliche Ersthelfer brauchen nach 24 Monaten (BG) bzw. 36 Monaten (GUV) eine Fortbildung."
+        },
+        {
+            "group": "Für Unternehmen",
+            "q": "Wer bezahlt die Ersthelfer-Ausbildung?",
+            "a": "Die Abrechnung kann über Ihren Unfallversicherungsträger erfolgen. Bitte klären Sie die Kostenübernahme vorab."
+        },
+        {
+            "group": "Für Unternehmen",
+            "q": "Wer bezahlt die Brandschutzhelfer-Ausbildung?",
+            "a": "Die Kosten trägt der Arbeitgeber."
+        },
+        {
+            "group": "Für Unternehmen",
+            "q": "Kommen Sie auch in unseren Betrieb?",
+            "a": "Ja. Sie brauchen einen Raum ab 50 m², Stühle, Platz für Übungen, ein Flipchart und eine Parkmöglichkeit."
+        }
+    ],
+    "contacts": [
+        {
+            "name": "Jan Wille",
+            "role": "Leitung Erste Hilfe & Brandschutz",
+            "email": "j.wille@rotkreuz-verden.de"
+        },
+        {
+            "name": "Matthias True",
+            "role": "Brandschutz",
+            "email": "kontakt@drk-sicherheit.de"
+        },
+        {
+            "name": "Bärbel Schierholz",
+            "role": "Abrechnung & Kosten",
+            "email": "b.schierholz@rotkreuz-verden.de"
+        },
+        {
+            "name": "Sigrid Renz",
+            "role": "Kinder helfen Kindern",
+            "email": "s.renz@rotkreuz-verden.de"
+        },
+        {
+            "name": "Christopher von Speckelsen",
+            "role": "Erste Hilfe am Hund",
+            "email": "ehhund@rotkreuz-verden.de"
+        }
+    ]
+}

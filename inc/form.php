@@ -1,0 +1,119 @@
+<?php
+/** Kontakt-/Anfrageformular: Verarbeitung (Spam-Schutz, Versand per mail()) und Ausgabe. */
+declare(strict_types=1);
+
+function form_topics(): array
+{
+    $t = [];
+    foreach (courses() as $c) {
+        $t[$c['slug']] = $c['title'];
+    }
+    $t['arbeitssicherheit'] = 'Fachkraft für Arbeitssicherheit';
+    $t['sonstiges'] = 'Sonstiges';
+    return $t;
+}
+
+/** Verarbeitet POST. Rückgabe: [Fehlerliste, alte Eingaben]. Bei Erfolg Redirect. */
+function form_handle(string $returnPath): array
+{
+    if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+        return [[], []];
+    }
+    $in = [];
+    foreach (['firma', 'name', 'email', 'telefon', 'thema', 'teilnehmer', 'nachricht'] as $k) {
+        $in[$k] = trim(str_replace(["\r", "\0"], '', (string) ($_POST[$k] ?? '')));
+    }
+    $err = [];
+
+    // Spam-Schutz: Honeypot, Mindest-Ausfüllzeit, CSRF, Limit je IP
+    $started = (int) ($_POST['t'] ?? 0);
+    if (!empty($_POST['website']) || $started === 0 || time() - $started < 3) {
+        redirect($returnPath . '?gesendet=1#formular');
+    }
+    // Signiertes Zeitstempel-Token statt Session: keine Cookies auf der öffentlichen Seite
+    if (!hash_equals(hash_hmac('sha256', 'form' . $started, app_secret()), (string) ($_POST['sig'] ?? '')) || time() - $started > 86400) {
+        $err[] = 'Das Formular ist abgelaufen. Bitte senden Sie es erneut.';
+    }
+    if ($in['name'] === '') {
+        $err[] = 'Bitte geben Sie Ihren Namen an.';
+    }
+    if (!filter_var($in['email'], FILTER_VALIDATE_EMAIL)) {
+        $err[] = 'Bitte geben Sie eine gültige E-Mail-Adresse an.';
+    }
+    if (mb_strlen($in['nachricht']) > 5000) {
+        $err[] = 'Die Nachricht ist zu lang.';
+    }
+    if (empty($_POST['datenschutz'])) {
+        $err[] = 'Bitte stimmen Sie der Datenschutzerklärung zu.';
+    }
+    $ipFile = CACHE_DIR . '/form-' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . date('YmdH')) . '.cnt';
+    $count = is_file($ipFile) ? (int) file_get_contents($ipFile) : 0;
+    if ($count >= 5) {
+        $err[] = 'Zu viele Anfragen. Bitte versuchen Sie es später erneut oder rufen Sie uns an.';
+    }
+    if ($err) {
+        return [$err, $in];
+    }
+
+    $topics = form_topics();
+    $topic = $topics[$in['thema']] ?? 'Allgemeine Anfrage';
+    $body = "Neue Anfrage über die Website\n\n"
+        . "Thema:        {$topic}\n"
+        . "Unternehmen:  {$in['firma']}\n"
+        . "Name:         {$in['name']}\n"
+        . "E-Mail:       {$in['email']}\n"
+        . "Telefon:      {$in['telefon']}\n"
+        . "Teilnehmende: {$in['teilnehmer']}\n\n"
+        . "Nachricht:\n{$in['nachricht']}\n";
+
+    $to = site('form_recipient') ?: site('email');
+    $host = preg_replace('/^www\./', '', parse_url(site('url'), PHP_URL_HOST) ?: ($_SERVER['HTTP_HOST'] ?? 'localhost'));
+    $headers = [
+        'From: ' . mb_encode_mimeheader(site('name')) . ' <noreply@' . $host . '>',
+        'Reply-To: ' . $in['email'],
+        'Content-Type: text/plain; charset=UTF-8',
+        'Content-Transfer-Encoding: 8bit',
+        'MIME-Version: 1.0',
+    ];
+    $subject = mb_encode_mimeheader('Website-Anfrage: ' . $topic . ' – ' . $in['name']);
+    $sent = @mail($to, $subject, $body, implode("\r\n", $headers));
+    @file_put_contents($ipFile, (string) ($count + 1));
+    if (!$sent) {
+        return [['Die Nachricht konnte leider nicht versendet werden. Bitte schreiben Sie uns direkt an ' . site('email') . '.'], $in];
+    }
+    redirect($returnPath . '?gesendet=1#formular');
+    return [[], []];
+}
+
+function form_render(array $err, array $old, string $preset = ''): void
+{
+    $topics = form_topics();
+    $sel = $old['thema'] ?? $preset;
+    $v = fn($k) => e($old[$k] ?? '');
+    if (!empty($_GET['gesendet'])): ?>
+<div class="notice notice--ok" role="status"><h3 class="h5">Vielen Dank!</h3><p>Ihre Anfrage ist bei uns angekommen. Wir melden uns schnellstmöglich.</p></div>
+<?php return; endif; ?>
+<form class="form" method="post" action="#formular" novalidate>
+  <?php if ($err): ?><div class="notice notice--err" role="alert"><ul><?php foreach ($err as $x): ?><li><?= e($x) ?></li><?php endforeach; ?></ul></div><?php endif; ?>
+  <?php $t = time(); ?>
+  <input type="hidden" name="t" value="<?= $t ?>">
+  <input type="hidden" name="sig" value="<?= hash_hmac('sha256', 'form' . $t, app_secret()) ?>">
+  <div class="hp" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+  <div class="form__grid">
+    <label class="field"><span>Name *</span><input name="name" required autocomplete="name" value="<?= $v('name') ?>"></label>
+    <label class="field"><span>Unternehmen</span><input name="firma" autocomplete="organization" value="<?= $v('firma') ?>"></label>
+    <label class="field"><span>E-Mail *</span><input type="email" name="email" required autocomplete="email" value="<?= $v('email') ?>"></label>
+    <label class="field"><span>Telefon</span><input type="tel" name="telefon" autocomplete="tel" value="<?= $v('telefon') ?>"></label>
+    <label class="field"><span>Thema</span>
+      <select name="thema">
+        <?php foreach ($topics as $k => $t): ?><option value="<?= e($k) ?>"<?= $sel === $k ? ' selected' : '' ?>><?= e($t) ?></option><?php endforeach; ?>
+      </select>
+    </label>
+    <label class="field"><span>Teilnehmende (ca.)</span><input name="teilnehmer" inputmode="numeric" value="<?= $v('teilnehmer') ?>"></label>
+    <label class="field field--full"><span>Nachricht</span><textarea name="nachricht" rows="5"><?= $v('nachricht') ?></textarea></label>
+  </div>
+  <label class="check"><input type="checkbox" name="datenschutz" value="1" required><span>Ich habe die <a href="<?= url('datenschutz') ?>">Datenschutzerklärung</a> gelesen und bin mit der Verarbeitung meiner Angaben einverstanden. *</span></label>
+  <button class="btn btn--red" type="submit">Anfrage senden <?= icon('arrow') ?></button>
+</form>
+<?php
+}
