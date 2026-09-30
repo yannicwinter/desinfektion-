@@ -126,22 +126,6 @@ function layout_end(): void
     </div>
   </div>
 </footer>
-<dialog class="book" data-book-dialog aria-labelledby="book-title">
-  <div class="book__head">
-    <div class="book__info">
-      <span class="eyebrow">Anmeldung</span>
-      <strong class="book__title" id="book-title"></strong>
-      <span class="book__meta"></span>
-    </div>
-    <a class="book__ext" href="#" target="_blank" rel="noopener" title="In neuem Fenster öffnen"><?= icon('external') ?><span>Neues Fenster</span></a>
-    <button class="book__close" type="button" data-book-close aria-label="Schließen"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
-  </div>
-  <div class="book__body">
-    <div class="book__loading"><span></span>Anmeldeformular wird geladen …</div>
-    <iframe title="Kursanmeldung über HiOrg-Server" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
-  </div>
-  <p class="book__foot">Die Anmeldung erfolgt sicher über unser Buchungssystem HiOrg-Server.</p>
-</dialog>
 <script src="<?= asset('js/main.js') ?>" defer></script>
 </body>
 </html>
@@ -232,30 +216,14 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
 <?php
 }
 
-/**
- * Animiertes Kreuz im Hintergrund: Kontur zeichnet sich, Fläche blendet ein,
- * Puls-Wellen laufen nach außen, EKG-Linie läuft durch. Folgt leicht Maus & Scroll.
- */
+/** Rotes Kreuz als ruhiges Hintergrundmotiv (einmaliges sanftes Einblenden, keine Dauer-Animation). */
 function hero_art(bool $big = true): string
 {
     $cross = 'M15 2h14v13h13v14H29v13H15V29H2V15h13z';
-    ob_start(); ?>
-<div class="art<?= $big ? ' art--big' : '' ?>" aria-hidden="true">
-  <div class="art__grid"></div>
-  <svg class="art__cross" viewBox="-12 -12 68 68" data-parallax>
-    <defs><linearGradient id="crossfill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FDE7E7"/><stop offset="1" stop-color="#FBD6D7"/></linearGradient></defs>
-    <g class="art__pulses"><path d="<?= $cross ?>"/><path d="<?= $cross ?>"/><path d="<?= $cross ?>"/></g>
-    <path class="art__fill" d="<?= $cross ?>"/>
-    <path class="art__line" d="<?= $cross ?>" pathLength="100"/>
-    <path class="art__run" d="<?= $cross ?>" pathLength="100"/>
-  </svg>
-  <?php if ($big): ?>
-  <?php $ecg = 'M0 70h380l18-10 14 10h40l12 12 22-78 24 102 16-36h34l20-14 20 14h600'; ?>
-  <svg class="art__ecg" viewBox="0 0 1200 120" preserveAspectRatio="none"><path class="art__ecg-base" d="<?= $ecg ?>"/><path class="art__ecg-run" pathLength="100" d="<?= $ecg ?>"/></svg>
-  <?php endif; ?>
-</div>
-<?php
-    return (string) ob_get_clean();
+    return '<div class="art' . ($big ? ' art--big' : '') . '" aria-hidden="true"><div class="art__grid"></div>'
+        . '<svg class="art__cross" viewBox="-2 -2 48 48">'
+        . '<defs><linearGradient id="crossfill" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FDE9E9"/><stop offset="1" stop-color="#FAD9DA"/></linearGradient></defs>'
+        . '<path class="art__fill" d="' . $cross . '"/><path class="art__line" d="' . $cross . '"/></svg></div>';
 }
 
 /** Bild-Platz: hochgeladenes Bild oder gestaltete Fläche mit Symbol. */

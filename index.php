@@ -61,7 +61,16 @@ switch ($route) {
 
     case 'termine':
         $slug = $parts[1] ?? '';
-        if ($slug !== '' && (!($current = course($slug)) || empty($current['hiorg_id']) || count($parts) > 2)) {
+        if ($slug !== '' && (!($current = course($slug)) || empty($current['hiorg_id']))) {
+            not_found();
+        }
+        // /termine/{kurs}/anmeldung/{kid} → Anmeldung eingebettet auf unserer Seite
+        if (count($parts) === 4 && $parts[2] === 'anmeldung' && ctype_digit($parts[3])) {
+            $kid = $parts[3];
+            require __DIR__ . '/templates/anmeldung.php';
+            break;
+        }
+        if (count($parts) > 2) {
             not_found();
         }
         require __DIR__ . '/templates/termine.php';

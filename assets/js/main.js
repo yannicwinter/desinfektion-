@@ -30,26 +30,6 @@
     items.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  // Kreuz folgt leicht Maus und Scroll (Parallax)
-  var art = document.querySelector('[data-parallax]');
-  if (art && !reduce) {
-    var mx = 0, my = 0, sy = 0, raf = null;
-    var paint = function () {
-      raf = null;
-      art.style.setProperty('--px', (mx * 18).toFixed(1) + 'px');
-      art.style.setProperty('--py', (my * 14 + sy * 0.18).toFixed(1) + 'px');
-    };
-    var queue = function () { if (!raf) raf = requestAnimationFrame(paint); };
-    if (window.matchMedia('(pointer: fine)').matches) {
-      window.addEventListener('pointermove', function (e) {
-        mx = e.clientX / window.innerWidth - 0.5;
-        my = e.clientY / window.innerHeight - 0.5;
-        queue();
-      }, { passive: true });
-    }
-    window.addEventListener('scroll', function () { sy = Math.min(window.scrollY, 800); queue(); }, { passive: true });
-  }
-
   // Akkordeon: weich auf- und zuklappen, Termine beim Öffnen nachladen
   var loadDates = function (item) {
     var box = item.querySelector('[data-dates]');
@@ -147,44 +127,3 @@
   });
 })();
 
-/* Buchen: HiOrg-Anmeldung im Fenster auf unserer Seite (Link funktioniert auch ohne JS) */
-(function () {
-  'use strict';
-  var dlg = document.querySelector('[data-book-dialog]');
-  if (!dlg || typeof dlg.showModal !== 'function') return;
-  var frame = dlg.querySelector('iframe');
-  var ext = dlg.querySelector('.book__ext');
-  var lastFocus = null;
-
-  frame.addEventListener('load', function () {
-    if (frame.getAttribute('src') && frame.getAttribute('src') !== 'about:blank') dlg.classList.add('is-loaded');
-  });
-
-  var close = function () {
-    if (dlg.open) dlg.close();
-  };
-  dlg.addEventListener('close', function () {
-    document.body.classList.remove('book-open');
-    frame.setAttribute('src', 'about:blank');
-    dlg.classList.remove('is-loaded');
-    if (lastFocus) lastFocus.focus();
-  });
-  dlg.querySelector('[data-book-close]').addEventListener('click', close);
-  // Klick auf den abgedunkelten Hintergrund schließt
-  dlg.addEventListener('click', function (e) { if (e.target === dlg) close(); });
-
-  // Delegation: gilt auch für nachgeladene Termine im Akkordeon
-  document.addEventListener('click', function (e) {
-    var a = e.target.closest && e.target.closest('a[data-book]');
-    if (!a || e.ctrlKey || e.metaKey || e.shiftKey || e.button === 1) return;
-    e.preventDefault();
-    lastFocus = a;
-    dlg.querySelector('.book__title').textContent = a.getAttribute('data-book-title') || 'Anmeldung';
-    dlg.querySelector('.book__meta').textContent = a.getAttribute('data-book-meta') || '';
-    ext.href = a.href;
-    dlg.classList.remove('is-loaded');
-    frame.setAttribute('src', a.href);
-    document.body.classList.add('book-open');
-    dlg.showModal();
-  });
-})();

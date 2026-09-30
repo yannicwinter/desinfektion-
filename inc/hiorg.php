@@ -382,6 +382,7 @@ function hiorg_parse_boxes(DOMXPath $xp, DOMNodeList $boxes, array $course): arr
             'title' => $get($box, 'kurstyp-bezeichung'),
             'link' => $link ?: hiorg_list_url((string) ($course['hiorg_id'] ?? '')),
             'bookable' => $link !== '',
+            'kid' => preg_match('/[?&]kid=(\d+)/', $link, $km) ? $km[1] : '',
             'course' => $course,
         ];
     }
@@ -462,6 +463,17 @@ function hiorg_abs(string $href): string
     return HIORG_BASE . ltrim($href, '/');
 }
 
+/** Einzelnen Termin anhand der HiOrg-Kurs-ID (kid) finden. */
+function hiorg_find(array $course, string $kid): ?array
+{
+    foreach (hiorg_dates($course)['items'] as $it) {
+        if (($it['kid'] ?? '') === $kid) {
+            return $it;
+        }
+    }
+    return null;
+}
+
 /** Ausgabe einer Terminliste (auch für /api/termine per fetch). */
 function render_dates(array $items, array $opt = []): string
 {
@@ -494,7 +506,11 @@ function render_dates(array $items, array $opt = []): string
     <?php if ($it['status'] === 'full' || empty($it['bookable'] ?? true)): ?>
       <a class="btn btn--ghost btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Details</a>
     <?php else: ?>
-      <a class="btn btn--red btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener"<?php if ($inline): ?> data-book data-book-title="<?= e($c['title'] ?? 'Anmeldung') ?>" data-book-meta="<?= e(de_date($d, 'WW, D. MMM YYYY') . ($it['time'] ? ' · ' . $it['time'] . ' Uhr' : '') . ($it['details'] ? ' · ' . $it['details'] : '')) ?>"<?php endif; ?>>Buchen</a>
+      <?php if ($inline && !empty($it['kid'])): ?>
+      <a class="btn btn--red btn--sm" href="<?= url('termine/' . ($c['slug'] ?? '') . '/anmeldung/' . $it['kid']) ?>">Buchen</a>
+      <?php else: ?>
+      <a class="btn btn--red btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Buchen</a>
+      <?php endif; ?>
     <?php endif; ?>
   </div>
 </li>

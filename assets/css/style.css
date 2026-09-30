@@ -120,35 +120,16 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 .header__phone .i{width:18px;height:18px;color:var(--red)}
 .header__phone:hover{background:var(--soft)}
 
-/* ---------- Animiertes Kreuz ---------- */
+/* ---------- Kreuz im Hintergrund (ruhig) ---------- */
 .art{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
-.art__grid{position:absolute;inset:-40px;opacity:.55;
+.art__grid{position:absolute;inset:0;opacity:.45;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='44'%3E%3Cpath fill='%23F4C9CA' d='M20 16h4v4h4v4h-4v4h-4v-4h-4v-4h4z'/%3E%3C/svg%3E");
-  -webkit-mask-image:radial-gradient(ellipse 60% 70% at 78% 45%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse 60% 70% at 78% 45%,#000 0%,transparent 70%);
-  animation:grid-drift 40s linear infinite}
-.art__cross{position:absolute;right:max(-3vw,calc((100vw - 1320px)/2 + 10px));top:50%;width:min(42vw,560px);height:auto;overflow:visible;
-  transform:translate3d(var(--px,0px),calc(-50% + var(--py,0px)),0);transition:transform .6s var(--ease)}
-.art__fill{fill:url(#crossfill);transform-box:fill-box;transform-origin:center;opacity:0;
-  animation:cross-in 1.4s .9s var(--ease) forwards,breathe 7s 2.4s ease-in-out infinite}
-.art__line{fill:none;stroke:var(--red);stroke-width:.22;stroke-linejoin:round;stroke-dasharray:100;stroke-dashoffset:100;opacity:.55;
-  animation:draw 2.2s .2s var(--ease) forwards}
-.art__run{fill:none;stroke:var(--red);stroke-width:.55;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 90;opacity:0;
-  filter:drop-shadow(0 0 .8px rgba(230,0,5,.6));animation:run 8s 2.2s linear infinite}
-.art__pulses path{fill:none;stroke:var(--red);stroke-width:.12;transform-box:fill-box;transform-origin:center;opacity:0;animation:pulse 6s 2.2s ease-out infinite}
-.art__pulses path:nth-child(2){animation-delay:4.2s}
-.art__pulses path:nth-child(3){display:none}
-.art__ecg{position:absolute;left:0;right:0;bottom:6%;width:100%;height:clamp(60px,9vw,120px);opacity:.9}
-.art__ecg path{fill:none;}
-.art__ecg .art__ecg-base{stroke:var(--red);stroke-width:1;vector-effect:non-scaling-stroke;opacity:.1}
-.art__ecg .art__ecg-run{stroke:var(--red);stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke;
-  stroke-dasharray:18 82;stroke-dashoffset:100;opacity:.45;animation:ecg 4.5s 1s linear infinite}
-@keyframes draw{to{stroke-dashoffset:0}}
-@keyframes run{0%{stroke-dashoffset:0;opacity:0}6%{opacity:.95}94%{opacity:.95}100%{stroke-dashoffset:-100;opacity:0}}
-@keyframes cross-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
-@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.025)}}
-@keyframes pulse{0%{opacity:.35;transform:scale(1)}60%{opacity:0}100%{opacity:0;transform:scale(1.35)}}
-@keyframes ecg{from{stroke-dashoffset:100}to{stroke-dashoffset:-100}}
-@keyframes grid-drift{from{background-position:0 0}to{background-position:44px 88px}}
+  -webkit-mask-image:radial-gradient(ellipse 55% 65% at 80% 45%,#000 0%,transparent 70%);mask-image:radial-gradient(ellipse 55% 65% at 80% 45%,#000 0%,transparent 70%)}
+.art__cross{position:absolute;right:max(-3vw,calc((100vw - 1320px)/2 + 10px));top:50%;width:min(40vw,520px);height:auto;transform:translateY(-50%)}
+.art__fill{fill:url(#crossfill)}
+.art__line{fill:none;stroke:var(--red);stroke-width:.15;opacity:.35}
+.js .art__cross{animation:fade-in 1s .1s var(--ease) both}
+@keyframes fade-in{from{opacity:0}to{opacity:1}}
 
 /* ---------- Hero ---------- */
 .hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff 0%,#FFF7F7 100%);padding:clamp(48px,8vw,120px) 0 clamp(96px,11vw,160px)}
@@ -340,8 +321,7 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 .cta p{color:rgba(255,255,255,.85);margin-top:6px}
 .cta__text{position:relative;z-index:1}
 .cta .btn-row{position:relative;z-index:1}
-.cta__cross{position:absolute;right:-60px;top:-80px;width:320px;color:#fff;opacity:.08;animation:spin-slow 60s linear infinite}
-@keyframes spin-slow{to{transform:rotate(90deg)}}
+.cta__cross{position:absolute;right:-60px;top:-80px;width:320px;color:#fff;opacity:.08}
 
 /* ---------- Footer ---------- */
 .footer{background:var(--ink);color:#B9BCC4;padding:clamp(48px,6vw,80px) 0 28px;margin-top:clamp(56px,7vw,104px);font-size:15px}
@@ -356,7 +336,7 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 .footer__bottom nav{display:flex;gap:20px}
 
 /* ---------- Scroll-Animation ---------- */
-.js .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.js .reveal{opacity:0;transform:translateY(8px);transition:opacity .5s var(--ease),transform .5s var(--ease)}
 .js .reveal.is-in{opacity:1;transform:none}
 
 /* ==========================================================
@@ -418,7 +398,6 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
   .date__side{grid-column:2;justify-content:flex-start;gap:10px}
   .dates--compact .date__side{grid-column:2}
   .art__cross{width:92vw;right:-38%;top:22%;opacity:.8}
-  .art__ecg{bottom:2%}
   .phead .art__cross{width:62vw;right:-24%;top:40%;opacity:.7}
   .hero .display{max-width:none}
   .footer__grid{grid-template-columns:1fr}
@@ -440,9 +419,6 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
-  .art__fill{opacity:1}
-  .art__line{stroke-dashoffset:0}
-  .art__pulses,.art__ecg,.art__run{display:none}
   .js .reveal{opacity:1;transform:none}
 }
 
@@ -478,36 +454,33 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 .count--over{color:var(--red)}
 .acc__item.is-closing .acc__chev{transform:none;background:#fff;border-color:var(--line);color:var(--ink)}
 
-/* ---------- Buchungsfenster (HiOrg-Anmeldung im iframe) ---------- */
-.book{width:min(920px,calc(100vw - 32px));height:min(900px,calc(100dvh - 48px));max-width:none;max-height:none;padding:0;border:0;border-radius:22px;background:#fff;box-shadow:var(--shadow-lg);display:none;flex-direction:column;overflow:hidden}
-.book[open]{display:flex;animation:book-in .35s var(--ease)}
-.book::backdrop{background:rgba(21,23,28,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
-@keyframes book-in{from{opacity:0;transform:translateY(24px) scale(.98)}to{opacity:1;transform:none}}
-.book__head{display:flex;align-items:center;gap:12px;padding:16px 16px 14px 24px;border-bottom:1px solid var(--line)}
-.book__info{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
-.book__info .eyebrow{font-size:11.5px}
-.book__title{font-size:18px;font-weight:600;color:var(--ink);line-height:1.25}
-.book__meta{font-size:14px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.book__ext{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 14px;border-radius:999px;font-size:14px;font-weight:500;color:var(--muted);border:1px solid var(--line)}
-.book__ext .i{width:16px;height:16px}
-.book__ext:hover{color:var(--ink);border-color:var(--ink)}
-.book__close{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:0;background:var(--soft);cursor:pointer;color:var(--ink);flex-shrink:0}
-.book__close:hover{background:var(--rose);color:var(--red)}
-.book__body{position:relative;flex:1;min-height:0;background:#fff}
-.book__body iframe{position:absolute;inset:0;width:100%;height:100%;border:0;opacity:0;transition:opacity .3s}
-.book.is-loaded .book__body iframe{opacity:1}
-.book__loading{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--muted);font-size:15px}
-.book__loading span{width:34px;height:34px;border-radius:50%;border:3px solid var(--rose-2);border-top-color:var(--red);animation:spin .8s linear infinite}
-.book.is-loaded .book__loading{display:none}
-@keyframes spin{to{transform:rotate(360deg)}}
-.book__foot{margin:0;padding:10px 24px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--soft)}
-body.book-open{overflow:hidden}
-@media (max-width:720px){
-  .book{width:100vw;height:100dvh;max-height:100dvh;border-radius:0;margin:0}
-  .book[open]{animation:book-up .35s var(--ease)}
-  .book__head{padding:12px 12px 12px 16px;padding-top:max(12px,env(safe-area-inset-top))}
-  .book__ext span{display:none}
-  .book__ext{width:40px;padding:0;justify-content:center}
-  .book__foot{display:none}
+
+/* ---------- Anmeldung (HiOrg-Formular eingebettet) ---------- */
+.signup{padding:clamp(24px,4vw,48px) 0 0}
+.signup__title{margin:14px 0 clamp(20px,3vw,32px)}
+.signup__grid{display:grid;grid-template-columns:320px minmax(0,1fr);gap:clamp(20px,3vw,40px);align-items:start}
+.signup__side{position:sticky;top:calc(var(--header) + 24px);display:flex;flex-direction:column;gap:14px}
+.signup__date{display:flex;gap:14px;align-items:center}
+.signup__date>div{display:flex;flex-direction:column;line-height:1.35}
+.signup__date strong{font-weight:600;color:var(--ink)}
+.signup__date span{color:var(--muted);font-size:15px}
+.signup__date .date__cal{width:60px;flex-shrink:0}
+.signup__facts{display:flex;flex-direction:column;gap:10px;font-size:15px;color:var(--text)}
+.signup__facts li{display:flex;gap:10px;align-items:flex-start}
+.signup__facts .i{width:18px;height:18px;color:var(--red);margin-top:2px}
+.box--soft{background:var(--soft);border-color:var(--soft)}
+.signup__help a{display:flex;align-items:center;gap:10px;font-weight:500;color:var(--ink)}
+.signup__help .i{width:18px;height:18px;color:var(--red)}
+.signup__frame{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff}
+.signup__frame iframe{display:block;width:100%;height:1500px;border:0}
+.signup__note{margin-top:12px}
+.signup__note a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
+@media (max-width:1000px){
+  .signup__grid{grid-template-columns:1fr}
+  .signup__side{position:static}
+  .signup__help{display:none}
 }
-@keyframes book-up{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+@media (max-width:720px){
+  .signup__frame{border-radius:12px;margin:0 calc(-1*var(--gutter) + 6px)}
+  .signup__frame iframe{height:2100px}
+}
