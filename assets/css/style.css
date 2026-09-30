@@ -1157,3 +1157,9 @@ body{border-top:4px solid var(--red)}
 .nsel__opt{border-radius:4px!important}
 .apage__media,.phead__media{box-shadow:none!important}
 .kf-launch{border-radius:6px!important}
+/* Stil A: keine rosa Flächen, Dachzeilen ohne Strich */
+:root{--rose:#F4F4F4;--rose-2:#EAEAEA}
+.eyebrow::before{display:none}
+.eyebrow{font-size:14px}
+.form-wrap .stack>.box{align-self:stretch}
+.panel>.h4{margin-bottom:18px}
