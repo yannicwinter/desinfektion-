@@ -248,8 +248,9 @@ function hiorg_parse(string $html, array $course = []): array
         } elseif (preg_match('/warteliste/iu', $all)) {
             $status = 'full';
             $free = 'Warteliste';
-        } elseif (preg_match('/(\d+)\s*(?:freie?n?\s*)?(?:Pl(?:ä|ae)tze?|Platz)(?:\s*frei)?|frei(?:e\s*Pl(?:ä|ae)tze)?\s*:?\s*(\d+)/iu', $all, $fm)) {
-            $n = (int) ($fm[1] !== '' ? $fm[1] : $fm[2]);
+        } elseif (preg_match('/(\d+)\s*(?:von|\/)\s*\d+\s*(?:Pl(?:ä|ae)tzen?)?\s*frei/iu', $all, $fm)
+            || preg_match('/(\d+)\s*(?:freie?n?\s*)?(?:Pl(?:ä|ae)tze?n?|Platz)\s*frei|freie?\s*Pl(?:ä|ae)tze\s*:?\s*(\d+)|frei\s*:\s*(\d+)/iu', $all, $fm)) {
+            $n = (int) ($fm[1] ?? '' ?: ($fm[2] ?? '' ?: ($fm[3] ?? '0')));
             $free = $n === 1 ? '1 Platz frei' : $n . ' Plätze frei';
             $status = $n === 0 ? 'full' : ($n <= 3 ? 'few' : 'open');
             if ($n === 0) {
@@ -280,11 +281,12 @@ function hiorg_parse(string $html, array $course = []): array
                 '/(\d{1,2})[:.](\d{2})\s*(?:Uhr)?\s*(?:-|–|—|bis)\s*(\d{1,2})[:.](\d{2})\s*(?:Uhr)?/u',
                 '/\b\d{1,2}[:.]\d{2}\s*Uhr/u',
                 '/\d{1,4}(?:[.,]\d{2})?\s*(?:€|EUR|Euro)\b/iu',
-                '/\d+\s*(?:freie?n?\s*)?(?:Pl(?:ä|ae)tze?|Platz)(?:\s*frei)?/iu',
+                '/(?:jetzt\s*)?\d+\s*(?:von|\/)\s*\d+\s*(?:Pl(?:ä|ae)tzen?)?\s*frei/iu',
+                '/(?:noch\s*)?\d+\s*(?:freie?n?\s*)?(?:Pl(?:ä|ae)tze?n?|Platz)(?:\s*frei)?/iu',
                 '/\b(?:Mo|Di|Mi|Do|Fr|Sa|So)(?:ntag|nstag|ttwoch|nnerstag|eitag|mstag)?\b\.?,?/u',
                 '/\b(?:anmelden|anmeldung|buchen|details|mehr|ausgebucht|warteliste)\b/iu',
             ], ' ', $c));
-            $rest = trim(preg_replace('/\s{2,}/', ' ', $rest), " \t\n\r\0\x0B,;·|-–");
+            $rest = trim(preg_replace(['/\s{2,}/', '/\(\s*\)/', '/,\s*,/'], [' ', '', ','], $rest), " \t\n\r\0\x0B,;·|-–");
             if (mb_strlen($rest) > 1 && !in_array($rest, $details, true)) {
                 $details[] = $rest;
             }
@@ -324,7 +326,18 @@ function hiorg_text(DOMNode $n): string
     foreach ((new DOMXPath($n->ownerDocument))->query('.//text()', $n) as $t) {
         $parts[] = $t->nodeValue;
     }
-    return trim(preg_replace('/\s+/u', ' ', str_replace("\xC2\xA0", ' ', implode(' ', $parts))));
+    return hiorg_clean(implode(' ', $parts));
+}
+
+/** HiOrg liefert teils HTML5-Entities (&lpar; &NewLine; …) als Text – dekodieren und glätten. */
+function hiorg_clean(string $s): string
+{
+    $s = preg_replace('/&(?:amp;)?NewLine;/i', ', ', $s);
+    $s = html_entity_decode(html_entity_decode($s, ENT_QUOTES | ENT_HTML5, 'UTF-8'), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $s = str_replace("\xC2\xA0", ' ', $s);
+    $s = preg_replace('/\s+/u', ' ', $s);
+    $s = preg_replace('/\s*,(\s*,)+/', ',', $s);
+    return trim(preg_replace('/\s+,/', ',', $s), " ,");
 }
 
 function hiorg_abs(string $href): string
