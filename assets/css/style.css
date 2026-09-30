@@ -1163,3 +1163,35 @@ body{border-top:4px solid var(--red)}
 .eyebrow{font-size:14px}
 .form-wrap .stack>.box{align-self:stretch}
 .panel>.h4{margin-bottom:18px}
+
+/* ===== Härtere Konturen: klare Linien, keine Rundungen ===== */
+:root{--line:#C9C9C9;--radius:0px;--radius-sm:0px}
+*{--r0:0}
+.btn,.header__phone,.chip,.nsel__btn,.nsel__list,.nsel__opt,.field input,.field select,.field textarea,.field--inline select,
+.box,.panel,.card,.notice,.person,.acc--courses,.acc__dates,.compare__scroll,.cpage__compare,.tpage__more,.apage__kosten,.asteps li,
+.date__cal,.acc__photo,.apage__media,.phead__media,.asplit__img,.ahero__img,.sbar,.sbar__go,.spill,.spill__icon,.spill__go,.kchip,.schip,
+.signup__frame,.kf-launch,.kf__date,.kf__book,.kf__chip,.kf__input input,.usp__icon,.insta__row a,.badge,.dates--compact .date,.ssheet__go{border-radius:0!important}
+.header{border-bottom:1px solid #1d1d1f}
+.phead{border-bottom:1px solid #1d1d1f}
+.asec--grey{border-top:1px solid #1d1d1f;border-bottom:1px solid #1d1d1f}
+.asec--grey + .asec--grey{border-top:0}
+.acta{border-top:1px solid #1d1d1f}
+.footer{border-top:1px solid #1d1d1f}
+.box,.panel,.person,.cpage__compare,.tpage__more,.asteps li,.nsel__btn,.field input,.field select,.field textarea,.btn--ghost{border-color:#1d1d1f!important}
+.panel,.box{box-shadow:none!important}
+.sbar,.asec .sbar,.asec .spill{border:1px solid #1d1d1f!important;box-shadow:none!important}
+.sbar__f{border-right-color:#C9C9C9!important}
+.dates--list{border-top:2px solid #1d1d1f}
+.dates--list .date{border-bottom:1px solid var(--line)}
+.dates--list .date:last-child{border-bottom:1px solid #1d1d1f}
+.acc--courses,.acc--plain{border-top:2px solid #1d1d1f}
+.group-title{color:#1d1d1f}
+.ahero__facts{border-top:1px solid #1d1d1f}
+.offer__item{border-top-width:4px}
+.nextcard{border:1px solid #1d1d1f;box-shadow:none}
+.date__cal{border:1px solid #1d1d1f;background:#fff!important}
+.alist,.apage__cols .alist{border-top:2px solid #1d1d1f}
+.apage__kosten{border:1px solid #1d1d1f}
+.kf-launch{box-shadow:none!important;border:1px solid #fff}
+.acc__chev,.sbar .nsel__btn,.header__phone,.tabbar__icon{border-radius:0!important}
+.acc__chev{border-color:#1d1d1f!important}
