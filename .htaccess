@@ -10,7 +10,10 @@ ServerSignature Off
 
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteBase /
+
+  # --- Basis-Ordner automatisch ermitteln (Hauptverzeichnis ODER Unterordner) ---
+  RewriteCond %{REQUEST_URI}::$1 ^(.*?/)(.*)::\2$
+  RewriteRule ^(.*)$ - [E=BASE:%1]
 
   # --- HTTPS erzwingen (lokal ausgenommen) --------------------------
   RewriteCond %{HTTPS} off
@@ -28,23 +31,21 @@ ServerSignature Off
   RewriteRule \.(json|md|lock|log|bak|sql|zip)$ - [F,L,NC]
 
   # --- .php / .html in der Adresse → saubere URL (301) --------------
-  RewriteCond %{THE_REQUEST} \s/+index\.(php|html)[\s?] [NC]
-  RewriteRule ^ / [R=301,L]
+  RewriteCond %{THE_REQUEST} \s/+((?:[^\s?]*/)?)index\.(php|html)[\s?] [NC]
+  RewriteRule ^ /%1 [R=301,L]
   RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.(php|html?)[\s?] [NC]
   RewriteRule ^ /%1 [R=301,L,NE]
 
   # --- Schrägstrich am Ende entfernen --------------------------------
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^(.+)/$ /$1 [R=301,L]
+  RewriteRule ^(.+)/$ %{ENV:BASE}$1 [R=301,L]
 
   # --- Alles Übrige an den Front-Controller -------------------------
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.php [L,QSA]
+  RewriteRule ^ %{ENV:BASE}index.php [L,QSA]
 </IfModule>
 
-ErrorDocument 403 /index.php
-ErrorDocument 404 /index.php
 
 # --- Sicherheits-Header -------------------------------------------
 <IfModule mod_headers.c>
@@ -74,4 +75,6 @@ ErrorDocument 404 /index.php
   ExpiresByType image/png "access plus 1 year"
 </IfModule>
 
-AddType font/woff2 .woff2
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+</IfModule>
