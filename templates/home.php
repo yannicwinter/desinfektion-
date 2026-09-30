@@ -148,14 +148,20 @@ layout_start([
 </section>
 <?php endif; ?>
 
-<?php $insta = instagram_posts(6); if ($insta): ?>
+<?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
 <section class="section section--tight insta">
   <div class="wrap">
     <div class="section-head reveal">
       <div><span class="eyebrow">Instagram</span><h2 class="h2"><?= e($P('insta_title')) ?></h2></div>
       <a class="link-arrow" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">@drk_kreisverband_verden folgen <?= icon('arrow') ?></a>
     </div>
-    <?php if ($insta): ?>
+    <?php if (!$insta): ?>
+    <ul class="insta__row insta__row--ph">
+      <?php foreach ([['heart', 'Erste Hilfe'], ['flame', 'Brandschutz'], ['users', 'Unser Team'], ['calendar', 'Kurse'], ['shield', 'Arbeitssicherheit'], ['hand', 'Ehrenamt']] as $i => [$ic, $label]): ?>
+      <li><a href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener" class="insta__ph insta__ph--<?= $i % 3 ?>"><?= icon($ic) ?><span><?= e($label) ?></span></a></li>
+      <?php endforeach; ?>
+    </ul>
+    <?php else: ?>
     <ul class="insta__row">
       <?php foreach ($insta as $post): ?>
       <li><a href="<?= e($post['link']) ?>" target="_blank" rel="noopener" title="<?= e($post['caption']) ?>"><img src="<?= e($post['img']) ?>" alt="<?= e($post['caption'] ?: 'Instagram-Beitrag DRK Verden') ?>" loading="lazy" decoding="async" width="600" height="600"></a></li>

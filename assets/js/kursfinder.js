@@ -1,5 +1,6 @@
-/* Kursfinder: geführter Assistent – fragt nach dem Zweck, filtert nach Ort/Tag
-   und zeigt die nächsten freien Termine mit direktem Link zur Anmeldung. */
+/* Kursfinder: geführter Assistent – fragt nach dem Zweck (und wann der letzte Kurs war),
+   filtert nach Ort/Tag und zeigt die nächsten freien Termine mit direktem Link zur Anmeldung.
+   Antworten erscheinen nacheinander mit „tippt …“ und Wort für Wort wie in einem Chat. */
 (function () {
   'use strict';
   var box = document.getElementById('kursfinder');
@@ -9,43 +10,80 @@
   var form = box.querySelector('[data-kf-form]');
   var input = form.querySelector('input');
   var launch = document.querySelector('[data-kf-open]');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var state = {};
   var cache = {};
+  var queue = Promise.resolve();
+  var gen = 0; // erhöht sich bei „Neu starten“ → alte Warteschlange verwerfen
 
-  // ---------- Hilfsfunktionen ----------
+  // ---------- Bausteine ----------
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
     if (text != null) n.textContent = text;
     return n;
   }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, reduce ? 0 : ms); }); }
   function scroll() { log.scrollTop = log.scrollHeight; }
-  function bot(text) {
-    var b = el('div', 'kf__msg kf__msg--bot');
-    if (typeof text === 'string') b.textContent = text; else b.appendChild(text);
-    log.appendChild(b);
-    scroll();
-    return b;
+  function then(fn) {
+    var g = gen;
+    queue = queue.then(function () { if (g === gen) return fn(); });
+    return queue;
+  }
+
+  // Bot-Nachricht: erst „tippt …“, dann Text Wort für Wort (bzw. Karten sanft eingeblendet)
+  function say(content) {
+    return then(function () {
+      var dots = el('div', 'kf__msg kf__msg--bot kf__typing');
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      log.appendChild(dots);
+      scroll();
+      var len = typeof content === 'string' ? content.length : 60;
+      return wait(Math.min(1200, 450 + len * 6)).then(function () {
+        dots.remove();
+        var b = el('div', 'kf__msg kf__msg--bot');
+        log.appendChild(b);
+        if (typeof content !== 'string') {
+          b.appendChild(content);
+          b.classList.add('kf__msg--fade');
+          scroll();
+          return wait(250);
+        }
+        if (reduce) { b.textContent = content; scroll(); return; }
+        var words = content.split(' ');
+        var i = 0;
+        return new Promise(function (done) {
+          (function next() {
+            if (i >= words.length) { done(); return; }
+            b.textContent += (i ? ' ' : '') + words[i++];
+            scroll();
+            setTimeout(next, 28 + Math.random() * 40);
+          })();
+        });
+      });
+    });
   }
   function me(text) { log.appendChild(el('div', 'kf__msg kf__msg--me', text)); scroll(); }
   function clearChoices() { log.querySelectorAll('.kf__choices').forEach(function (c) { c.remove(); }); }
   function choices(list) {
-    clearChoices();
-    var wrap = el('div', 'kf__choices');
-    list.forEach(function (c) {
-      var btn = el(c.href ? 'a' : 'button', 'kf__chip' + (c.primary ? ' kf__chip--primary' : ''), c.label);
-      if (c.href) { btn.href = c.href; } else { btn.type = 'button'; }
-      btn.addEventListener('click', function (e) {
-        if (c.href) return;
-        e.preventDefault();
-        me(c.label);
-        clearChoices();
-        setTimeout(c.go, 250);
+    return then(function () {
+      clearChoices();
+      var wrap = el('div', 'kf__choices');
+      list.forEach(function (c) {
+        var btn = el(c.href ? 'a' : 'button', 'kf__chip' + (c.primary ? ' kf__chip--primary' : ''), c.label);
+        if (c.href) { btn.href = c.href; } else { btn.type = 'button'; }
+        btn.addEventListener('click', function (e) {
+          if (c.href) return;
+          e.preventDefault();
+          me(c.label);
+          clearChoices();
+          c.go();
+        });
+        wrap.appendChild(btn);
       });
-      wrap.appendChild(btn);
+      log.appendChild(wrap);
+      scroll();
     });
-    log.appendChild(wrap);
-    scroll();
   }
   function title(slug) { return cfg.titles[slug] || slug; }
   function load(slug) {
@@ -55,28 +93,23 @@
       return r.json();
     }).then(function (d) { cache[slug] = d; return d; });
   }
-  function typing() {
-    var t = el('div', 'kf__msg kf__msg--bot kf__typing');
-    t.innerHTML = '<span></span><span></span><span></span>';
-    log.appendChild(t);
-    scroll();
-    return t;
-  }
 
   // ---------- Gesprächsablauf ----------
   function start() {
+    gen++;
+    queue = Promise.resolve();
     log.innerHTML = '';
     state = {};
-    bot('Hallo! Ich helfe dir, den passenden Kurs und einen freien Termin zu finden.');
+    say('Hallo! Ich helfe dir, den passenden Kurs und einen freien Termin zu finden.');
     ask();
   }
 
   function ask() {
-    bot('Wofür brauchst du den Kurs?');
+    say('Wofür brauchst du den Kurs?');
     var list = [];
-    if (cfg.titles['erste-hilfe-ausbildung']) list.push({ label: 'Führerschein', go: function () { pick('erste-hilfe-ausbildung'); } });
-    list.push({ label: 'Für den Job (Ersthelfer)', go: askBetrieb });
-    if (cfg.titles['erste-hilfe-ausbildung']) list.push({ label: 'Trainer, Verein, Studium', go: function () { pick('erste-hilfe-ausbildung'); } });
+    if (cfg.titles['erste-hilfe-ausbildung']) list.push({ label: 'Führerschein', go: function () { pick('erste-hilfe-ausbildung', 'Für den Führerschein brauchst du die komplette Ausbildung.'); } });
+    list.push({ label: 'Für den Job (Ersthelfer)', go: function () { askLast('job'); } });
+    list.push({ label: 'Trainer, Verein, Studium', go: function () { askLast('verein'); } });
     if (cfg.titles['erste-hilfe-am-kind']) list.push({ label: 'Für Kinder', go: function () { pick('erste-hilfe-am-kind'); } });
     if (cfg.titles['erste-hilfe-am-hund']) list.push({ label: 'Für meinen Hund', go: askHund });
     if (cfg.titles['brandschutzhelfer']) list.push({ label: 'Brandschutzhelfer', go: function () { pick('brandschutzhelfer', 'Die Kosten trägt der Arbeitgeber.'); } });
@@ -84,17 +117,19 @@
     choices(list);
   }
 
-  function askBetrieb() {
-    bot('Warst du in den letzten 2 Jahren schon in einer Erste-Hilfe-Ausbildung?');
+  // Ausbildung oder Fortbildung? Entscheidet, wie lange der letzte Kurs her ist.
+  function askLast(ctx) {
+    var bg = ctx === 'job' ? ' Die Kosten übernimmt meist die Berufsgenossenschaft – bitte vorher klären.' : '';
+    say('Wann war dein letzter Erste-Hilfe-Kurs?');
     choices([
-      { label: 'Ja – ich muss auffrischen', go: function () { pick('erste-hilfe-fortbildung', 'Die Kosten übernimmt meist die Berufsgenossenschaft – bitte vorher klären.'); } },
-      { label: 'Nein / länger her', go: function () { pick('erste-hilfe-ausbildung', 'Die Kosten übernimmt meist die Berufsgenossenschaft – bitte vorher klären.'); } }
+      { label: 'Noch nie / länger als 2 Jahre', go: function () { pick('erste-hilfe-ausbildung', 'Du brauchst die komplette Ausbildung.' + bg); } },
+      { label: 'In den letzten 2 Jahren', go: function () { pick('erste-hilfe-fortbildung', 'Die Auffrischung reicht.' + bg); } }
     ]);
   }
 
   function askHund() {
     if (!cfg.titles['erste-hilfe-am-welpen']) { pick('erste-hilfe-am-hund'); return; }
-    bot('Erwachsener Hund oder Welpe?');
+    say('Erwachsener Hund oder Welpe?');
     choices([
       { label: 'Erwachsener Hund', go: function () { pick('erste-hilfe-am-hund'); } },
       { label: 'Welpe', go: function () { pick('erste-hilfe-am-welpen', 'Dein Welpe darf mitkommen.'); } }
@@ -113,7 +148,7 @@
       ul.appendChild(li);
     });
     frag.appendChild(ul);
-    bot(frag);
+    say(frag);
     choices([
       { label: 'Anfrage stellen', href: cfg.contact, primary: true },
       { label: 'Anrufen', href: cfg.phoneLink },
@@ -123,18 +158,18 @@
 
   function pick(slug, note) {
     state.slug = slug;
-    bot('Dann passt: ' + title(slug) + '.' + (note ? ' ' + note : ''));
-    var t = typing();
-    load(slug).then(function (d) {
-      t.remove();
-      state.data = d;
-      if (!d.dates.length) { noDates(d); return; }
-      if (state.ort !== undefined && state.day !== undefined) { results(); return; }
-      askOrt();
-    }).catch(function () {
-      t.remove();
-      bot('Die Termine konnten gerade nicht geladen werden.');
-      choices([{ label: 'Zur Terminseite', href: cfg.api.replace(/api\/kursfinder$/, 'termine'), primary: true }, { label: 'Neu starten', go: start }]);
+    var loading = load(slug); // Termine schon laden, während „getippt“ wird
+    say('Dann passt: ' + title(slug) + '.' + (note ? ' ' + note : ''));
+    then(function () {
+      return loading.then(function (d) {
+        state.data = d;
+        if (state.text) applyOrt(state.text);
+        if (!d.dates.length) { noDates(d); return; }
+        askOrt();
+      }).catch(function () {
+        say('Die Termine konnten gerade nicht geladen werden.');
+        choices([{ label: 'Zur Terminseite', href: cfg.api.replace(/api\/kursfinder$/, 'termine'), primary: true }, { label: 'Neu starten', go: start }]);
+      });
     });
   }
 
@@ -143,7 +178,7 @@
     var orte = [];
     state.data.dates.forEach(function (x) { if (x.ort && orte.indexOf(x.ort) === -1) orte.push(x.ort); });
     if (orte.length < 2) { state.ort = ''; askDay(); return; }
-    bot('Wo passt es dir am besten?');
+    say('Wo passt es dir am besten?');
     var list = orte.sort().map(function (o) { return { label: o, go: function () { state.ort = o; askDay(); } }; });
     list.push({ label: 'Egal', go: function () { state.ort = ''; askDay(); } });
     choices(list);
@@ -155,7 +190,7 @@
     var we = pool.some(function (x) { return x.wd >= 6; });
     var wk = pool.some(function (x) { return x.wd < 6; });
     if (!(we && wk)) { state.day = ''; results(); return; }
-    bot('Lieber unter der Woche oder am Wochenende?');
+    say('Lieber unter der Woche oder am Wochenende?');
     choices([
       { label: 'Unter der Woche', go: function () { state.day = 'wk'; results(); } },
       { label: 'Wochenende', go: function () { state.day = 'we'; results(); } },
@@ -176,13 +211,13 @@
   function results() {
     var d = state.data;
     var hits = filtered(state.ort, state.day);
-    var intro = 'Hier sind die nächsten freien Termine:';
+    var intro = hits.length === 1 ? 'Ich habe einen passenden Termin gefunden:' : 'Hier sind die nächsten freien Termine:';
     if (!hits.length) {
       hits = d.dates;
-      intro = 'Dafür habe ich leider nichts gefunden – das sind die nächsten freien Termine insgesamt:';
+      intro = 'Dafür habe ich leider nichts gefunden. Das sind die nächsten freien Termine insgesamt:';
     }
-    var frag = el('div');
-    frag.appendChild(el('p', null, intro));
+    say(intro);
+    var frag = el('div', 'kf__dates');
     hits.slice(0, 3).forEach(function (x) {
       var card = el('a', 'kf__date');
       card.href = x.book;
@@ -198,7 +233,7 @@
       card.appendChild(el('span', 'kf__book', 'Buchen'));
       frag.appendChild(card);
     });
-    bot(frag);
+    say(frag);
     choices([
       { label: 'Alle Termine (' + d.dates.length + ')', href: d.all, primary: true },
       { label: 'Mehr zum Kurs', href: d.info },
@@ -207,7 +242,7 @@
   }
 
   function noDates(d) {
-    bot('Für ' + d.title + ' gibt es gerade keine freien Termine. Neue kommen laufend dazu – für Gruppen und Betriebe finden wir auch einen eigenen Termin.');
+    say('Für ' + d.title + ' gibt es gerade keine freien Termine. Neue kommen laufend dazu – für Gruppen und Betriebe finden wir auch einen eigenen Termin.');
     choices([
       { label: 'Anfrage stellen', href: d.inhouse, primary: true },
       { label: 'Anrufen', href: cfg.phoneLink },
@@ -217,53 +252,66 @@
 
   // ---------- Freitext ----------
   var days = { montag: 1, dienstag: 2, mittwoch: 3, donnerstag: 4, freitag: 5, samstag: 6, sonntag: 7 };
-  function understand(text) {
-    var t = ' ' + text.toLowerCase() + ' ';
-    var slug = null;
-    var betrieb = cfg.keywords._betrieb.some(function (k) { return t.indexOf(k) !== -1; });
-    Object.keys(cfg.keywords).some(function (s) {
-      if (s === '_betrieb') return false;
-      var hit = cfg.keywords[s].some(function (k) { return t.indexOf(k) !== -1; });
-      if (hit) slug = s;
-      return hit;
-    });
-    var day;
-    if (/wochenend/.test(t)) day = 'we';
-    else if (/unter der woche|werktag|wochentag/.test(t)) day = 'wk';
-    Object.keys(days).forEach(function (n) { if (t.indexOf(n) !== -1) day = days[n]; });
-    return { slug: slug, betrieb: betrieb, day: day, text: t };
+  function has(t, list) { return list.some(function (k) { return t.indexOf(k) !== -1; }); }
+  function applyOrt(t) {
+    if (!state.data) return;
+    state.data.dates.forEach(function (x) { if (x.ort && t.indexOf(x.ort.toLowerCase()) !== -1) state.ort = x.ort; });
   }
 
   function freeText(text) {
     me(text);
     clearChoices();
-    var u = understand(text);
-    // Ort erst nach dem Laden bekannt → nach Kurswahl prüfen
-    var applyOrt = function () {
-      if (!state.data) return;
-      state.data.dates.forEach(function (x) { if (x.ort && u.text.indexOf(x.ort.toLowerCase()) !== -1) state.ort = x.ort; });
-    };
-    if (u.day !== undefined) state.day = u.day;
-    var slug = u.slug;
-    if (u.betrieb && (!slug || slug === 'erste-hilfe-ausbildung') && !/führerschein|fuehrerschein/.test(u.text)) {
-      if (slug === 'erste-hilfe-ausbildung' && /ausbildung/.test(u.text)) slug = 'erste-hilfe-ausbildung';
-      else { setTimeout(askBetrieb, 250); return; }
-    }
-    if (!slug && state.slug) slug = state.slug;
-    if (!slug) {
-      setTimeout(function () { bot('Das habe ich noch nicht ganz verstanden.'); ask(); }, 250);
+    var t = ' ' + text.toLowerCase() + ' ';
+    state.text = t;
+    if (/wochenend/.test(t)) state.day = 'we';
+    else if (/unter der woche|werktag|wochentag/.test(t)) state.day = 'wk';
+    Object.keys(days).forEach(function (n) { if (t.indexOf(n) !== -1) state.day = days[n]; });
+    if (state.data) applyOrt(t);
+
+    // Wissenssuche auf dem Server: durchsucht Kurse und FAQ der Website
+    var asked = fetch(cfg.api + '?frage=' + encodeURIComponent(text)).then(function (r) { return r.json(); });
+    then(function () {
+      return asked.then(answer).catch(function () {
+        say('Da ist gerade etwas schiefgelaufen. Wähl bitte einfach aus:');
+        ask();
+      });
+    });
+  }
+
+  function answer(a) {
+    var t = state.text;
+    if (a.faq) say(a.faq.a);
+    if (a.type === 'none') {
+      say('Das habe ich leider nicht verstanden. Wähl einfach aus, wofür du den Kurs brauchst:');
+      ask();
       return;
     }
-    state.slug = slug;
-    var t = typing();
-    load(slug).then(function (d) {
-      t.remove();
-      state.data = d;
-      applyOrt();
-      bot('Dann passt: ' + d.title + '.');
-      if (!d.dates.length) { noDates(d); return; }
-      if (state.ort === undefined) askOrt(); else askDay();
-    }).catch(function () { t.remove(); bot('Die Termine konnten gerade nicht geladen werden.'); });
+    if (a.type === 'faq') {
+      choices([
+        { label: 'Passenden Kurs finden', go: ask, primary: true },
+        { label: 'Alle Fragen', href: cfg.faq },
+        { label: 'Neu starten', go: start }
+      ]);
+      return;
+    }
+    if (a.fact) say(a.title + ' – ' + a.fact + '.');
+    if (!a.bookable) {
+      say(a.title + ': ' + a.teaser + ' Den Termin stimmen wir individuell mit dir ab.');
+      choices([
+        { label: 'Anfrage stellen', href: a.inquiry, primary: true },
+        { label: 'Mehr zum Kurs', href: a.url },
+        { label: 'Neu starten', go: start }
+      ]);
+      return;
+    }
+    var fuehrerschein = /führerschein|fuehrerschein|fahrschule|fahrerlaubnis/.test(t);
+    var zweck = has(t, cfg.keywords._betrieb);
+    // Ausbildung für Job/Trainer/Verein: erst klären, wie lange der letzte Kurs her ist
+    if (a.slug === 'erste-hilfe-ausbildung' && zweck && !fuehrerschein) {
+      askLast(/betrieb|firma|arbeit|job|chef|ersthelfer|bg|berufsgenossen|unternehmen/.test(t) ? 'job' : 'verein');
+      return;
+    }
+    pick(a.slug, fuehrerschein && a.slug === 'erste-hilfe-ausbildung' ? 'Für den Führerschein brauchst du die komplette Ausbildung.' : '');
   }
 
   // ---------- Öffnen / Schließen ----------
@@ -273,10 +321,7 @@
     document.body.classList.add('kf-open');
     if (launch) launch.setAttribute('aria-expanded', 'true');
     if (!log.childElementCount) start();
-    setTimeout(function () {
-      var first = log.querySelector('.kf__chip');
-      (first || input).focus({ preventScroll: true });
-    }, 50);
+    setTimeout(function () { input.focus({ preventScroll: true }); }, 60);
   }
   function close() {
     box.classList.remove('is-open');
@@ -297,6 +342,5 @@
     input.value = '';
     freeText(v);
   });
-  // Direktlink: …#kursfinder öffnet den Assistenten
   if (location.hash === '#kursfinder') open();
 })();

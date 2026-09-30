@@ -41,7 +41,7 @@ const FIELD_LABELS = [
     'hint' => ['Hinweis unter der Terminliste', ''], 'orte' => ['Kursorte', 'Ein Ort pro Zeile.'],
     'vergleich' => ['Vergleichstabelle „Welcher Kurs passt?“', 'Erste Zeile = Überschriften. Spalten mit | trennen. „ja“/„nein“ werden als Symbol angezeigt.'],
     'asi_benefits' => ['Arbeitssicherheit – Ihr Nutzen', 'Ein Punkt pro Zeile.'],
-    'insta_title' => ['Instagram – Überschrift', 'Der Feed erscheint, sobald unter „Allgemein“ ein Instagram-Token eingetragen ist.'],
+    'insta_title' => ['Instagram – Überschrift', 'Die Beiträge erscheinen, sobald unter „Allgemein“ der Behold-Feed-Link eingetragen ist – bis dahin Platzhalter.'],
     'body' => ['Seiteninhalt', 'Leerzeile = neuer Absatz · **fett** · [Linktext](https://…) · Zeilen mit „- “ = Liste'],
 ];
 
@@ -50,7 +50,7 @@ const SITE_LABELS = [
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'instagram' => 'Instagram-Link',
-    'instagram_token' => 'Instagram-Zugangstoken (für den Feed auf der Startseite, wird automatisch verlängert)', 'hiorg_ov' => 'HiOrg-Kürzel (ov)', 'hiorg_cache_minutes' => 'Termine zwischenspeichern (Minuten)',
+    'instagram_feed_url' => 'Instagram-Feed-Link von behold.so (JSON-Feed-URL, z. B. https://feeds.behold.so/…)',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
 ];
@@ -364,7 +364,7 @@ function admin_course(): void
             $idx = $i;
         }
     }
-    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1'];
+    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1', 'keywords' => ''];
     $k = $idx !== null ? array_merge($empty, $c['courses'][$idx]) : $empty;
     $err = '';
 
@@ -411,6 +411,7 @@ function admin_course(): void
     echo field_input('text', 'Beschreibung', $k['text'], 'Bitte kurz halten – 2 bis 3 Sätze.', true);
     echo field_input('learn', 'Inhalte', $k['learn'], 'Ein Punkt pro Zeile.', true);
     echo field_input('facts', 'Eckdaten', $k['facts'], 'Eine Zeile pro Angabe: „Dauer: 9 UE“', true);
+    echo field_input('keywords', 'Suchbegriffe für den Kursfinder', $k['keywords'], 'Mit Komma trennen: Wörter, mit denen Leute nach diesem Kurs fragen (z. B. „Führerschein, Fahrschule“).', true);
     echo '<div class="form__checks">';
     echo '<label class="check"><input type="checkbox" name="active" value="1"' . (!empty($k['active']) ? ' checked' : '') . '><span>Auf der Website anzeigen</span></label>';
     echo '<label class="check"><input type="checkbox" name="featured" value="1"' . (!empty($k['featured']) ? ' checked' : '') . '><span>Auf der Startseite zeigen</span></label>';

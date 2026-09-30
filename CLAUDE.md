@@ -11,6 +11,7 @@
 - Öffentliche Seiten setzen keine Cookies (Formular nutzt signiertes Token); Session nur im Admin.
 - Sprache: Deutsch, kurze Texte. Privat-Angebote in Du-Form, Betriebsthemen neutral (kein „Sie“, kein „ihr/euch“ außer in Fragen).  Unbekanntes als `[PLATZHALTER]`.
 - Lokal testen: `php -S 127.0.0.1:8080` mit einem Router, der `.htaccess` nachbildet.
-- Kursfinder (`inc/kursfinder.php`, `assets/js/kursfinder.js`): geführter Assistent ohne KI-Dienst. Ablauf: Zweck → (Rückfrage) → Ort → Wochentag/Wochenende → 3 nächste freie Termine. Daten über `/api/kursfinder?kurs={slug}`. Suchbegriffe für Freitext in `kursfinder_config()`.
+- Kursfinder (`inc/kursfinder.php`, `assets/js/kursfinder.js`): geführter Assistent ohne externen KI-Dienst. Ablauf: Zweck → bei Job/Trainer/Verein „letzter Kurs < 2 Jahre?“ (Fortbildung, sonst Ausbildung; Führerschein immer Ausbildung) → Ort → Wochentag/Wochenende → 3 nächste freie Termine. Freitext: Wissenssuche (TF-IDF über Kurse + FAQ, Feld „Suchbegriffe“ je Kurs) via `/api/kursfinder?frage=`. Antworten erscheinen mit Tipp-Effekt; kein Speichern, jeder Aufruf startet leer.
+- Instagram nur über Behold.so-Feed-Link (`site.instagram_feed_url`), Bilder lokal gecacht; ohne Link Platzhalter-Kacheln.
 - Mobil (≤1000 px): Tab-Leiste unten (Start · Erste Hilfe · Termine · Brandschutz · Mehr), oberes Menü ausgeblendet.
-- Startseite nutzt SVG-Illustrationen (`inc/illus.php`) statt Fotos; Fotos der alten Seite nur auf Unterseiten (`assets/img/fotos/`).
+- Keine Stockfotos: Seiten und Kurse nutzen SVG-Motive (`inc/illus.php`); im Admin hochgeladene Bilder ersetzen sie. Team-Fotos in `assets/img/team/`.

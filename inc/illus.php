@@ -69,23 +69,40 @@ function illus_safety(): string
     return (string) ob_get_clean();
 }
 
-/** Symbol-Kopf für Kurskarten: passendes Motiv je Kurs. */
+/** Motiv je Kurs (Kurskarten, Akkordeon). */
 function illus_course(array $c): string
 {
     $slug = $c['slug'];
-    if ($c['category'] === 'brandschutz') {
-        return '<div class="card__art card__art--fire">' . illus_extinguisher('card__art-ext') . '</div>';
+    $svg = fn(string $inner) => '<svg class="card__art-icon" viewBox="0 0 120 120" aria-hidden="true">' . $inner . '</svg>';
+    $r = '#E60005';
+    $map = [
+        'erste-hilfe-fortbildung' => ['soft', illus_kit('card__art-kit')],
+        'erste-hilfe-am-kind' => ['rose', $svg('<circle cx="44" cy="26" r="15" fill="' . $r . '"/><path d="M18 112V74c0-17 12-30 26-30s26 13 26 30v38z" fill="' . $r . '"/><circle cx="86" cy="58" r="11" fill="' . $r . '" opacity=".75"/><path d="M68 112V94c0-12 8-21 18-21s18 9 18 21v18z" fill="' . $r . '" opacity=".75"/>')],
+        'kinder-helfen-kindern' => ['rose', $svg('<circle cx="34" cy="40" r="12" fill="' . $r . '"/><path d="M14 104V80c0-13 9-22 20-22s20 9 20 22v24z" fill="' . $r . '"/><circle cx="86" cy="40" r="12" fill="' . $r . '" opacity=".75"/><path d="M66 104V80c0-13 9-22 20-22s20 9 20 22v24z" fill="' . $r . '" opacity=".75"/><path fill="#fff" d="M54 70h12v-12h8v12h12v8H74v12h-8V78H54z" transform="translate(-10 -6) scale(1)"/>')],
+        'forstehjelp-schulen' => ['soft', $svg('<circle cx="24" cy="70" r="15" fill="#C98A4B"/><circle cx="50" cy="56" r="15" fill="#AEB4BD"/><circle cx="76" cy="70" r="15" fill="#E3B341"/><circle cx="100" cy="52" r="15" fill="#7C8594"/><path d="M60 14v18M52 22h16" stroke="' . $r . '" stroke-width="7" stroke-linecap="round"/>')],
+        'erste-hilfe-party' => ['rose', $svg('<path d="M60 18 14 56h12v46h68V56h12z" fill="' . $r . '"/><path fill="#fff" d="M54 64h12v-12h8v12h12v8H74v12h-8V72H54z" transform="translate(-10 4)"/>')],
+        'erste-hilfe-am-hund' => ['rose', $svg('<g fill="' . $r . '"><ellipse cx="60" cy="80" rx="26" ry="22"/><ellipse cx="26" cy="54" rx="11" ry="14"/><ellipse cx="46" cy="30" rx="11" ry="14"/><ellipse cx="74" cy="30" rx="11" ry="14"/><ellipse cx="94" cy="54" rx="11" ry="14"/></g>')],
+        'erste-hilfe-am-welpen' => ['rose', $svg('<g fill="' . $r . '" opacity=".85" transform="translate(12 12) scale(.8)"><ellipse cx="60" cy="80" rx="26" ry="22"/><ellipse cx="26" cy="54" rx="11" ry="14"/><ellipse cx="46" cy="30" rx="11" ry="14"/><ellipse cx="74" cy="30" rx="11" ry="14"/><ellipse cx="94" cy="54" rx="11" ry="14"/></g>')],
+        'fresh-up-arztpraxen' => ['soft', illus_kit('card__art-kit')],
+        'aed-reanimationstraining' => ['red', $svg('<rect x="18" y="16" width="84" height="88" rx="16" fill="#fff"/><path d="M60 92S30 74 30 52a15 15 0 0 1 30-5 15 15 0 0 1 30 5c0 22-30 40-30 40z" fill="' . $r . '"/><path d="M64 44 52 64h12l-6 16 16-24H62z" fill="#fff"/>')],
+        'feuerloeschertraining' => ['fire', illus_extinguisher('card__art-ext')],
+        'brandschutzhelfer' => ['fire', illus_extinguisher('card__art-ext')],
+        'evakuierungsuebung' => ['green', $svg('<rect x="10" y="22" width="100" height="76" rx="10" fill="#fff"/><circle cx="44" cy="36" r="8" fill="#12703B"/><path d="M40 48 30 66l12 2 6 22M40 48l14 10 10-4M48 68l14 10" fill="none" stroke="#12703B" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M74 38h24v44H74" fill="none" stroke="#12703B" stroke-width="6"/><path d="M84 60h-14m6-6-6 6 6 6" fill="none" stroke="#12703B" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>')],
+        'brandschutzordnung-rettungsplaene' => ['soft', $svg('<rect x="24" y="10" width="72" height="100" rx="10" fill="#fff"/><rect x="36" y="24" width="40" height="8" rx="4" fill="#15171C"/><path d="M38 50l5 5 9-9M38 72l5 5 9-9" fill="none" stroke="' . $r . '" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="58" y="48" width="26" height="6" rx="3" fill="#C9CCD2"/><rect x="58" y="70" width="22" height="6" rx="3" fill="#C9CCD2"/><rect x="38" y="90" width="44" height="6" rx="3" fill="#E3E5E8"/>')],
+        'brandschutzbeauftragter' => ['rose', $svg('<path d="M60 8 104 24v36c0 30-20 48-44 58C36 108 16 90 16 60V24z" fill="' . $r . '"/><path d="M40 62l14 14 28-30" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>')],
+    ];
+    [$tone, $art] = $map[$slug] ?? ($c['category'] === 'brandschutz' ? ['fire', illus_extinguisher('card__art-ext')] : ['red', illus_heart('card__art-heart')]);
+    return '<div class="card__art card__art--' . $tone . '">' . $art . '</div>';
+}
+
+/** Großes Seitenmotiv für Unterseiten (statt Foto). */
+function illus_page(string $page): string
+{
+    if ($page === 'brandschutz') {
+        return '<div class="illus-page illus-page--fire" role="img" aria-label="Illustration Brandschutz">' . illus_extinguisher('illus-page__ext') . '<svg class="illus-page__flame" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F2141A" d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.4-.5-2-1-3-1.1-2.1-.2-4 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.2.4-2.3 1-3.3.3 1.5 1.3 2.8 2.5 2.8z"/></svg></div>';
     }
-    if (str_contains($slug, 'kind')) {
-        $svg = '<svg class="card__art-icon" viewBox="0 0 120 120" aria-hidden="true"><circle cx="44" cy="26" r="15" fill="#E60005"/><path d="M18 112V74c0-17 12-30 26-30s26 13 26 30v38z" fill="#E60005"/><circle cx="86" cy="58" r="11" fill="#E60005" opacity=".75"/><path d="M68 112V94c0-12 8-21 18-21s18 9 18 21v18z" fill="#E60005" opacity=".75"/></svg>';
-        return '<div class="card__art card__art--rose">' . $svg . '</div>';
+    if ($page === 'unternehmen') {
+        return illus_safety();
     }
-    if (str_contains($slug, 'hund') || str_contains($slug, 'welpe')) {
-        $svg = '<svg class="card__art-icon" viewBox="0 0 120 120" aria-hidden="true"><g fill="#E60005"><ellipse cx="60" cy="80" rx="26" ry="22"/><ellipse cx="26" cy="54" rx="11" ry="14"/><ellipse cx="46" cy="30" rx="11" ry="14"/><ellipse cx="74" cy="30" rx="11" ry="14"/><ellipse cx="94" cy="54" rx="11" ry="14"/></g></svg>';
-        return '<div class="card__art card__art--rose">' . $svg . '</div>';
-    }
-    if (str_contains($slug, 'fortbildung')) {
-        return '<div class="card__art card__art--soft">' . illus_kit('card__art-kit') . '</div>';
-    }
-    return '<div class="card__art card__art--red">' . illus_heart('card__art-heart') . '</div>';
+    return '<div class="illus-page illus-page--eh" role="img" aria-label="Illustration Erste Hilfe">' . illus_heart('illus-page__heart', 'rgba(255,255,255,.16)', '#fff') . illus_kit('illus-page__kit') . '</div>';
 }

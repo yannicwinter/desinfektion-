@@ -39,10 +39,11 @@ Die HiOrg-Nummer je Kurs wird im Admin unter **Kurse** gepflegt.
 ## Passwort vergessen
 Per FTP `data/admin.json` löschen und `/admin` neu einrichten.
 
-## Instagram-Feed
-Unter Admin → Allgemein ein Instagram-Zugangstoken eintragen (Instagram API mit Instagram-Login,
-Meta-Entwicklerkonto). Die Beiträge werden stündlich geladen, Bilder lokal in `uploads/instagram/`
-gespeichert, das Token wird automatisch verlängert. Ohne Token wird der Bereich ausgeblendet.
+## Instagram-Feed (Behold.so)
+1. Auf behold.so kostenlos registrieren und das Instagram-Konto verbinden.
+2. Einen Feed vom Typ **JSON** anlegen und den Feed-Link kopieren (`https://feeds.behold.so/…`).
+3. Im Admin unter **Allgemein → Instagram-Feed-Link** einfügen.
+Die Beiträge werden stündlich geladen und die Bilder lokal gespeichert. Ohne Link erscheinen Platzhalter.
 
 ## Kursfinder
 Der „Kurs finden“-Knopf (unten rechts) fragt nach Zweck, Ort und Tag und zeigt die nächsten freien

@@ -186,18 +186,14 @@ function course_url(array $c): string
 /** Hochgeladenes Bild zu einem Bild-Platz (z. B. "home"), sonst null. */
 function slot_image(string $slot): ?string
 {
-    // 1. im Admin hochgeladenes Bild, 2. mitgeliefertes Platzhalter-Foto
+    // Nur im Admin hochgeladene Bilder
     foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
         $f = UPLOAD_DIR . '/' . $slot . '.' . $ext;
         if (is_file($f)) {
             return url('uploads/' . $slot . '.' . $ext) . '?v=' . filemtime($f);
         }
     }
-    if (in_array($slot, ['hero', 'home'], true)) {
-        return null; // Startseite: ohne eigenes Bild werden die Illustrationen gezeigt
-    }
-    $d = ROOT . '/assets/img/fotos/' . $slot . '.jpg';
-    return is_file($d) ? asset('img/fotos/' . $slot . '.jpg') : null;
+    return null; // ohne eigenes Bild zeigen die Seiten gezeichnete Motive (inc/illus.php)
 }
 
 /** Bildplätze für den Admin: feste Seitenbilder + ein Bild je Kurs. */

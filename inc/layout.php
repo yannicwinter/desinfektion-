@@ -63,7 +63,6 @@ function layout_start(array $meta): void
   <div class="wrap header__top">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
       <picture>
-        <source media="(max-width: 1280px)" srcset="<?= asset('img/logo-drk-mittelweser-kurz.png') ?>" width="752" height="105">
         <img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V.">
       </picture>
     </a>
@@ -92,7 +91,7 @@ function layout_end(): void
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="brand brand--footer" href="<?= url('/') ?>" aria-label="Startseite"><img src="<?= asset('img/logo-drk-mittelweser-weiss.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V." loading="lazy"></a>
+        <a class="brand brand--footer" href="<?= url('/') ?>" aria-label="Startseite"><img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V." loading="lazy"></a>
         <p><?= e(site('name')) ?> · <?= e(site('org')) ?><br><?= e(site('street')) ?> · <?= e(site('zip')) ?> <?= e(site('city')) ?></p>
       </div>
       <div>
@@ -108,7 +107,7 @@ function layout_end(): void
         <ul>
           <li><a href="<?= url('erste-hilfe') ?>">Erste Hilfe</a></li>
           <li><a href="<?= url('brandschutz') ?>">Brandschutz</a></li>
-          <li><a href="<?= url('arbeitssicherheit') ?>">Für Unternehmen</a></li>
+          <li><a href="<?= url('arbeitssicherheit') ?>">Arbeitssicherheit</a></li>
           <li><a href="<?= url('termine') ?>">Alle Termine</a></li>
           <li><a href="<?= url('faq') ?>">Häufige Fragen</a></li>
         </ul>
@@ -246,6 +245,36 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
   </div>
 </section>
 <?php
+}
+
+/** Tabelle „Welcher Kurs passt?“ (Zeilen: „Kurs | Spalte | …“, erste Zeile = Überschriften). */
+function compare_table(string $data, bool $compact = false): string
+{
+    $rows = lines($data);
+    if (count($rows) < 2) {
+        return '';
+    }
+    $h = '<div class="compare' . ($compact ? ' compare--compact' : ' reveal') . '"><h2 class="' . ($compact ? 'h5' : 'group-title') . '">Welcher Kurs passt?</h2><div class="compare__scroll"><table><thead><tr>';
+    foreach (array_map('trim', explode('|', $rows[0])) as $th) {
+        $label = e($th);
+        if ($compact) { // schmale Spalte: kürzen und Trennstellen setzen
+            $label = strtr($label, ['Abrechnung über BG' => 'über BG', 'Führerschein' => 'Führer&shy;schein', 'Selbstzahler' => 'Selbst&shy;zahler']);
+        }
+        $h .= '<th scope="col">' . $label . '</th>';
+    }
+    $h .= '</tr></thead><tbody>';
+    foreach (array_slice($rows, 1) as $line) {
+        $cells = array_map('trim', explode('|', $line));
+        $h .= '<tr><th scope="row">' . e(array_shift($cells)) . '</th>';
+        foreach ($cells as $cell) {
+            $k = mb_strtolower($cell);
+            $h .= '<td class="' . ($k === 'ja' ? 'yes' : ($k === 'nein' ? 'no' : 'part')) . '">'
+                . ($k === 'ja' ? icon('check') . '<span class="sr-only">ja</span>' : ($k === 'nein' ? '<span aria-hidden="true">–</span><span class="sr-only">nein</span>' : e($cell)))
+                . '</td>';
+        }
+        $h .= '</tr>';
+    }
+    return $h . '</tbody></table></div></div>';
 }
 
 /** Bild-Platz: hochgeladenes Bild oder gestaltete Fläche mit Symbol. */

@@ -86,11 +86,16 @@ page_head($P('eyebrow'), $title, $lead, $crumbs, $chips);
         <div class="btn-row"><a class="btn btn--red btn--sm" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> <?= e(site('phone')) ?></a></div>
       </div>
       <?php endif; ?>
-      <p class="muted small hint"><?= e($P('hint')) ?>
-        <?php if ($slug): ?><a href="<?= e(hiorg_list_url((string) $current['hiorg_id'])) ?>" target="_blank" rel="noopener">Liste bei HiOrg-Server öffnen</a><?php endif; ?></p>
     </div>
 
     <aside class="layout-aside__side">
+      <?php if ($slug === '' || in_array($slug, ['erste-hilfe-ausbildung', 'erste-hilfe-fortbildung', 'erste-hilfe-am-kind'], true)): ?>
+      <div class="box">
+        <?= compare_table(page('erste-hilfe', 'vergleich'), true) ?>
+        <p class="small">Unsicher? Der Kursfinder hilft in 3 Fragen.</p>
+        <button class="btn btn--ghost btn--sm" type="button" data-kf-open>Kursfinder fragen</button>
+      </div>
+      <?php endif; ?>
       <?php if ($slug): $facts = pairs($current['facts']); ?>
       <div class="box">
         <h2 class="h5"><?= e($current['title']) ?></h2>

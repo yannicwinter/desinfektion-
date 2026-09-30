@@ -17,7 +17,7 @@
         "default_og_image": "",
         "hiorg_booking": "fenster",
         "whatsapp": "",
-        "instagram_token": ""
+        "instagram_feed_url": ""
     },
     "pages": {
         "home": {
@@ -129,7 +129,8 @@
             "hiorg_id": "3871",
             "cta": "termine",
             "featured": "1",
-            "active": "1"
+            "active": "1",
+            "keywords": "führerschein, fahrschule, fahrerlaubnis, grundkurs, lebensrettende sofortmaßnahmen, ersthelfer, bg-lehrgang"
         },
         {
             "slug": "erste-hilfe-fortbildung",
@@ -144,7 +145,8 @@
             "hiorg_id": "3872",
             "cta": "termine",
             "featured": "1",
-            "active": "1"
+            "active": "1",
+            "keywords": "auffrischung, auffrischen, wiederholung, refresh, fortbildung, verlängern"
         },
         {
             "slug": "erste-hilfe-am-kind",
@@ -159,7 +161,8 @@
             "hiorg_id": "3873",
             "cta": "termine",
             "featured": "1",
-            "active": "1"
+            "active": "1",
+            "keywords": "baby, säugling, kleinkind, eltern, mutter, vater, kita, erzieher, tagesmutter, babysitter, oma, opa, enkel, notfälle bei kindern"
         },
         {
             "slug": "erste-hilfe-party",
@@ -174,7 +177,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "party, zuhause, privat, freunde, feier, junggesellen, hausbesuch"
         },
         {
             "slug": "kinder-helfen-kindern",
@@ -189,7 +193,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "kinder helfen kindern, grundschule, vorschule, kindergarten, rettungswagen, urkunde, comic"
         },
         {
             "slug": "forstehjelp-schulen",
@@ -204,7 +209,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "førstehjelp, forstehjelp, schule, schulklasse, schüler, norwegen, projekttag, bronze, silber, gold, platin"
         },
         {
             "slug": "erste-hilfe-am-hund",
@@ -219,7 +225,8 @@
             "hiorg_id": "4007",
             "cta": "termine",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "hund, hunde, hundekurs, tier, vierbeiner, pfote, dummy-hund"
         },
         {
             "slug": "erste-hilfe-am-welpen",
@@ -234,7 +241,8 @@
             "hiorg_id": "4310",
             "cta": "termine",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "welpe, welpen, junghund, welpenkurs"
         },
         {
             "slug": "fresh-up-arztpraxen",
@@ -249,7 +257,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "arztpraxis, praxis, arzt, ärztin, praxisteam, mfa, zahnarzt, fresh up"
         },
         {
             "slug": "aed-reanimationstraining",
@@ -264,7 +273,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "aed, defi, defibrillator, reanimation, wiederbelebung, herzdruckmassage, herzstillstand"
         },
         {
             "slug": "brandschutzhelfer",
@@ -279,7 +289,8 @@
             "hiorg_id": "3870",
             "cta": "termine",
             "featured": "1",
-            "active": "1"
+            "active": "1",
+            "keywords": "brandschutzhelfer, evakuierungshelfer, brandschutz, brandschutzschulung, asr a2.2"
         },
         {
             "slug": "feuerloeschertraining",
@@ -294,7 +305,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "feuerlöscher, feuerlöschertraining, löschtraining, löschübung"
         },
         {
             "slug": "evakuierungsuebung",
@@ -309,7 +321,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "evakuierung, räumungsübung, räumung, alarmübung, übung"
         },
         {
             "slug": "brandschutzordnung-rettungsplaene",
@@ -324,7 +337,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "brandschutzordnung, fluchtplan, rettungsplan, flucht- und rettungsplan, gefährdungsbeurteilung, dokumente"
         },
         {
             "slug": "brandschutzbeauftragter",
@@ -339,7 +353,8 @@
             "hiorg_id": "",
             "cta": "anfrage",
             "featured": "",
-            "active": "1"
+            "active": "1",
+            "keywords": "brandschutzbeauftragter, brandschutzpflichten, externer brandschutzbeauftragter"
         }
     ],
     "faq": [

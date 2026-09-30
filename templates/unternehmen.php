@@ -52,7 +52,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeit
       <?php endif; ?>
       <div class="btn-row"><a class="btn btn--dark" href="#formular">Kostenlose Erstberatung</a></div>
     </div>
-    <div class="split__media reveal"><?= image_slot('unternehmen', 'Sicherheitsfachkraft bei einer Betriebsbegehung', 'building') ?></div>
+    <div class="split__media reveal"><?= slot_image('unternehmen') ? image_slot('unternehmen', 'Sicherheitsfachkraft bei einer Betriebsbegehung', 'building') : illus_page('unternehmen') ?></div>
   </div>
 </section>
 

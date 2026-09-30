@@ -21,19 +21,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
 <section class="section section--tight">
   <div class="wrap layout-aside">
     <div class="layout-aside__main">
-      <?php if (lines($P('vergleich'))): ?>
-      <div class="compare reveal">
-        <h2 class="group-title">Welcher Kurs passt?</h2>
-        <div class="compare__scroll"><table>
-          <thead><tr><?php foreach (array_map('trim', explode('|', lines($P('vergleich'))[0])) as $th): ?><th scope="col"><?= e($th) ?></th><?php endforeach; ?></tr></thead>
-          <tbody>
-          <?php foreach (array_slice(lines($P('vergleich')), 1) as $line): $cells = array_map('trim', explode('|', $line)); ?>
-            <tr><th scope="row"><?= e(array_shift($cells)) ?></th><?php foreach ($cells as $cell): $k = mb_strtolower($cell); ?><td class="<?= $k === 'ja' ? 'yes' : ($k === 'nein' ? 'no' : 'part') ?>"><?= $k === 'ja' ? icon('check') . '<span class="sr-only">ja</span>' : ($k === 'nein' ? '<span aria-hidden="true">–</span><span class="sr-only">nein</span>' : e($cell)) ?></td><?php endforeach; ?></tr>
-          <?php endforeach; ?>
-          </tbody>
-        </table></div>
-      </div>
-      <?php endif; ?>
+      <?= compare_table(page('erste-hilfe', 'vergleich')) ?>
       <?php foreach ($groups as $g => $items): ?>
       <h2 class="group-title reveal"><?= e($g) ?></h2>
       <div class="acc reveal">
@@ -63,7 +51,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
                 <?php endif; ?>
               </div>
               <div class="acc__side">
-                <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="acc__img" src="<?= e($img) ?>" alt="<?= e($c['title']) ?>" loading="lazy" decoding="async" width="1400" height="788"><?php endif; ?>
+                <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="acc__img" src="<?= e($img) ?>" alt="<?= e($c['title']) ?>" loading="lazy" decoding="async" width="1400" height="788"><?php else: ?><div class="acc__art"><?= illus_course($c) ?></div><?php endif; ?>
                 <?php if ($facts): ?>
                 <dl class="facts">
                   <?php foreach ($facts as [$k, $v]): ?><div><dt><?= e($k) ?></dt><dd><?= e($v) ?></dd></div><?php endforeach; ?>
@@ -94,7 +82,7 @@ page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
     </div>
 
     <aside class="layout-aside__side">
-      <?= image_slot($category, $isFire ? 'Löschübung mit dem Feuerlöscher' : 'Erste-Hilfe-Übung: Verband anlegen', $isFire ? 'flame' : 'heart', 'reveal') ?>
+      <?= slot_image($category) ? image_slot($category, $isFire ? 'Löschübung mit dem Feuerlöscher' : 'Erste-Hilfe-Übung', 'heart', 'reveal') : illus_page($category) ?>
       <div class="box reveal">
         <?php if ($isFire): ?>
         <h2 class="h5"><?= e($P('contact_title')) ?></h2>
