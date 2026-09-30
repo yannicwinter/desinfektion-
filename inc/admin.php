@@ -20,8 +20,8 @@ const PAGE_NAMES = [
 ];
 
 const FIELD_LABELS = [
-    'hero_badge' => ['Hinweis über der Überschrift', 'z. B. Anerkennung durch die Berufsgenossenschaften. Leer = ausgeblendet.'],
-    'hero_trust' => ['Vorteile unter der Suche', 'Eine Zeile je Punkt.'],
+    'angebot_title' => ['Angebot – Überschrift', ''], 'angebot_eh' => ['Angebot – Erste Hilfe', ''], 'angebot_bs' => ['Angebot – Brandschutz', ''], 'angebot_as' => ['Angebot – Arbeitssicherheit', ''],
+    'termine_title' => ['Terminsuche – Überschrift', ''], 'termine_lead' => ['Terminsuche – Text', ''],
     'inhouse_text' => ['Schulung im Betrieb – Text', ''],
     'seo_title' => ['Google-Titel', 'Erscheint als Überschrift in Suchergebnissen. Ideal: 50–60 Zeichen, wichtigster Begriff vorne.'],
     'seo_description' => ['Google-Beschreibung', 'Kurzer Text unter dem Titel in Suchergebnissen. Ideal: 120–155 Zeichen.'],

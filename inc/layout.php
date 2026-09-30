@@ -60,16 +60,6 @@ function layout_start(array $meta): void
 <body class="page-<?= e($active ?: 'home') ?>">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <header class="header">
-  <div class="topbar">
-    <div class="wrap topbar__in">
-      <span><?= icon('pin') ?><?= e(site('org')) ?> · <?= e(site('street')) ?>, <?= e(site('city')) ?></span>
-      <span class="topbar__r">
-        <a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a>
-        <a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a>
-        <?php if (site('instagram')): ?><a href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">Instagram</a><?php endif; ?>
-      </span>
-    </div>
-  </div>
   <div class="wrap header__top">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
       <picture>
@@ -85,7 +75,7 @@ function layout_start(array $meta): void
     </nav>
     <div class="header__actions">
       <a class="header__phone" href="tel:<?= e(site('phone_link')) ?>" aria-label="Anrufen: <?= e(site('phone')) ?>"><?= icon('phone') ?><span><?= e(site('phone')) ?></span></a>
-      <a class="btn btn--red btn--sm" href="<?= url('termine') ?>"<?= $active === 'termine' ? ' aria-current="page"' : '' ?>><?= icon('calendar') ?><span>Termine</span></a>
+      <a class="btn btn--red btn--sm" href="<?= url('termine') ?>"<?= $active === 'termine' ? ' aria-current="page"' : '' ?>><?= icon('calendar') ?><span>Kurs buchen</span></a>
     </div>
   </div>
 </header>

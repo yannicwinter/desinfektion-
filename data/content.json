@@ -25,11 +25,9 @@
         "home": {
             "seo_title": "DRK Arbeitssicherheit Mittelweser | Erste Hilfe & Brandschutz in Verden",
             "seo_description": "Erste-Hilfe-Kurse, Brandschutzhelfer-Ausbildung und Arbeitssicherheit vom DRK-Kreisverband Verden e.V. – für Unternehmen und privat, in Verden, Achim und der Region Mittelweser.",
-            "hero_eyebrow": "DRK Arbeitssicherheit Mittelweser",
-            "hero_title": "Sicher helfen können – im Betrieb und im Alltag.",
-            "hero_badge": "Anerkannt von den Berufsgenossenschaften",
-            "hero_trust": "Für Führerschein, Betrieb und Familie\nOnline buchen in 2 Minuten\nKurse in Verden, Achim und der Region",
-            "hero_lead": "Deutschlands größte Hilfsorganisation – für Unternehmen und für dich privat. In Verden, Achim und der ganzen Region Mittelweser.",
+            "hero_eyebrow": "DRK-Kreisverband Verden e.V.",
+            "hero_title": "Erste Hilfe und Brandschutz – für Betriebe und für dich.",
+            "hero_lead": "Kurse für Führerschein, Beruf und Familie in Verden, Achim und der Region Mittelweser. Anerkannt von den Berufsgenossenschaften.",
             "usp1_title": "Anerkannt",
             "usp1_text": "Nach DGUV-Vorgaben, vom Unfallversicherungsträger geprüft.",
             "usp2_title": "Praxisnah",
@@ -46,7 +44,13 @@
             "stat_text": "der Beschäftigten müssen mindestens als Brandschutzhelfer ausgebildet sein (ASR A2.2).",
             "cta_title": "Fragen? Wir sind für dich da.",
             "cta_text": "Wir beraten gern – telefonisch oder per E-Mail.",
-            "insta_title": "Aktuelles vom DRK Verden"
+            "insta_title": "Aktuelles vom DRK Verden",
+            "angebot_title": "Unser Angebot",
+            "angebot_eh": "Für Führerschein, Trainerlizenz, Studium und als Ersthelfer im Betrieb. Dazu Kurse für Eltern und Hundehalter.",
+            "angebot_bs": "Brandschutz- und Evakuierungshelfer nach ASR A2.2, Löschtraining, Brandschutzordnung und Rettungspläne.",
+            "angebot_as": "Fachkraft für Arbeitssicherheit, Beratung und Unterweisungen – alles aus einer Hand.",
+            "termine_title": "Kurstermin finden",
+            "termine_lead": "Kurs, Ort und Tag wählen – freie Plätze sehen und direkt online anmelden."
         },
         "erste-hilfe": {
             "seo_title": "Erste-Hilfe-Kurse in Verden & Achim | DRK Arbeitssicherheit",

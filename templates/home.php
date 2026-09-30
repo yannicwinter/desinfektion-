@@ -20,125 +20,95 @@ layout_start([
     ]],
 ]);
 ?>
-<section class="hero2">
-  <?= photo('hero', 'Erste-Hilfe-Kurs beim DRK: Teilnehmende üben die Herzdruckmassage', 'hero2__bg', false) ?>
-  <div class="hero2__shade" aria-hidden="true"></div>
-  <div class="wrap hero2__in">
-    <?php if ($P('hero_badge')): ?><span class="hero2__badge"><?= icon('shield') ?><?= e($P('hero_badge')) ?></span><?php endif; ?>
-    <h1 class="display"><?= e($P('hero_title')) ?></h1>
-    <p class="lead"><?= e($P('hero_lead')) ?></p>
-    <?php include __DIR__ . '/partials/suche.php'; ?>
-    <ul class="hero2__trust">
-      <?php foreach (lines($P('hero_trust')) as $t): ?><li><?= icon('check') ?><?= e($t) ?></li><?php endforeach; ?>
-    </ul>
-  </div>
-</section>
-
-<section class="tiles">
-  <div class="wrap tiles__grid">
-    <?php foreach ([['erste-hilfe', 'Erste Hilfe', 'Führerschein · Betrieb · Familie'], ['brandschutz', 'Brandschutz', 'Helfer · Löschtraining · Beratung'], ['arbeitssicherheit', 'Arbeitssicherheit', 'Fachkraft · Beratung · Dokumente']] as [$slug, $t, $sub]): ?>
-    <a class="tile reveal" href="<?= url($slug) ?>">
-      <?= photo($slug === 'arbeitssicherheit' ? 'unternehmen' : $slug, $t, 'tile__img') ?>
-      <span class="tile__txt"><strong><?= e($t) ?></strong><span><?= e($sub) ?></span></span>
-      <span class="tile__go"><?= icon('arrow') ?></span>
-    </a>
-    <?php endforeach; ?>
-  </div>
-</section>
-
 <?php
 $next = array_values(array_filter(hiorg_dates_all(bookable_courses()), fn($it) => $it['status'] !== 'full' && !empty($it['kid'])));
+$first = $next[0] ?? null;
+$ehPrice = (course('erste-hilfe-ausbildung') ?? [])['price'] ?? '';
+$orteAll = array_unique(array_filter(array_map(fn($it) => hiorg_town($it['details']), $next)));
 ?>
-<?php if ($next): ?>
-<section class="section section--tight">
-  <div class="wrap nextd">
-    <div class="section-head reveal">
-      <div><h2 class="h2">Nächste freie Termine</h2><p class="lead">Platz sichern und direkt online anmelden.</p></div>
-      <a class="link-arrow" href="<?= url('termine') ?>">Alle <?= count($next) ?> Termine <?= icon('arrow') ?></a>
+<section class="ahero">
+  <div class="wrap ahero__grid">
+    <div class="ahero__text">
+      <?php if ($P('hero_eyebrow')): ?><p class="kicker"><?= e($P('hero_eyebrow')) ?></p><?php endif; ?>
+      <h1 class="ahero__title"><?= e($P('hero_title')) ?></h1>
+      <p class="ahero__lead"><?= e($P('hero_lead')) ?></p>
+      <div class="ahero__acts">
+        <a class="btn btn--red" href="#termine">Kurstermin finden <?= icon('arrow') ?></a>
+        <a class="ulink" href="<?= url('arbeitssicherheit') ?>">Angebot für Unternehmen</a>
+      </div>
+      <dl class="ahero__facts">
+        <?php if ($next): ?><div><dt><?= count($next) ?></dt><dd>freie Termine</dd></div><?php endif; ?>
+        <?php if ($orteAll): ?><div><dt><?= count($orteAll) ?></dt><dd>Kursorte</dd></div><?php endif; ?>
+        <?php if ($ehPrice): ?><div><dt><?= e($ehPrice) ?></dt><dd>Erste-Hilfe-Kurs</dd></div><?php endif; ?>
+      </dl>
     </div>
-    <ul class="dates dates--list reveal">
-      <?= render_dates($next, ['limit' => 5, 'show_course' => true]) ?>
-    </ul>
-  </div>
-</section>
-<?php endif; ?>
-
-<section class="figures">
-  <div class="wrap figures__grid">
-    <div class="figure"><strong><?= count($next) ?></strong><span>freie Termine</span></div>
-    <div class="figure"><strong><?= count($orte) ?></strong><span>Kursorte in der Region</span></div>
-    <div class="figure"><strong><?= count(courses()) ?></strong><span>Kurse &amp; Leistungen</span></div>
-    <div class="figure"><strong>1 Tag</strong><span>Erste-Hilfe-Kurs – für Führerschein und Betrieb</span></div>
-  </div>
-</section>
-
-<section class="usps">
-  <div class="wrap usps__grid">
-    <?php foreach ([['shield', 1], ['hand', 2], ['pin', 3]] as [$ic, $n]): ?>
-    <div class="usp reveal">
-      <span class="usp__icon"><?= icon($ic) ?></span>
-      <div><h2 class="h5"><?= e($P("usp{$n}_title")) ?></h2><p><?= e($P("usp{$n}_text")) ?></p></div>
+    <div class="ahero__pic">
+      <?= photo('hero', 'Erste-Hilfe-Kurs: Herzdruckmassage an der Übungspuppe', 'ahero__img', false) ?>
+      <?php if ($first): $fc = $first['course']; $book = site('hiorg_booking') !== 'tab' ? url('termine/' . $fc['slug'] . '/anmeldung/' . $first['kid']) : $first['link']; ?>
+      <div class="nextcard">
+        <small>Nächster freier Termin</small>
+        <p><?= e($fc['title']) ?></p>
+        <span><?= e(de_date($first['date'], 'WW, D. MMM')) ?><?= $first['time'] ? ' · ' . e(explode('–', $first['time'])[0]) . ' Uhr' : '' ?><?= hiorg_town($first['details']) ? ' · ' . e(hiorg_town($first['details'])) : '' ?></span>
+        <div><em><?= e($first['free']) ?></em><a href="<?= e($book) ?>">Buchen <?= icon('arrow') ?></a></div>
+      </div>
+      <?php endif; ?>
     </div>
-    <?php endforeach; ?>
   </div>
 </section>
 
-<section class="section">
+<section class="asec asec--grey">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><h2 class="h2"><?= e($P('kurse_title')) ?></h2><p class="lead"><?= e($P('kurse_lead')) ?></p></div>
-      <a class="link-arrow" href="<?= url('erste-hilfe') ?>">Alle Kurse <?= icon('arrow') ?></a>
-    </div>
-    <div class="cards">
-      <?php foreach ($featured as $c): ?>
-      <article class="card card--img reveal">
-        <div class="card__media"><?= course_media($c) ?></div>
-        <span class="card__tag"><?= $c['category'] === 'brandschutz' ? 'Brandschutz' : e($c['group']) ?></span>
-        <h3 class="h4"><a href="<?= course_url($c) ?>" class="card__link"><?= e($c['title']) ?></a></h3>
-        <p><?= e($c['teaser']) ?></p>
-        <div class="card__foot">
-          <span class="card__price"><?= e($c['price'] ?: '') ?></span>
-          <?php if (!empty($c['hiorg_id'])): ?>
-          <a class="card__cta" href="<?= url('termine/' . $c['slug']) ?>">Termine <?= icon('arrow') ?></a>
-          <?php endif; ?>
-        </div>
-      </article>
+    <h2 class="asec__title"><?= e($P('angebot_title')) ?></h2>
+    <div class="offer">
+      <?php foreach ([['erste-hilfe', 'Erste Hilfe', 'angebot_eh', 'Alle Kurse'], ['brandschutz', 'Brandschutz', 'angebot_bs', 'Mehr erfahren'], ['arbeitssicherheit', 'Arbeitssicherheit', 'angebot_as', 'Für Unternehmen']] as [$slug, $t, $k, $more]): ?>
+      <a class="offer__item" href="<?= url($slug) ?>">
+        <h3><?= e($t) ?></h3>
+        <p><?= e($P($k)) ?></p>
+        <span class="alink"><?= e($more) ?> <?= icon('arrow') ?></span>
+      </a>
       <?php endforeach; ?>
     </div>
   </div>
 </section>
 
-<section class="section section--soft">
-  <div class="wrap split">
-    <div class="split__media reveal">
-      <?php if ($img = slot_image('home')): ?>
-      <?= image_slot('home', 'Arbeitssicherheit beim DRK', 'building') ?>
-      <div class="stat"><strong><?= e($P('stat_value')) ?></strong><span><?= e($P('stat_text')) ?></span></div>
-      <?php else: ?>
-      <?= illus_safety() ?>
-      <?php endif; ?>
+<section class="asec" id="termine">
+  <div class="wrap">
+    <div class="asec__head">
+      <div><h2 class="asec__title"><?= e($P('termine_title')) ?></h2><p class="asec__lead"><?= e($P('termine_lead')) ?></p></div>
     </div>
-    <div class="stack reveal">
-      <span class="eyebrow"><?= e($P('firma_eyebrow')) ?></span>
-      <h2 class="h2"><?= e($P('firma_title')) ?></h2>
-      <p class="lead"><?= e($P('firma_text')) ?></p>
-      <ul class="checks">
+    <?php include __DIR__ . '/partials/suche.php'; ?>
+    <?php if ($next): ?>
+    <ul class="dates dates--list anext">
+      <?= render_dates($next, ['limit' => 5, 'show_course' => true]) ?>
+    </ul>
+    <p class="anext__more"><a class="alink" href="<?= url('termine') ?>">Alle <?= count($next) ?> freien Termine <?= icon('arrow') ?></a></p>
+    <?php endif; ?>
+  </div>
+</section>
+
+<section class="asec asec--grey">
+  <div class="wrap asplit">
+    <figure class="asplit__pic"><?= photo('home', 'Arbeitssicherheit im Betrieb', 'asplit__img') ?></figure>
+    <div class="asplit__text">
+      <p class="kicker"><?= e($P('firma_eyebrow')) ?></p>
+      <h2 class="asec__title"><?= e($P('firma_title')) ?></h2>
+      <p class="asec__lead"><?= e($P('firma_text')) ?></p>
+      <ul class="alist2">
         <?php foreach (lines($P('firma_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?>
       </ul>
-      <div class="btn-row"><a class="btn btn--dark" href="<?= url('arbeitssicherheit') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a></div>
+      <a class="btn btn--red" href="<?= url('arbeitssicherheit') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a>
     </div>
   </div>
 </section>
 
 <?php if ($faq): ?>
-<section class="section">
-  <div class="wrap faq-teaser">
-    <div class="reveal">
-      <span class="eyebrow">Häufige Fragen</span>
-      <h2 class="h2">Kurz gefragt.</h2>
-      <a class="link-arrow" href="<?= url('faq') ?>">Alle Fragen <?= icon('arrow') ?></a>
+<section class="asec">
+  <div class="wrap afaq">
+    <div>
+      <h2 class="asec__title">Häufige Fragen</h2>
+      <a class="alink" href="<?= url('faq') ?>">Alle Fragen <?= icon('arrow') ?></a>
     </div>
-    <div class="acc acc--plain reveal">
+    <div class="acc acc--plain">
       <?php foreach ($faq as $f): ?>
       <details class="acc__item"><summary class="acc__sum"><span class="acc__title"><?= e($f['q']) ?></span><?= icon('chevron', 'i acc__chev') ?></summary><div class="acc__body"><div class="prose"><?= rich($f['a']) ?></div></div></details>
       <?php endforeach; ?>
@@ -147,12 +117,12 @@ $next = array_values(array_filter(hiorg_dates_all(bookable_courses()), fn($it) =
 </section>
 <?php endif; ?>
 
-<?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
-<section class="section section--tight insta">
+<?php $insta = instagram_posts(6); if ($insta): ?>
+<section class="asec asec--grey insta">
   <div class="wrap">
     <div class="section-head reveal">
-      <div><span class="eyebrow">Instagram</span><h2 class="h2"><?= e($P('insta_title')) ?></h2></div>
-      <a class="link-arrow" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">@drk_kreisverband_verden folgen <?= icon('arrow') ?></a>
+      <div><h2 class="asec__title"><?= e($P('insta_title')) ?></h2></div>
+      <a class="alink" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">@drk_kreisverband_verden folgen <?= icon('arrow') ?></a>
     </div>
     <?php if (!$insta): ?>
     <ul class="insta__row insta__row--ph">
