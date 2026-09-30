@@ -168,6 +168,13 @@ function hiorg_parse(string $html, array $course = []): array
         $n->parentNode->removeChild($n);
     }
 
+    // Aktuelles HiOrg-Layout (div.termine-container) direkt auslesen
+    $boxes = $xp->query('//div[contains(concat(" ", normalize-space(@class), " "), " termine-container ")]');
+    if ($boxes->length) {
+        return hiorg_parse_boxes($xp, $boxes, $course);
+    }
+
+    // Rückfallebene für abweichende Layouts: Muster erkennen
     $dateRe = '/\b(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})\b/';
     $blocks = [];
     foreach ($xp->query('//tr[td]') as $tr) {
@@ -319,6 +326,106 @@ function hiorg_parse(string $html, array $course = []): array
     return $items;
 }
 
+/** Liest die Termin-Boxen des HiOrg-Layouts „kurse_extern.php“. */
+function hiorg_parse_boxes(DOMXPath $xp, DOMNodeList $boxes, array $course): array
+{
+    $cls = fn(string $c) => './/*[contains(concat(" ", normalize-space(@class), " "), " ' . $c . ' ")]';
+    $get = function (DOMNode $box, string $c) use ($xp, $cls): string {
+        $n = $xp->query($cls($c), $box)->item(0);
+        return $n ? hiorg_text($n) : '';
+    };
+    $today = (new DateTimeImmutable('today'))->getTimestamp();
+    $price = hiorg_price((string) ($course['hiorg_id'] ?? '')) ?: (string) ($course['price'] ?? '');
+    $items = [];
+    foreach ($boxes as $box) {
+        preg_match_all('/(\d{1,2})\.(\d{1,2})\.(\d{4})/', $get($box, 'termine-start-ende-datum'), $dm, PREG_SET_ORDER);
+        if (!$dm) {
+            continue;
+        }
+        $d = DateTimeImmutable::createFromFormat('!Y-n-j', "{$dm[0][3]}-{$dm[0][2]}-{$dm[0][1]}");
+        $last = end($dm);
+        $end = $last[0] !== $dm[0][0] ? (DateTimeImmutable::createFromFormat('!Y-n-j', "{$last[3]}-{$last[2]}-{$last[1]}") ?: null) : null;
+        if (!$d || ($end ?? $d)->getTimestamp() < $today) {
+            continue;
+        }
+        $time = '';
+        if (preg_match('/(\d{1,2})[:.](\d{2})\s*(?:-|–|bis)\s*(\d{1,2})[:.](\d{2})/u', $get($box, 'div-termine-zeit'), $tm)) {
+            $time = sprintf('%02d:%s–%02d:%s', $tm[1], $tm[2], $tm[3], $tm[4]);
+        }
+        $freeText = $get($box, 'freie-plaetze-container');
+        $status = 'open';
+        $free = '';
+        if (preg_match('/ausgebucht|warteliste|keine/iu', $freeText)) {
+            $status = 'full';
+            $free = stripos($freeText, 'warteliste') !== false ? 'Warteliste' : 'Ausgebucht';
+        } elseif (preg_match('/(\d+)\s*(?:von\s*\d+)?/u', $freeText, $fm)) {
+            $n = (int) $fm[1];
+            $free = $n === 0 ? 'Ausgebucht' : ($n === 1 ? '1 Platz frei' : $n . ' Plätze frei');
+            $status = $n === 0 ? 'full' : ($n <= 3 ? 'few' : 'open');
+        }
+        $a = $xp->query('.//a[contains(@class, "button-anmelden") or contains(@href, "tn_anmeldung")]', $box)->item(0);
+        $link = $a ? hiorg_abs($a->getAttribute('href')) : '';
+        if ($link === '' && $status !== 'full') {
+            $status = 'full';
+            $free = $free ?: 'Anmeldung geschlossen';
+        }
+        $details = array_filter([$get($box, 'kurs-ort'), $get($box, 'kurs-bemerkung')]);
+        $items[] = [
+            'ts' => $d->getTimestamp(),
+            'date' => $d,
+            'end' => $end,
+            'time' => $time,
+            'price' => $price,
+            'free' => $free,
+            'status' => $status,
+            'details' => implode(' · ', $details),
+            'title' => $get($box, 'kurstyp-bezeichung'),
+            'link' => $link ?: hiorg_list_url((string) ($course['hiorg_id'] ?? '')),
+            'bookable' => $link !== '',
+            'course' => $course,
+        ];
+    }
+    usort($items, fn($a, $b) => $a['ts'] <=> $b['ts']);
+    return $items;
+}
+
+/**
+ * Kursgebühr aus dem HiOrg-Anmeldeformular (erster Termin der Liste), 12 Std. zwischengespeichert.
+ * So stimmt der angezeigte Preis immer mit HiOrg überein.
+ */
+function hiorg_price(string $id): string
+{
+    $id = preg_replace('/\D/', '', $id);
+    if ($id === '') {
+        return '';
+    }
+    $f = CACHE_DIR . '/hiorg-price-' . $id . '.txt';
+    if (is_file($f) && filemtime($f) > time() - 43200) {
+        return trim((string) file_get_contents($f));
+    }
+    $list = is_file(hiorg_cache_file($id)) ? (string) file_get_contents(hiorg_cache_file($id)) : '';
+    if (!preg_match('/href="(tn_anmeldung\.php\?[^"]+)"/', $list, $m)) {
+        return is_file($f) ? trim((string) file_get_contents($f)) : '';
+    }
+    $html = '';
+    if (function_exists('curl_init')) {
+        $ch = curl_init(hiorg_abs($m[1]));
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 5, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_ENCODING => '', CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)']);
+        $html = (string) curl_exec($ch);
+        curl_close($ch);
+    }
+    $price = '';
+    if (preg_match('/(\d{1,4}),(\d{2})\s*(?:&euro;|€|Eur)/iu', $html, $pm)) {
+        $price = $pm[1] . ($pm[2] !== '00' ? ',' . $pm[2] : '') . ' €';
+    }
+    if ($html !== '') {
+        @file_put_contents($f, $price, LOCK_EX);
+    } else {
+        @touch($f, time() - 43200 + 600);
+    }
+    return $price;
+}
+
 /** Text eines Knotens; Textteile mit Leerzeichen getrennt, damit Zellen nicht verkleben. */
 function hiorg_text(DOMNode $n): string
 {
@@ -360,6 +467,7 @@ function render_dates(array $items, array $opt = []): string
 {
     $limit = $opt['limit'] ?? 0;
     $showCourse = $opt['show_course'] ?? false;
+    $inline = site('hiorg_booking') !== 'tab';
     if ($limit) {
         $items = array_slice($items, 0, $limit);
     }
@@ -383,10 +491,10 @@ function render_dates(array $items, array $opt = []): string
   <div class="date__side">
     <?php if ($it['free']): ?><span class="badge badge--<?= e($it['status']) ?>"><?= e($it['free']) ?></span><?php endif; ?>
     <?php if ($it['price']): ?><span class="date__price"><?= e($it['price']) ?></span><?php endif; ?>
-    <?php if ($it['status'] === 'full'): ?>
+    <?php if ($it['status'] === 'full' || empty($it['bookable'] ?? true)): ?>
       <a class="btn btn--ghost btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Details</a>
     <?php else: ?>
-      <a class="btn btn--red btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Buchen</a>
+      <a class="btn btn--red btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener"<?php if ($inline): ?> data-book data-book-title="<?= e($c['title'] ?? 'Anmeldung') ?>" data-book-meta="<?= e(de_date($d, 'WW, D. MMM YYYY') . ($it['time'] ? ' · ' . $it['time'] . ' Uhr' : '') . ($it['details'] ? ' · ' . $it['details'] : '')) ?>"<?php endif; ?>>Buchen</a>
     <?php endif; ?>
   </div>
 </li>

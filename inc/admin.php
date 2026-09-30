@@ -47,6 +47,7 @@ const SITE_LABELS = [
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'instagram' => 'Instagram-Link', 'hiorg_ov' => 'HiOrg-Kürzel (ov)', 'hiorg_cache_minutes' => 'Termine zwischenspeichern (Minuten)',
+    'hiorg_booking' => 'Buchen öffnet: „fenster“ = Anmeldung im Fenster auf unserer Seite, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
 ];
 

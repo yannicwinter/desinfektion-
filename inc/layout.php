@@ -126,6 +126,22 @@ function layout_end(): void
     </div>
   </div>
 </footer>
+<dialog class="book" data-book-dialog aria-labelledby="book-title">
+  <div class="book__head">
+    <div class="book__info">
+      <span class="eyebrow">Anmeldung</span>
+      <strong class="book__title" id="book-title"></strong>
+      <span class="book__meta"></span>
+    </div>
+    <a class="book__ext" href="#" target="_blank" rel="noopener" title="In neuem Fenster öffnen"><?= icon('external') ?><span>Neues Fenster</span></a>
+    <button class="book__close" type="button" data-book-close aria-label="Schließen"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="book__body">
+    <div class="book__loading"><span></span>Anmeldeformular wird geladen …</div>
+    <iframe title="Kursanmeldung über HiOrg-Server" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  <p class="book__foot">Die Anmeldung erfolgt sicher über unser Buchungssystem HiOrg-Server.</p>
+</dialog>
 <script src="<?= asset('js/main.js') ?>" defer></script>
 </body>
 </html>
