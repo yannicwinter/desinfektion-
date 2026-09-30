@@ -109,7 +109,15 @@
         r.hidden = !ok;
         if (ok) n++;
       });
-      if (count) count.textContent = n + (n === 1 ? ' Termin' : ' Termine');
+      // Monatsüberschriften ohne sichtbare Termine ausblenden, freie Termine zählen
+      document.querySelectorAll('[data-date-list] .dates__month').forEach(function (m) {
+        var el = m.nextElementSibling, any = false;
+        while (el && !el.classList.contains('dates__month')) { if (!el.hidden) any = true; el = el.nextElementSibling; }
+        m.hidden = !any;
+      });
+      var free = 0;
+      rows.forEach(function (r) { if (!r.hidden && !r.classList.contains('date--full')) free++; });
+      if (count) count.textContent = free + (free === 1 ? ' freier Termin' : ' freie Termine');
       if (empty) empty.hidden = n > 0;
     };
     filter.addEventListener('change', apply);
@@ -158,4 +166,116 @@
     more.querySelectorAll('[data-more-close]').forEach(function (b) { b.addEventListener('click', closeMore); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !more.hidden) closeMore(); });
   }
+})();
+
+/* Gestaltete Auswahlmenüs statt der Standard-Menüs des Browsers (select[data-nice]).
+   Das echte <select> bleibt für Formular, Tastatur-Fallback und bestehende Skripte erhalten. */
+(function () {
+  'use strict';
+  var chev = '<svg class="nsel__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+  var tick = '<svg class="nsel__tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>';
+  var all = [];
+  var uid = 0;
+
+  function split(text) {
+    var m = /^(.*) \((\d+)\)$/.exec(text);
+    return m ? { label: m[1], n: m[2] } : { label: text, n: '' };
+  }
+
+  function build(sel) {
+    var wrap = document.createElement('div');
+    wrap.className = 'nsel';
+    var id = 'nsel-' + (++uid);
+    wrap.innerHTML = '<button type="button" class="nsel__btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="' + id + '"><span class="nsel__val"></span>' + chev + '</button><ul class="nsel__list" role="listbox" id="' + id + '" tabindex="-1" hidden></ul>';
+    sel.parentNode.insertBefore(wrap, sel.nextSibling);
+    sel.classList.add('nsel__native');
+    sel.tabIndex = -1;
+    sel.setAttribute('aria-hidden', 'true');
+    var btn = wrap.querySelector('.nsel__btn');
+    var list = wrap.querySelector('.nsel__list');
+    if (sel.getAttribute('aria-label')) btn.setAttribute('aria-label', sel.getAttribute('aria-label') + ': ' + (sel.options[sel.selectedIndex] || {}).text);
+    var active = -1;
+
+    function sync() {
+      var o = sel.options[sel.selectedIndex];
+      wrap.querySelector('.nsel__val').textContent = o ? split(o.text).label : '';
+      if (sel.getAttribute('aria-label') && o) btn.setAttribute('aria-label', sel.getAttribute('aria-label') + ': ' + o.text);
+    }
+    function render() {
+      list.innerHTML = '';
+      Array.prototype.forEach.call(sel.options, function (o, i) {
+        var p = split(o.text);
+        var li = document.createElement('li');
+        li.className = 'nsel__opt' + (o.selected ? ' is-on' : '') + (o.disabled || p.n === '0' ? ' is-off' : '');
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', o.selected ? 'true' : 'false');
+        li.id = list.id + '-' + i;
+        li.innerHTML = tick + '<span class="nsel__lbl"></span>' + (p.n !== '' ? '<span class="nsel__n">' + p.n + '</span>' : '');
+        li.querySelector('.nsel__lbl').textContent = p.label;
+        li.addEventListener('click', function () { choose(i); });
+        li.addEventListener('mousemove', function () { setActive(i); });
+        list.appendChild(li);
+      });
+    }
+    function setActive(i) {
+      var items = list.children;
+      if (active >= 0 && items[active]) items[active].classList.remove('is-active');
+      active = Math.max(0, Math.min(items.length - 1, i));
+      if (items[active]) {
+        items[active].classList.add('is-active');
+        list.setAttribute('aria-activedescendant', items[active].id);
+        items[active].scrollIntoView({ block: 'nearest' });
+      }
+    }
+    function open() {
+      all.forEach(function (x) { if (x !== api) x.close(); });
+      render();
+      list.hidden = false;
+      wrap.classList.add('is-open');
+      btn.setAttribute('aria-expanded', 'true');
+      setActive(sel.selectedIndex);
+      list.focus({ preventScroll: true });
+    }
+    function close(focusBtn) {
+      if (list.hidden) return;
+      list.hidden = true;
+      wrap.classList.remove('is-open');
+      btn.setAttribute('aria-expanded', 'false');
+      if (focusBtn) btn.focus({ preventScroll: true });
+    }
+    function choose(i) {
+      if (sel.selectedIndex !== i) {
+        sel.selectedIndex = i;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      sync();
+      close(true);
+    }
+    btn.addEventListener('click', function (e) { e.stopPropagation(); list.hidden ? open() : close(true); });
+    btn.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { e.preventDefault(); open(); }
+    });
+    list.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+      else if (e.key === 'Home') { e.preventDefault(); setActive(0); }
+      else if (e.key === 'End') { e.preventDefault(); setActive(list.children.length - 1); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); choose(active); }
+      else if (e.key === 'Escape' || e.key === 'Tab') { close(e.key === 'Escape'); }
+    });
+    sel.addEventListener('change', sync);
+    if (sel.form) sel.form.addEventListener('reset', function () { setTimeout(sync); });
+    // Ganze Feldfläche (z. B. in der Suchleiste) öffnet das Menü
+    var field = sel.closest('.sbar__f');
+    if (field) field.addEventListener('click', function (e) { if (!wrap.contains(e.target)) { e.stopPropagation(); open(); } });
+    var api = { close: close, sync: sync };
+    all.push(api);
+    sync();
+  }
+
+  document.querySelectorAll('select[data-nice]').forEach(build);
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('.nsel')) all.forEach(function (x) { x.close(); });
+  });
+  window.niceSelectSync = function () { all.forEach(function (x) { x.sync(); }); };
 })();

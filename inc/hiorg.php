@@ -502,43 +502,64 @@ function hiorg_find(array $course, string $kid): ?array
     return null;
 }
 
-/** Ausgabe einer Terminliste (auch für /api/termine per fetch). */
+/** Kurze Ortsangabe: „Aller-Weser-Zentrum, Lindhooper Straße 57, 27283 Verden (Aller)“ → „Aller-Weser-Zentrum · Verden“. */
+function hiorg_place_short(string $details): string
+{
+    $town = hiorg_town($details);
+    $name = trim(explode(',', $details)[0]);
+    if ($name === '' || preg_match('/^\d{5}\b/', $name) || preg_match('/(straße|str\.|weg|platz|allee)\s*\d/iu', $name)) {
+        return $town ?: $details;
+    }
+    // „DRK Zentrum Achim“ enthält den Ort schon
+    return ($town && mb_stripos($name, $town) === false) ? $name . ' · ' . $town : $name;
+}
+
+/**
+ * Ausgabe einer Terminliste (auch für /api/termine per fetch).
+ * Optionen: limit, show_course (Kursname je Zeile), show_price, months (Monatsüberschriften).
+ */
 function render_dates(array $items, array $opt = []): string
 {
+    static $months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
     $limit = $opt['limit'] ?? 0;
     $showCourse = $opt['show_course'] ?? false;
+    $showPrice = $opt['show_price'] ?? $showCourse;
+    $groupMonths = $opt['months'] ?? false;
     $inline = site('hiorg_booking') !== 'tab';
     if ($limit) {
         $items = array_slice($items, 0, $limit);
     }
+    $lastMonth = '';
     ob_start();
     foreach ($items as $it) {
         /** @var DateTimeImmutable $d */
         $d = $it['date'];
         $c = $it['course'];
-        $when = de_date($d, 'WWW');
+        $when = de_date($d, 'WW, D. MMM');
         if ($it['end']) {
-            $when .= ' bis ' . de_date($it['end'], 'WW D. MMM');
+            $when .= ' – ' . de_date($it['end'], 'WW, D. MMM');
         }
+        $full = $it['status'] === 'full' || empty($it['bookable'] ?? true);
+        if ($groupMonths && $d->format('Y-m') !== $lastMonth) {
+            $lastMonth = $d->format('Y-m');
+            echo '<li class="dates__month" data-month="' . $lastMonth . '">' . $months[(int) $d->format('n')] . ' ' . $d->format('Y') . '</li>';
+        }
+        $book = $inline && !empty($it['kid']) ? url('termine/' . ($c['slug'] ?? '') . '/anmeldung/' . $it['kid']) : $it['link'];
         ?>
-<li class="date" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
+<li class="date<?= $full ? ' date--full' : '' ?>" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
   <time class="date__cal" datetime="<?= $d->format('Y-m-d') ?>"><span><?= de_date($d, 'MMM') ?></span><strong><?= $d->format('j') ?></strong></time>
   <div class="date__info">
     <?php if ($showCourse): ?><span class="date__course"><?= e($c['title'] ?? '') ?></span><?php endif; ?>
-    <span class="date__when"><?= e($when) ?><?= $it['time'] ? ' · ' . e($it['time']) . ' Uhr' : '' ?></span>
-    <?php if ($it['details']): ?><span class="date__details"><?= e($it['details']) ?></span><?php endif; ?>
+    <span class="date__when"><?= e($when) ?><?= $it['time'] ? '<span class="date__time"> · ' . e($it['time']) . '</span>' : '' ?></span>
+    <?php if ($it['details']): ?><span class="date__details" title="<?= e($it['details']) ?>"><?= icon('pin') ?><?= e(hiorg_place_short($it['details'])) ?></span><?php endif; ?>
   </div>
   <div class="date__side">
-    <?php if ($it['free']): ?><span class="badge badge--<?= e($it['status']) ?>"><?= e($it['free']) ?></span><?php endif; ?>
-    <?php if ($it['price']): ?><span class="date__price"><?= e($it['price']) ?></span><?php endif; ?>
-    <?php if ($it['status'] === 'full' || empty($it['bookable'] ?? true)): ?>
-      <a class="btn btn--ghost btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Details</a>
+    <?php if ($full): ?>
+      <span class="badge badge--full"><?= e($it['free'] ?: 'Ausgebucht') ?></span>
     <?php else: ?>
-      <?php if ($inline && !empty($it['kid'])): ?>
-      <a class="btn btn--red btn--sm" href="<?= url('termine/' . ($c['slug'] ?? '') . '/anmeldung/' . $it['kid']) ?>">Buchen</a>
-      <?php else: ?>
-      <a class="btn btn--red btn--sm" href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Buchen</a>
-      <?php endif; ?>
+      <?php if ($it['free']): ?><span class="date__free date__free--<?= e($it['status']) ?>"><?= e($it['free']) ?></span><?php endif; ?>
+      <?php if ($showPrice && $it['price']): ?><span class="date__price"><?= e($it['price']) ?></span><?php endif; ?>
+      <a class="btn btn--red btn--sm" href="<?= e($book) ?>"<?= $book === $it['link'] ? ' target="_blank" rel="noopener"' : '' ?>>Buchen</a>
     <?php endif; ?>
   </div>
 </li>

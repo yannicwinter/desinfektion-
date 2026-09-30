@@ -19,85 +19,65 @@ layout_start([
 page_head($P('eyebrow'), $P('title'), $P('lead'), [[$P('title'), $category]]);
 ?>
 <section class="section section--tight">
-  <div class="wrap layout-aside">
-    <div class="layout-aside__main">
-      <?= compare_table(page('erste-hilfe', 'vergleich')) ?>
-      <?php foreach ($groups as $g => $items): ?>
-      <h2 class="group-title reveal"><?= e($g) ?></h2>
-      <div class="acc reveal">
-        <?php foreach ($items as $c):
-            $facts = pairs($c['facts']);
-            $learn = lines($c['learn']);
-        ?>
-        <details class="acc__item" id="<?= e($c['slug']) ?>">
-          <summary class="acc__sum">
-            <span class="acc__head">
-              <span class="acc__title"><?= e($c['title']) ?></span>
-              <span class="acc__teaser"><?= e($c['teaser']) ?></span>
-            </span>
-            <span class="acc__meta">
-              <?php if ($c['price']): ?><span class="pill pill--red"><?= e($c['price']) ?></span><?php endif; ?>
-              <?php if (!empty($c['hiorg_id'])): ?><span class="pill"><?= icon('calendar') ?>Online buchbar</span><?php else: ?><span class="pill">Auf Anfrage</span><?php endif; ?>
-            </span>
-            <?= icon('chevron', 'i acc__chev') ?>
-          </summary>
-          <div class="acc__body">
-            <div class="acc__grid">
-              <div class="prose">
-                <?= rich($c['text']) ?>
-                <?php if ($learn): ?>
-                <h3 class="h6">Inhalte</h3>
-                <ul class="checks checks--sm"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
-                <?php endif; ?>
-              </div>
-              <div class="acc__side">
-                <?php if ($img = slot_image('kurs-' . $c['slug'])): ?><img class="acc__img" src="<?= e($img) ?>" alt="<?= e($c['title']) ?>" loading="lazy" decoding="async" width="1400" height="788"><?php else: ?><div class="acc__art"><?= illus_course($c) ?></div><?php endif; ?>
-                <?php if ($facts): ?>
-                <dl class="facts">
-                  <?php foreach ($facts as [$k, $v]): ?><div><dt><?= e($k) ?></dt><dd><?= e($v) ?></dd></div><?php endforeach; ?>
-                </dl>
-                <?php endif; ?>
-              </div>
-            </div>
-            <?php if (!empty($c['hiorg_id'])): ?>
-            <div class="acc__dates" data-dates="<?= url('api/termine/' . $c['slug']) ?>?limit=3">
-              <h3 class="h6">Nächste Termine</h3>
-              <div class="acc__dates-list"><p class="muted small">Termine werden geladen …</p></div>
-            </div>
-            <?php endif; ?>
-            <div class="btn-row">
-              <?php if (!empty($c['hiorg_id'])): ?>
-              <a class="btn btn--red" href="<?= url('termine/' . $c['slug']) ?>"><?= icon('calendar') ?> Alle Termine &amp; buchen</a>
-              <a class="btn btn--ghost" href="<?= url('kontakt?thema=' . $c['slug']) ?>">Inhouse anfragen</a>
-              <?php else: ?>
-              <a class="btn btn--red" href="<?= url('kontakt?thema=' . $c['slug']) ?>"><?= icon('mail') ?> Jetzt anfragen</a>
-              <a class="btn btn--ghost" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> Anrufen</a>
-              <?php endif; ?>
-            </div>
+  <div class="wrap cpage">
+    <?php if ($category === 'erste-hilfe' && lines(page('erste-hilfe', 'vergleich'))): ?>
+    <details class="cpage__compare reveal">
+      <summary><?= icon('search') ?> Welcher Kurs passt zu mir? <span>Übersicht Führerschein · Selbstzahler · BG</span><?= icon('chevron', 'i cpage__chev') ?></summary>
+      <?= compare_table(page('erste-hilfe', 'vergleich'), true) ?>
+    </details>
+    <?php endif; ?>
+
+    <?php foreach ($groups as $g => $items): ?>
+    <h2 class="group-title reveal"><?= e($g) ?></h2>
+    <div class="acc acc--courses reveal">
+      <?php foreach ($items as $c):
+          $facts = array_filter(pairs($c['facts']), fn($f) => mb_strtolower($f[0]) !== 'preis');
+          $learn = lines($c['learn']);
+          $bookable = !empty($c['hiorg_id']);
+      ?>
+      <details class="acc__item" id="<?= e($c['slug']) ?>">
+        <summary class="acc__sum">
+          <span class="acc__ico" aria-hidden="true"><?= illus_course($c) ?></span>
+          <span class="acc__head">
+            <span class="acc__title"><?= e($c['title']) ?></span>
+            <span class="acc__teaser"><?= e($c['teaser']) ?></span>
+          </span>
+          <span class="acc__price"><?= $c['price'] ? e($c['price']) : 'auf Anfrage' ?></span>
+          <?= icon('chevron', 'i acc__chev') ?>
+        </summary>
+        <div class="acc__body">
+          <p class="acc__text"><?= e($c['text']) ?></p>
+          <?php if ($facts): ?>
+          <ul class="acc__facts"><?php foreach ($facts as [$k, $v]): ?><li><span><?= e($k) ?></span> <?= e($v) ?></li><?php endforeach; ?></ul>
+          <?php endif; ?>
+          <?php if ($learn): ?>
+          <ul class="checks checks--sm checks--2 acc__learn"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
+          <?php endif; ?>
+          <?php if ($bookable): ?>
+          <div class="acc__dates" data-dates="<?= url('api/termine/' . $c['slug']) ?>?limit=3">
+            <div class="acc__dates-list"><p class="muted small">Termine werden geladen …</p></div>
           </div>
-        </details>
-        <?php endforeach; ?>
-      </div>
+          <?php endif; ?>
+          <div class="btn-row">
+            <?php if ($bookable): ?>
+            <a class="btn btn--red" href="<?= url('termine/' . $c['slug']) ?>"><?= icon('calendar') ?> Alle Termine</a>
+            <a class="btn btn--ghost" href="<?= url('kontakt?thema=' . $c['slug']) ?>">Inhouse anfragen</a>
+            <?php else: ?>
+            <a class="btn btn--red" href="<?= url('kontakt?thema=' . $c['slug']) ?>"><?= icon('mail') ?> Anfragen</a>
+            <a class="btn btn--ghost" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> Anrufen</a>
+            <?php endif; ?>
+          </div>
+        </div>
+      </details>
       <?php endforeach; ?>
     </div>
+    <?php endforeach; ?>
 
-    <aside class="layout-aside__side">
-      <?= slot_image($category) ? image_slot($category, $isFire ? 'Löschübung mit dem Feuerlöscher' : 'Erste-Hilfe-Übung', 'heart', 'reveal') : illus_page($category) ?>
-      <div class="box reveal">
-        <?php if ($isFire): ?>
-        <h2 class="h5"><?= e($P('contact_title')) ?></h2>
-        <p><?= e($P('contact_text')) ?></p>
-        <?php else: ?>
-        <h2 class="h5"><?= e($P('outro_title')) ?></h2>
-        <p><?= e($P('outro_text')) ?></p>
-        <?php endif; ?>
-        <ul class="contact-list">
-          <li><a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a></li>
-          <li><a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a></li>
-        </ul>
-        <a class="btn btn--red btn--block" href="<?= url('termine') ?>"><?= icon('calendar') ?> Alle Kurstermine</a>
-      </div>
-    </aside>
+    <p class="cpage__help reveal">
+      <?= $isFire ? e($P('contact_title')) . ': ' . e($P('contact_text')) : e($P('outro_title')) ?>
+      · <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a>
+      · <a href="#kursfinder" data-kf-open>Kursfinder fragen</a>
+    </p>
   </div>
 </section>
 <?php include __DIR__ . '/partials/cta.php'; ?>

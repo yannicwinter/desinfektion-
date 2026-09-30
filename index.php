@@ -98,6 +98,8 @@ switch ($route) {
             header('Cache-Control: public, max-age=300');
             header('X-Robots-Tag: noindex');
             $res = hiorg_dates($c);
+            // Vorschau: nur freie Termine
+            $res['items'] = array_values(array_filter($res['items'], fn($it) => $it['status'] !== 'full' && !empty($it['bookable'] ?? true)));
             $limit = min(10, max(1, (int) ($_GET['limit'] ?? 3)));
             if ($res['items']) {
                 echo '<ul class="dates dates--compact">' . render_dates($res['items'], ['limit' => $limit]) . '</ul>';

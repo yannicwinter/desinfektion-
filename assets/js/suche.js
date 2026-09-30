@@ -52,6 +52,7 @@
       var sel = form.querySelector('[data-f=' + k + ']');
       if (sel && sel.value !== state[k]) sel.value = state[k];
     });
+    if (window.niceSelectSync) window.niceSelectSync();
     var sub = root.querySelector('[data-spill-sub]');
     if (sub && touched) {
       sub.textContent = title(state.kurs) + ' · ' + (state.ort || 'alle Orte') + (state.wann ? ' · ' + (state.wann === 'we' ? 'Wochenende' : 'unter der Woche') : '');

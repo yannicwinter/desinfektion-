@@ -23,29 +23,29 @@ $first = $suche['kurse'][0]['slug'] ?? '';
 ?>
 <div class="hsearch" data-search='<?= e(json_encode($suche, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)) ?>'>
   <form class="sbar" action="<?= url('termine') ?>" method="get" data-search-form>
-    <label class="sbar__f sbar__f--kurs">
+    <div class="sbar__f sbar__f--kurs">
       <small>Kurs</small>
-      <select name="kurs" data-f="kurs">
+      <select name="kurs" data-f="kurs" data-nice aria-label="Kurs">
         <?php foreach ($suche['kurse'] as $k): ?>
         <option value="<?= e($k['slug']) ?>"><?= e($k['title']) ?></option>
         <?php endforeach; ?>
       </select>
-    </label>
-    <label class="sbar__f">
+    </div>
+    <div class="sbar__f">
       <small>Ort</small>
-      <select name="ort" data-f="ort">
+      <select name="ort" data-f="ort" data-nice aria-label="Ort">
         <option value="">Alle Orte</option>
         <?php foreach ($orte as $o): ?><option value="<?= e($o) ?>"><?= e($o) ?></option><?php endforeach; ?>
       </select>
-    </label>
-    <label class="sbar__f">
+    </div>
+    <div class="sbar__f">
       <small>Wann</small>
-      <select name="wann" data-f="wann">
+      <select name="wann" data-f="wann" data-nice aria-label="Wann">
         <option value="">Egal</option>
         <option value="wk">Unter der Woche</option>
         <option value="we">Am Wochenende</option>
       </select>
-    </label>
+    </div>
     <button class="btn btn--red sbar__go" type="submit"><?= icon('search') ?><span data-count-label>Termine finden</span></button>
   </form>
 
