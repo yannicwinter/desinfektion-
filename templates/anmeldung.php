@@ -41,6 +41,8 @@ layout_start([
         </div>
         <div class="box box--soft signup__help">
           <h2 class="h6">Fragen zur Anmeldung?</h2>
+          <?php $mail = site(($current['category'] ?? '') === 'erste-hilfe' ? 'email_erste_hilfe' : 'email_brandschutz') ?: site('email'); ?>
+          <a href="mailto:<?= e($mail) ?>"><?= icon('mail') ?><?= e($mail) ?></a>
           <a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a>
         </div>
       </aside>
@@ -50,6 +52,7 @@ layout_start([
           <iframe src="<?= e($it['link']) ?>" title="Anmeldeformular <?= e($current['title']) ?>" referrerpolicy="strict-origin-when-cross-origin" data-signup-frame></iframe>
         </div>
         <p class="muted small signup__note">Die Anmeldung und ggf. Zahlung laufen über unser Buchungssystem HiOrg-Server. Funktioniert etwas nicht? <a href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Formular in neuem Tab öffnen</a></p>
+        <p class="muted small signup__mhelp">Fragen zur Anmeldung? <a href="mailto:<?= e($mail) ?>"><?= e($mail) ?></a></p>
       </div>
     </div>
   </div>

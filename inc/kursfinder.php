@@ -92,7 +92,24 @@ function kursfinder_config(): array
         'faq' => url('faq'),
         'phone' => site('phone'),
         'phoneLink' => 'tel:' . site('phone_link'),
+        'orte' => kursfinder_orte(),
     ];
+}
+
+/** Alle Kursorte (Städte) aus den aktuellen Terminen, z. B. Verden, Achim. */
+function kursfinder_orte(): array
+{
+    $orte = [];
+    foreach (bookable_courses() as $c) {
+        foreach (hiorg_dates($c)['items'] as $it) {
+            if ($t = hiorg_town($it['details'])) {
+                $orte[$t] = true;
+            }
+        }
+    }
+    $orte = array_keys($orte);
+    sort($orte);
+    return $orte;
 }
 
 /** Markup: Startknopf + Chat-Fenster (wird in layout_end eingebunden). */
@@ -235,10 +252,11 @@ function kf_score(array $doc, array $q, string $qJoined, array $idx): float
 /** Antwort auf eine Freitext-Frage: bester Kurs, beste FAQ, erkannte Absicht. */
 function kursfinder_answer(string $question): array
 {
+    $question = kf_correct($question); // Tippfehler großzügig korrigieren
     $q = kf_tokens($question);
     $raw = mb_strtolower($question);
     if (!$q) {
-        return ['type' => 'none'];
+        return ['type' => 'none', 'fixed' => $question];
     }
     $idx = kf_index();
     $qJoined = implode(' ', $q);
@@ -293,5 +311,88 @@ function kursfinder_answer(string $question): array
             $out['type'] = 'faq';
         }
     }
+    $out['fixed'] = $question;
     return $out;
+}
+
+// ---------------------------------------------------------------------------
+// Rechtschreib-Toleranz: jedes Wort der Frage wird mit dem Wortschatz der Website
+// verglichen (Kurse, Suchbegriffe, FAQ, Orte, Wochentage). Großzügig: je länger das
+// Wort, desto mehr Tippfehler sind erlaubt (Levenshtein-Abstand).
+// ---------------------------------------------------------------------------
+
+function kf_ascii(string $w): string
+{
+    return strtr($w, ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'ø' => 'o', 'é' => 'e']);
+}
+
+/** Wortschatz: Wort (klein) → Häufigkeit. */
+function kf_vocab(): array
+{
+    static $v = null;
+    if ($v !== null) {
+        return $v;
+    }
+    $text = 'führerschein fahrschule fahrerlaubnis nächste nächster termin termine kurs kurse wochenende samstag sonntag montag dienstag mittwoch donnerstag freitag '
+        . 'arbeit arbeitgeber betrieb firma ersthelfer auffrischung fortbildung ausbildung hund hunde welpe welpen kind kinder baby brandschutz feuerlöscher '
+        . 'trainer verein studium übungsleiter kosten preis kostet dauer wann wo wie was gibt frei plätze anmelden buchen berufsgenossenschaft';
+    foreach (courses() as $c) {
+        $text .= ' ' . $c['title'] . ' ' . $c['teaser'] . ' ' . $c['text'] . ' ' . $c['learn'] . ' ' . $c['facts'] . ' ' . ($c['keywords'] ?? '') . ' ' . $c['group'];
+    }
+    foreach (content()['faq'] ?? [] as $f) {
+        $text .= ' ' . $f['q'] . ' ' . $f['a'];
+    }
+    $text .= ' ' . implode(' ', kursfinder_orte());
+    $v = [];
+    foreach (preg_split('/[^\p{L}]+/u', mb_strtolower($text)) as $w) {
+        if (mb_strlen($w) >= 3) {
+            $v[$w] = ($v[$w] ?? 0) + 1;
+        }
+    }
+    return $v;
+}
+
+/** Korrigiert Tippfehler in der Frage, z. B. „wan is der nächte kurs in vrden“ → „wann is der nächste kurs in verden“. */
+function kf_correct(string $question): string
+{
+    $vocab = kf_vocab();
+    $asciiVocab = [];
+    foreach ($vocab as $w => $n) {
+        $asciiVocab[$w] = kf_ascii($w);
+    }
+    $out = [];
+    foreach (preg_split('/\s+/u', trim(mb_strtolower($question))) as $raw) {
+        $word = preg_replace('/[^\p{L}\p{N}-]/u', '', $raw);
+        $len = mb_strlen($word);
+        if ($len < 4 || isset($vocab[$word]) || preg_match('/\d/', $word)) {
+            $out[] = $word;
+            continue;
+        }
+        $a = kf_ascii($word);
+        $max = $len <= 5 ? 1 : ($len <= 8 ? 2 : 3);
+        $best = null;
+        $bestD = PHP_INT_MAX;
+        foreach ($asciiVocab as $w => $wa) {
+            if (abs(strlen($wa) - strlen($a)) > $max) {
+                continue;
+            }
+            $d = levenshtein($a, $wa);
+            // Gleicher Anfangsbuchstabe zählt als etwas besser
+            $score = $d * 10 - ($wa[0] === $a[0] ? 3 : 0) - min(3, $vocab[$w]);
+            if ($d <= $max && $score < $bestD) {
+                $bestD = $score;
+                $best = $w;
+            }
+        }
+        // Zusammengesetzte Wörter wie „hundekurs“, „ersthelferkurs“: bekannten Wortanfang übernehmen
+        if ($best === null) {
+            foreach ($asciiVocab as $w => $wa) {
+                if (strlen($wa) >= 4 && str_starts_with($a, $wa) && ($best === null || strlen($wa) > strlen(kf_ascii($best)))) {
+                    $best = $w;
+                }
+            }
+        }
+        $out[] = $best ?? $word;
+    }
+    return implode(' ', $out);
 }

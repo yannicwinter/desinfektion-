@@ -40,7 +40,11 @@ const FIELD_LABELS = [
     'form_title' => ['Formular – Überschrift', ''], 'form_text' => ['Formular – Text', ''],
     'hint' => ['Hinweis unter der Terminliste', ''], 'orte' => ['Kursorte', 'Ein Ort pro Zeile.'],
     'vergleich' => ['Vergleichstabelle „Welcher Kurs passt?“', 'Erste Zeile = Überschriften. Spalten mit | trennen. „ja“/„nein“ werden als Symbol angezeigt.'],
-    'asi_benefits' => ['Arbeitssicherheit – Ihr Nutzen', 'Ein Punkt pro Zeile.'],
+    'asi_benefits' => ['Fachkraft – Nutzen', 'Ein Punkt pro Zeile.'],
+    'asi_offer' => ['Fachkraft – Angebot', 'Ein Punkt pro Zeile.'],
+    'ausbildung_title' => ['Überschrift Ausbildung', ''],
+    'dienst_title' => ['Überschrift Dienstleistung', ''],
+    'kosten' => ['Hinweis Kosten', 'Eine Zeile pro Hinweis: „Thema: Text“'],
     'insta_title' => ['Instagram – Überschrift', 'Die Beiträge erscheinen, sobald unter „Allgemein“ der Behold-Feed-Link eingetragen ist – bis dahin Platzhalter.'],
     'body' => ['Seiteninhalt', 'Leerzeile = neuer Absatz · **fett** · [Linktext](https://…) · Zeilen mit „- “ = Liste'],
 ];
@@ -48,6 +52,7 @@ const FIELD_LABELS = [
 const SITE_LABELS = [
     'name' => 'Name der Website', 'org' => 'Träger', 'url' => 'Adresse der Website (für Google, ohne / am Ende)',
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
+    'email_erste_hilfe' => 'E-Mail für Fragen zur Anmeldung (Erste Hilfe)', 'email_brandschutz' => 'E-Mail für Fragen zur Anmeldung (Brandschutz, Arbeitssicherheit)',
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'instagram' => 'Instagram-Link',
     'instagram_feed_url' => 'Instagram-Feed-Link von behold.so (JSON-Feed-URL, z. B. https://feeds.behold.so/…)',

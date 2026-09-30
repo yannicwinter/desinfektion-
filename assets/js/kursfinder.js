@@ -258,15 +258,21 @@
     state.data.dates.forEach(function (x) { if (x.ort && t.indexOf(x.ort.toLowerCase()) !== -1) state.ort = x.ort; });
   }
 
+  // Ort und Wochentag/Wochenende aus dem Text merken (z. B. „nächster Kurs in Verden am Samstag“)
+  function detect(t) {
+    if (/wochenend/.test(t)) state.day = 'we';
+    else if (/unter der woche|werktag|wochentag/.test(t)) state.day = 'wk';
+    Object.keys(days).forEach(function (n) { if (t.indexOf(n) !== -1) state.day = days[n]; });
+    if (state.data) applyOrt(t);
+    (cfg.orte || []).forEach(function (o) { if (t.indexOf(o.toLowerCase()) !== -1) state.ort = o; });
+  }
+
   function freeText(text) {
     me(text);
     clearChoices();
     var t = ' ' + text.toLowerCase() + ' ';
     state.text = t;
-    if (/wochenend/.test(t)) state.day = 'we';
-    else if (/unter der woche|werktag|wochentag/.test(t)) state.day = 'wk';
-    Object.keys(days).forEach(function (n) { if (t.indexOf(n) !== -1) state.day = days[n]; });
-    if (state.data) applyOrt(t);
+    detect(t);
 
     // Wissenssuche auf dem Server: durchsucht Kurse und FAQ der Website
     var asked = fetch(cfg.api + '?frage=' + encodeURIComponent(text)).then(function (r) { return r.json(); });
@@ -279,9 +285,22 @@
   }
 
   function answer(a) {
+    // Mit dem korrigierten Text (Tippfehler bereinigt) Ort und Tag erneut erkennen
+    if (a.fixed) {
+      state.text = ' ' + a.fixed + ' ';
+      detect(state.text);
+    }
     var t = state.text;
     if (a.faq) say(a.faq.a);
     if (a.type === 'none') {
+      // Terminfrage ohne Kursart („Wann ist der nächste Kurs in Verden?“) → nachfragen, wofür
+      if (/n(ä|ae)chst|termin|kurs|wann|frei|platz|anmeld|buch/.test(t) || state.ort || state.day !== undefined) {
+        var wo = state.ort ? ' in ' + state.ort : '';
+        var tag = state.day === 'we' ? ' am Wochenende' : state.day === 'wk' ? ' unter der Woche' : (typeof state.day === 'number' ? ' am ' + ['', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'][state.day] : '');
+        say('Gern, ich suche dir den nächsten freien Termin' + wo + tag + '. Dafür muss ich kurz wissen, welcher Kurs der richtige ist.');
+        ask();
+        return;
+      }
       say('Das habe ich leider nicht verstanden. Wähl einfach aus, wofür du den Kurs brauchst:');
       ask();
       return;

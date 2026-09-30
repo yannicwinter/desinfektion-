@@ -6,12 +6,12 @@
   var d = JSON.parse(root.getAttribute('data-search'));
   var form = root.querySelector('[data-search-form]');
   var sheet = root.querySelector('.ssheet');
-  var state = { kurs: d.kurse.length ? d.kurse[0].slug : '', ort: '', wann: '' };
+  var state = { kurs: '', ort: '', wann: '' }; // Standard: alle Kurse
   var touched = false;
 
   function count(k, o, w) {
     return d.termine.filter(function (t) {
-      return t.k === k && (!o || t.o === o) && (!w || (w === 'we' ? t.w >= 6 : t.w < 6));
+      return (!k || t.k === k) && (!o || t.o === o) && (!w || (w === 'we' ? t.w >= 6 : t.w < 6));
     }).length;
   }
   function label(n) {
@@ -20,7 +20,7 @@
   }
   function title(slug) {
     for (var i = 0; i < d.kurse.length; i++) if (d.kurse[i].slug === slug) return d.kurse[i].title;
-    return '';
+    return 'Alle Kurse';
   }
 
   function render() {
@@ -63,7 +63,7 @@
     var q = [];
     if (state.ort) q.push('ort=' + encodeURIComponent(state.ort));
     if (state.wann) q.push('wann=' + state.wann);
-    location.href = d.base + '/' + encodeURIComponent(state.kurs) + (q.length ? '?' + q.join('&') : '');
+    location.href = d.base + (state.kurs ? '/' + encodeURIComponent(state.kurs) : '') + (q.length ? '?' + q.join('&') : '');
   }
 
   form.addEventListener('change', function (e) {

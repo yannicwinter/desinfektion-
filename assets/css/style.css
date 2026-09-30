@@ -522,11 +522,15 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
 .signup__frame{border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff}
 .signup__frame iframe{display:block;width:100%;height:1500px;border:0}
 .signup__note{margin-top:12px}
+.signup__help a+a{margin-top:8px}
+.signup__mhelp{display:none;margin-top:6px}
+.signup__mhelp a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
 .signup__note a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
 @media (max-width:1000px){
   .signup__grid{grid-template-columns:1fr}
   .signup__side{position:static}
   .signup__help{display:none}
+  .signup__mhelp{display:block}
 }
 @media (max-width:720px){
   .signup__frame{border-radius:12px;margin:0 calc(-1*var(--gutter) + 6px)}
@@ -993,4 +997,37 @@ code{font-size:.9em;background:var(--soft);padding:2px 6px;border-radius:6px}
   .dates-tools .nsel__list{min-width:100%}
   .dates-tools .field--inline:nth-child(2) .nsel__list,.dates-tools .field--inline:nth-child(even) .nsel__list{left:auto;right:0}
   .cpage__compare summary span{display:none}
+}
+
+/* ---------- Seite Arbeitssicherheit ---------- */
+.apage{max-width:calc(1000px + 2*var(--gutter))}
+.page-arbeitssicherheit .phead__inner{max-width:calc(1000px + 2*var(--gutter))}
+.apage__cols{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.alist{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.alist a{display:flex;align-items:center;gap:14px;padding:14px 4px;border-bottom:1px solid var(--line);transition:background .15s}
+.alist a:hover{background:#FFFBFB}
+.alist .acc__ico .card__art{width:46px;height:46px}
+.alist__txt{display:flex;flex-direction:column;flex:1;min-width:0}
+.alist__txt strong{font-weight:500;color:var(--ink)}
+.alist__txt span{font-size:14px;color:var(--muted)}
+.alist__go{width:18px;height:18px;color:var(--red);flex-shrink:0;transition:transform .2s var(--ease)}
+.alist a:hover .alist__go{transform:translateX(3px)}
+.apage__kosten{display:flex;flex-direction:column;gap:8px;margin-top:28px;padding:16px 18px;border-radius:16px;background:var(--soft);font-size:15px}
+.apage__kosten li{display:flex;gap:10px;align-items:flex-start}
+.apage__kosten .i{width:18px;height:18px;color:var(--red);margin-top:3px;flex-shrink:0}
+.apage__kosten strong{font-weight:600;color:var(--ink)}
+.apage .lead{margin-top:10px}
+.apage__three{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:28px}
+.apage__three .h6{margin-bottom:12px}
+.asteps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px;counter-reset:none}
+.asteps li{display:flex;flex-direction:column;gap:4px;padding:18px;border:1px solid var(--line);border-radius:16px}
+.asteps__n{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--rose);color:var(--red);font-weight:600;font-size:14px;margin-bottom:6px}
+.asteps strong{font-weight:600;color:var(--ink)}
+.asteps span:last-child{font-size:14.5px;color:var(--muted)}
+.apage__needs{margin-top:18px;font-size:15px;color:var(--muted)}
+.apage__needs strong{color:var(--ink);font-weight:600}
+@media (max-width:1000px){.form-wrap--narrow{grid-template-columns:1fr}}
+@media (max-width:720px){
+  .apage__cols,.apage__three,.asteps{grid-template-columns:1fr}
+  .apage__cols{gap:8px}
 }

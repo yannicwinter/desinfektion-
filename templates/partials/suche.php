@@ -26,6 +26,7 @@ $first = $suche['kurse'][0]['slug'] ?? '';
     <div class="sbar__f sbar__f--kurs">
       <small>Kurs</small>
       <select name="kurs" data-f="kurs" data-nice aria-label="Kurs">
+        <option value="">Alle Kurse</option>
         <?php foreach ($suche['kurse'] as $k): ?>
         <option value="<?= e($k['slug']) ?>"><?= e($k['title']) ?></option>
         <?php endforeach; ?>
@@ -66,8 +67,9 @@ $first = $suche['kurse'][0]['slug'] ?? '';
       <div class="ssheet__body">
         <p class="ssheet__step">1 · Welcher Kurs?</p>
         <div class="ssheet__kurse" data-chips="kurs">
+          <button type="button" class="kchip kchip--all is-on" data-v="" aria-pressed="true"><strong>Alle Kurse</strong><span class="kchip__n" data-n></span></button>
           <?php foreach ($suche['kurse'] as $i => $k): ?>
-          <button type="button" class="kchip<?= $i === 0 ? ' is-on' : '' ?>" data-v="<?= e($k['slug']) ?>" aria-pressed="<?= $i === 0 ? 'true' : 'false' ?>">
+          <button type="button" class="kchip" data-v="<?= e($k['slug']) ?>" aria-pressed="false">
             <strong><?= e($k['title']) ?></strong>
             <span class="kchip__n<?= $k['n'] ? '' : ' is-zero' ?>" data-n></span>
           </button>

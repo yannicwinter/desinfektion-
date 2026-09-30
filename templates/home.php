@@ -22,7 +22,6 @@ layout_start([
 ?>
 <section class="hero hero--search">
   <div class="wrap hs">
-    <span class="eyebrow reveal"><?= e($P('hero_eyebrow')) ?></span>
     <h1 class="display reveal"><?= e($P('hero_title')) ?></h1>
     <p class="lead reveal"><?= e($P('hero_lead')) ?></p>
     <?php include __DIR__ . '/partials/suche.php'; ?>

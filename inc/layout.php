@@ -238,7 +238,6 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
     <?php if ($crumbs): ?>
     <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><?php foreach ($crumbs as [$n, $p]): ?><span aria-hidden="true">/</span><a href="<?= url($p) ?>"><?= e($n) ?></a><?php endforeach; ?></nav>
     <?php endif; ?>
-    <?php if ($eyebrow): ?><span class="eyebrow"><?= e($eyebrow) ?></span><?php endif; ?>
     <h1 class="h1"><?= e($title) ?></h1>
     <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
     <?= $extra ?>
