@@ -368,7 +368,8 @@ function advice_box(?array $p, string $text = ''): string
     $img = person_photo($p);
     $ini = $p ? implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2))) : 'DRK';
     $text = $text ?: ($p ? $p['name'] . ' · ' . $p['role'] . ' – wir helfen dir, den passenden Kurs zu finden.' : '');
-    return '<section class="section section--tight"><div class="wrap"><div class="cta reveal">'
+    $GLOBALS['__flush'] = true; // Box steht direkt über dem Footer
+    return '<section class="advice"><div class="wrap"><div class="cta reveal">'
         . '<svg class="cta__x" viewBox="0 0 100 100" aria-hidden="true"><path d="M35 0h30v35h35v30H65v35H35V65H0V35h35z"/></svg>'
         . ($img ? '<img class="cta__face" src="' . e($img) . '" alt="' . e($p['name']) . '" loading="lazy" width="96" height="96">' : '<span class="cta__ini">' . e($ini) . '</span>')
         . '<div><h2>' . e(page('home', 'cta_title') ?: 'Persönliche Beratung') . '</h2><p>' . e($text) . '</p></div>'
