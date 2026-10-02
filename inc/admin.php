@@ -21,7 +21,19 @@ const PAGE_NAMES = [
 
 const FIELD_LABELS = [
     'angebot_title' => ['Angebot – Überschrift', ''], 'angebot_eh' => ['Angebot – Erste Hilfe', ''], 'angebot_bs' => ['Angebot – Brandschutz', ''], 'angebot_as' => ['Angebot – Arbeitssicherheit', ''],
-    'termine_title' => ['Terminsuche – Überschrift', ''], 'termine_lead' => ['Terminsuche – Text', ''],
+    'termine_title' => ['Termine – Überschrift', ''], 'termine_lead' => ['Termine – Text', ''], 'termine_eyebrow' => ['Termine – Dachzeile', ''],
+    'angebot_eyebrow' => ['Angebot – Dachzeile', ''], 'angebot_lead' => ['Angebot – Text', ''],
+    'beliebt' => ['Suche – „Beliebt“-Links', 'Eine Zeile je Link: Text | Pfad, z. B. „Führerschein | termine/erste-hilfe-ausbildung“.'],
+    'trust' => ['Vorteile unter der Suche', 'Eine Zeile je Punkt.'],
+    'band_title' => ['Rotes Band – Überschrift', 'Leer = Band ausblenden.'], 'band_text' => ['Rotes Band – Text', ''],
+    'insta_lead' => ['Instagram – Text', ''],
+    'berater' => ['Ansprechperson in der Beratungsbox', 'Name wie unter „Ansprechpersonen“, z. B. Jan Wille.'],
+    'wege_eyebrow' => ['Wegweiser – Dachzeile', ''], 'wege_title' => ['Wegweiser – Überschrift', ''], 'wege_lead' => ['Wegweiser – Text', ''],
+    'wege' => ['Wegweiser – Karten', 'Eine Zeile je Karte: Titel | Text | Ziel (Pfad) | Bild (z. B. kurs-erste-hilfe-ausbildung).'],
+    'faq_title' => ['Häufige Fragen – Überschrift', ''],
+    'pflichten_title' => ['Pflichten – Überschrift', ''], 'pflichten_lead' => ['Pflichten – Text', ''],
+    'pflichten' => ['Pflichten – Karten', 'Eine Zeile je Karte: Zahl | Titel | Text | Kurs (Kurz-Name, z. B. brandschutzhelfer).'],
+    'leistungen_title' => ['Leistungen – Überschrift', ''], 'leistungen_lead' => ['Leistungen – Text', ''],
     'inhouse_text' => ['Schulung im Betrieb – Text', ''],
     'seo_title' => ['Google-Titel', 'Erscheint als Überschrift in Suchergebnissen. Ideal: 50–60 Zeichen, wichtigster Begriff vorne.'],
     'seo_description' => ['Google-Beschreibung', 'Kurzer Text unter dem Titel in Suchergebnissen. Ideal: 120–155 Zeichen.'],
@@ -57,6 +69,7 @@ const SITE_LABELS = [
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
     'email_erste_hilfe' => 'E-Mail für Fragen zur Anmeldung (Erste Hilfe)', 'email_brandschutz' => 'E-Mail für Fragen zur Anmeldung (Brandschutz, Arbeitssicherheit)',
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
+    'topbar' => 'Text in der dunklen Leiste ganz oben',
     'instagram' => 'Instagram-Link',
     'instagram_feed_url' => 'Instagram-Feed-Link von behold.so (JSON-Feed-URL, z. B. https://feeds.behold.so/…)',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
@@ -411,11 +424,11 @@ function admin_course(): void
     echo field_input('title', 'Titel', $k['title']);
     echo field_input('slug', 'Kürzel für die Web-Adresse', $k['slug'], 'Wird aus dem Titel erzeugt, wenn leer. Z. B. /termine/erste-hilfe-am-kind');
     echo '<label class="field"><span>Bereich</span><select name="category"><option value="erste-hilfe"' . ($k['category'] === 'erste-hilfe' ? ' selected' : '') . '>Erste Hilfe</option><option value="brandschutz"' . ($k['category'] === 'brandschutz' ? ' selected' : '') . '>Brandschutz</option></select></label>';
-    echo field_input('group', 'Gruppe', $k['group'], 'Zwischenüberschrift im Akkordeon, z. B. „Familie & Tier“.');
+    echo field_input('group', 'Gruppe', $k['group'], 'Zwischenüberschrift auf der Bereichsseite, z. B. „Familie & Kinder“.');
     echo field_input('hiorg_id', 'HiOrg-Kursliste (id)', $k['hiorg_id'], 'Die Zahl hinter „id=“ im HiOrg-Link. Leer = nur Anfrage, keine Online-Termine.');
     echo field_input('price', 'Preis (Anzeige)', $k['price'], 'Z. B. „55 €“. Leer lassen, wenn variabel.');
     echo '</div>';
-    echo field_input('teaser', 'Kurzbeschreibung (eine Zeile)', $k['teaser'], 'Erscheint im zugeklappten Akkordeon und auf der Startseite.');
+    echo field_input('teaser', 'Kurzbeschreibung (eine Zeile)', $k['teaser'], 'Erscheint auf den Kurskarten und oben auf der Kursseite.');
     echo field_input('text', 'Beschreibung', $k['text'], 'Bitte kurz halten – 2 bis 3 Sätze.', true);
     echo field_input('learn', 'Inhalte', $k['learn'], 'Ein Punkt pro Zeile.', true);
     echo field_input('facts', 'Eckdaten', $k['facts'], 'Eine Zeile pro Angabe: „Dauer: 9 UE“', true);

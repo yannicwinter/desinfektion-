@@ -20,11 +20,14 @@ layout_start([
     'noindex' => true,
 ]);
 ?>
-<section class="signup">
+<section class="phead">
   <div class="wrap">
-    <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><span aria-hidden="true">/</span><a href="<?= url('termine') ?>">Kurstermine</a><span aria-hidden="true">/</span><a href="<?= url('termine/' . $current['slug']) ?>"><?= e($current['title']) ?></a><span aria-hidden="true">/</span><span>Anmeldung</span></nav>
-    <h1 class="h2 signup__title">Anmeldung: <?= e($current['title']) ?></h1>
-
+    <?= crumbs_html([['Termine', 'termine'], [$current['title'], 'termine/' . $current['slug']], ['Anmeldung', 'termine/' . $current['slug']]]) ?>
+    <h1 class="h1">Anmeldung: <?= e($current['title']) ?></h1>
+  </div>
+</section>
+<section class="section section--tight signup">
+  <div class="wrap">
     <div class="signup__grid">
       <aside class="signup__side">
         <div class="box signup__card">
@@ -37,7 +40,7 @@ layout_start([
             <?php if ($it['free']): ?><li><?= icon('users') ?><span><?= e($it['free']) ?></span></li><?php endif; ?>
             <?php if ($it['price']): ?><li><?= icon('check') ?><span><?= e($it['price']) ?> · Betriebe: Abrechnung über BG möglich</span></li><?php endif; ?>
           </ul>
-          <a class="link-arrow small" href="<?= url('termine/' . $current['slug']) ?>">Anderen Termin wählen <?= icon('arrow') ?></a>
+          <a class="alink small" href="<?= url('termine/' . $current['slug']) ?>">Anderen Termin wählen <?= icon('arrow') ?></a>
         </div>
         <div class="box box--soft signup__help">
           <h2 class="h6">Fragen zur Anmeldung?</h2>

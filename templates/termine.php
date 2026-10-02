@@ -2,36 +2,35 @@
 /** /termine (alle Kurse) und /termine/{kurs} */
 $P = fn($k) => page('termine', $k);
 
-// Formular der Startseite ohne JavaScript: ?kurs=slug → /termine/slug
+// Formular ohne JavaScript: ?kurs=slug → /termine/slug
 if ($slug === '' && !empty($_GET['kurs']) && ($k = course((string) $_GET['kurs'])) && !empty($k['hiorg_id'])) {
     redirect('termine/' . $k['slug'], 302);
 }
 
 $all = bookable_courses();
+$bereich = in_array($_GET['bereich'] ?? '', ['erste-hilfe', 'brandschutz'], true) ? $_GET['bereich'] : '';
 if ($slug !== '') {
     $res = hiorg_dates($current);
     $items = $res['items'];
     $failed = !$res['ok'];
-    $title = 'Termine: ' . $current['title'];
+    $title = $current['title'];
     $seoTitle = $current['title'] . ' – Termine & Anmeldung | DRK Verden';
     $seoDesc = $current['teaser'] . ' Aktuelle Termine beim DRK-Kreisverband Verden – freie Plätze sehen und online buchen.';
-    $lead = $current['teaser'];
     $schema = [course_schema($current, $items)];
 } else {
-    $items = hiorg_dates_all($all);
-    $failed = !$items && !array_filter(array_map(fn($c) => is_file(hiorg_cache_file((string) $c['hiorg_id'])), $all));
+    $list = $bereich ? array_values(array_filter($all, fn($c) => $c['category'] === $bereich)) : $all;
+    $items = hiorg_dates_all($list);
+    $failed = !$items && !array_filter(array_map(fn($c) => is_file(hiorg_cache_file((string) $c['hiorg_id'])), $list));
     $title = $P('title');
     $seoTitle = $P('seo_title');
     $seoDesc = $P('seo_description');
-    $lead = $P('lead');
     $schema = [];
 }
 
-$crumbs = [['Kurstermine', 'termine']];
+$crumbs = [['Termine', 'termine']];
 if ($slug !== '') {
     $crumbs[] = [$current['title'], 'termine/' . $slug];
 }
-
 layout_start([
     'title' => $seoTitle,
     'description' => $seoDesc,
@@ -41,29 +40,30 @@ layout_start([
     'schema' => $schema,
 ]);
 
-// Kurzinfo zum Kurs (eine Zeile statt Seitenleiste)
-$info = [];
-if ($slug !== '') {
-    foreach (pairs($current['facts']) as [$k, $v]) {
-        if (in_array(mb_strtolower($k), ['dauer', 'preis', 'kosten'], true)) {
-            $info[] = $v;
-        }
-    }
-}
 $free = count(array_filter($items, fn($it) => $it['status'] !== 'full' && !empty($it['bookable'] ?? true)));
+if ($slug !== '') {
+    $info = array_filter([course_duration($current), $current['price']]);
+    $lead = implode(' · ', $info);
+} else {
+    $lead = $P('lead');
+}
 ?>
-<section class="tpage">
-  <div class="wrap tpage__wrap">
-    <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><span aria-hidden="true">/</span><a href="<?= url('termine') ?>">Kurstermine</a><?php if ($slug): ?><span aria-hidden="true">/</span><span><?= e($current['title']) ?></span><?php endif; ?></nav>
-    <h1 class="h2 tpage__title"><?= $slug ? e($current['title']) : e($P('title')) ?></h1>
-    <?php if ($slug && $info): ?>
-    <p class="tpage__info"><?= e(implode(' · ', $info)) ?> · <a href="<?= course_url($current) ?>">Mehr zum Kurs</a></p>
-    <?php elseif (!$slug): ?>
-    <p class="tpage__info"><?= e($lead) ?></p>
+<section class="phead">
+  <div class="wrap">
+    <?= crumbs_html($crumbs) ?>
+    <h1 class="h1"><?= e($slug ? 'Termine: ' . $title : $title) ?></h1>
+    <?php if ($slug): ?>
+    <p class="phead__info"><?= e($lead) ?><?= $lead ? ' · ' : '' ?><a href="<?= course_url($current) ?>">Alles zum Kurs</a></p>
+    <?php elseif ($lead): ?>
+    <p class="lead"><?= e($lead) ?></p>
     <?php endif; ?>
+  </div>
+</section>
 
+<section class="section section--tight">
+  <div class="wrap">
     <nav class="tabs" aria-label="Kurs wählen">
-      <a class="tab" href="<?= url('termine') ?>"<?= $slug === '' ? ' aria-current="page"' : '' ?>>Alle</a>
+      <a class="tab" href="<?= url('termine') ?>"<?= $slug === '' && !$bereich ? ' aria-current="page"' : '' ?>>Alle</a>
       <?php foreach ($all as $c): ?>
       <a class="tab" href="<?= url('termine/' . $c['slug']) ?>"<?= $slug === $c['slug'] ? ' aria-current="page"' : '' ?>><?= e($c['title']) ?></a>
       <?php endforeach; ?>
@@ -81,16 +81,16 @@ $free = count(array_filter($items, fn($it) => $it['status'] !== 'full' && !empty
         </select>
       </label>
       <?php endforeach; ?>
-      <span class="muted small dates-tools__count" data-date-count><?= $free ?> freie Termine</span>
+      <span class="dates-tools__count" data-date-count><?= $free ?> freie Termine</span>
     </form>
-    <ul class="dates dates--list" data-date-list>
-      <?= render_dates($items, ['show_course' => $slug === '', 'months' => true]) ?>
+    <ul class="dates" data-date-list>
+      <?= render_dates($items, ['show_course' => $slug === '', 'show_price' => true, 'months' => true]) ?>
     </ul>
-    <p class="notice empty" hidden data-date-empty>Keine Termine für diese Auswahl. <a href="#" data-date-reset>Filter zurücksetzen</a></p>
+    <p class="notice" hidden data-date-empty>Keine Termine für diese Auswahl. <a href="#" data-date-reset>Filter zurücksetzen</a></p>
     <?php elseif ($failed): ?>
     <div class="notice">
       <h2 class="h5">Termine gerade nicht erreichbar</h2>
-      <p>Unser Buchungssystem antwortet gerade nicht. Bitte versuch es gleich noch einmal oder ruf uns an: <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a></p>
+      <p>Unser Buchungssystem antwortet gerade nicht. Bitte gleich noch einmal versuchen oder anrufen: <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a></p>
     </div>
     <?php else: ?>
     <div class="notice">
@@ -99,9 +99,9 @@ $free = count(array_filter($items, fn($it) => $it['status'] !== 'full' && !empty
     </div>
     <?php endif; ?>
 
-    <div class="tpage__more">
+    <div class="tmore">
       <span>Kein passender Termin? Für Gruppen und Betriebe kommen wir auch vor Ort.</span>
-      <a class="btn btn--ghost btn--sm" href="<?= url('kontakt' . ($slug ? '?thema=' . $slug : '')) ?>">Inhouse anfragen</a>
+      <a class="btn btn--ghost btn--sm" href="<?= url('kontakt' . ($slug ? '?thema=' . $slug : '')) ?>#formular">Inhouse anfragen</a>
       <button class="btn btn--ghost btn--sm" type="button" data-kf-open>Welcher Kurs passt?</button>
     </div>
   </div>

@@ -50,8 +50,8 @@ function layout_start(array $meta): void
 <meta name="geo.region" content="DE-NI">
 <meta name="geo.placename" content="Verden (Aller)">
 <link rel="icon" href="<?= asset('img/favicon.svg') ?>" type="image/svg+xml">
-<link rel="preload" href="<?= url('assets/fonts/figtree-latin-400-normal.woff2') ?>" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="<?= url('assets/fonts/figtree-latin-500-normal.woff2') ?>" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="<?= url('assets/fonts/inter-latin-400-normal.woff2') ?>" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="<?= url('assets/fonts/inter-latin-600-normal.woff2') ?>" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="<?= asset('css/style.css') ?>">
 <?php foreach ($schema as $s): ?>
 <script type="application/ld+json"><?= json_encode($s, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG) ?></script>
@@ -59,24 +59,31 @@ function layout_start(array $meta): void
 </head>
 <body class="page-<?= e($active ?: 'home') ?>">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
+<div class="topbar">
+  <div class="wrap topbar__in">
+    <span><?= icon('shield') ?><?= e(site('topbar') ?: site('org')) ?></span>
+    <nav aria-label="Kontakt">
+      <a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a>
+      <a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a>
+    </nav>
+  </div>
+</div>
 <header class="header">
-  <div class="wrap header__top">
+  <div class="wrap header__in">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
       <picture>
+        <source media="(max-width:480px)" srcset="<?= asset('img/logo-drk-mittelweser-kurz.png') ?>">
         <img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V.">
       </picture>
     </a>
     <nav class="nav" aria-label="Hauptnavigation">
       <ul class="nav__list">
         <?php foreach (nav_items() as $slug => $label): ?>
-        <li><a href="<?= url($slug === '' ? '/' : $slug) ?>"<?= $active === $slug || ($slug === '' && $active === '') ? ' aria-current="page"' : '' ?><?= $slug === '' ? ' class="nav__home" aria-label="Startseite"' : '' ?>><?= $slug === '' ? icon('home') . '<span>' . e($label) . '</span>' : nav_label($label) ?></a></li>
+        <li><a href="<?= url($slug) ?>"<?= $active === $slug || ($slug === 'termine' && $active === 'anmeldung') ? ' aria-current="page"' : '' ?>><?= e($label) ?></a></li>
         <?php endforeach; ?>
       </ul>
     </nav>
-    <div class="header__actions">
-      <a class="header__phone" href="tel:<?= e(site('phone_link')) ?>" aria-label="Anrufen: <?= e(site('phone')) ?>"><?= icon('phone') ?><span><?= e(site('phone')) ?></span></a>
-      <a class="btn btn--red btn--sm" href="<?= url('termine') ?>"<?= $active === 'termine' ? ' aria-current="page"' : '' ?>><?= icon('calendar') ?><span>Kurs buchen</span></a>
-    </div>
+    <a class="btn btn--red btn--sm header__cta" href="<?= url('termine') ?>" aria-label="Kurs buchen"><?= icon('calendar') ?><span>Kurs buchen</span></a>
   </div>
 </header>
 <main id="inhalt">
@@ -87,18 +94,18 @@ function layout_end(): void
 {
     ?>
 </main>
-<footer class="footer">
+<footer class="footer<?= !empty($GLOBALS['__flush']) ? ' footer--flush' : '' ?>">
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <a class="brand brand--footer" href="<?= url('/') ?>" aria-label="Startseite"><img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V." loading="lazy"></a>
-        <p><?= e(site('name')) ?> · <?= e(site('org')) ?><br><?= e(site('street')) ?> · <?= e(site('zip')) ?> <?= e(site('city')) ?></p>
+        <a href="<?= url('/') ?>" aria-label="Startseite"><img src="<?= asset('img/logo-drk-mittelweser-weiss.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V." loading="lazy"></a>
+        <p><?= e(site('name')) ?><br><?= e(site('org')) ?><br><?= e(site('street')) ?> · <?= e(site('zip')) ?> <?= e(site('city')) ?></p>
       </div>
       <div>
         <h2 class="footer__h">Kurse</h2>
         <ul>
           <?php foreach (array_slice(bookable_courses(), 0, 5) as $c): ?>
-          <li><a href="<?= url('termine/' . $c['slug']) ?>"><?= e($c['title']) ?></a></li>
+          <li><a href="<?= course_url($c) ?>"><?= e($c['title']) ?></a></li>
           <?php endforeach; ?>
         </ul>
       </div>
@@ -107,7 +114,7 @@ function layout_end(): void
         <ul>
           <li><a href="<?= url('erste-hilfe') ?>">Erste Hilfe</a></li>
           <li><a href="<?= url('brandschutz') ?>">Brandschutz</a></li>
-          <li><a href="<?= url('arbeitssicherheit') ?>">Arbeitssicherheit</a></li>
+          <li><a href="<?= url('arbeitssicherheit') ?>">Für Unternehmen</a></li>
           <li><a href="<?= url('termine') ?>">Alle Termine</a></li>
           <li><a href="<?= url('faq') ?>">Häufige Fragen</a></li>
         </ul>
@@ -143,7 +150,7 @@ function layout_end(): void
   <div class="more__sheet">
     <span class="more__grip" aria-hidden="true"></span>
     <ul class="more__list">
-      <li><a href="<?= url('arbeitssicherheit') ?>"><?= icon('building') ?><span><strong>Arbeitssicherheit</strong><small>Für Betriebe · Fachkraft · Beratung</small></span></a></li>
+      <li><a href="<?= url('arbeitssicherheit') ?>"><?= icon('building') ?><span><strong>Für Unternehmen</strong><small>Arbeitssicherheit · Fachkraft · Schulung im Betrieb</small></span></a></li>
       <li><a href="<?= url('faq') ?>"><?= icon('search') ?><span><strong>Häufige Fragen</strong><small>Prüfung, Gültigkeit, Kosten</small></span></a></li>
       <li><a href="<?= url('kontakt') ?>"><?= icon('users') ?><span><strong>Kontakt</strong><small>Ansprechpersonen & Formular</small></span></a></li>
     </ul>
@@ -162,13 +169,6 @@ function layout_end(): void
 </body>
 </html>
 <?php
-}
-
-/** Auf sehr schmalen Displays kürzere Menübegriffe, damit alles nebeneinander passt. */
-function nav_label(string $label): string
-{
-    $short = ['Arbeitssicherheit' => 'Betriebe'][$label] ?? null;
-    return $short ? '<span class="nav__long">' . e($label) . '</span><span class="nav__short">' . e($short) . '</span>' : e($label);
 }
 
 function org_schema(): array
@@ -229,24 +229,174 @@ function course_schema(array $c, array $dates = []): array
     return $s;
 }
 
-/** Wiederverwendbarer Seitenkopf (Unterseiten). */
-function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = ''): void
+/** Brotkrumen: [[Name, Pfad], ...], der letzte Eintrag ist die aktuelle Seite. */
+function crumbs_html(array $crumbs): string
 {
-    $img = $photo ? photo($photo, $title, 'phead__img', false) : '';
-    ?>
-<section class="phead<?= $img ? ' phead--photo' : '' ?>">
-  <?php if ($img): ?><div class="wrap phead__grid"><?php endif; ?>
-  <div class="<?= $img ? '' : 'wrap ' ?>phead__inner">
-    <?php if ($crumbs): ?>
-    <nav class="crumbs" aria-label="Brotkrumen"><a href="<?= url('/') ?>">Start</a><?php foreach ($crumbs as [$n, $p]): ?><span aria-hidden="true">/</span><a href="<?= url($p) ?>"><?= e($n) ?></a><?php endforeach; ?></nav>
-    <?php endif; ?>
-    <h1 class="h1"><?= e($title) ?></h1>
-    <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
-    <?= $extra ?>
+    if (!$crumbs) {
+        return '';
+    }
+    $h = '<nav class="crumbs" aria-label="Brotkrumen"><a href="' . url('/') . '">Start</a>';
+    $last = count($crumbs) - 1;
+    foreach ($crumbs as $i => [$n, $p]) {
+        $h .= '<span aria-hidden="true">›</span>' . ($i === $last ? '<span aria-current="page">' . e($n) . '</span>' : '<a href="' . url($p) . '">' . e($n) . '</a>');
+    }
+    return $h . '</nav>';
+}
+
+/**
+ * Seitenkopf. Mit $photo: großes Foto mit Titel (wie die Startseite),
+ * $overlap = true lässt unten Platz für eine überlappende Leiste (Suche, Infoleiste).
+ */
+function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false): void
+{
+    $img = $photo ? photo($photo, $title, 'hero__img', false) : '';
+    if ($img) {
+        ?>
+<section class="hero hero--page<?= $overlap ? '' : ' hero--short' ?>">
+  <?= $img ?>
+  <div class="hero__in">
+    <?= crumbs_html($crumbs) ?>
+    <h1><?= e($title) ?></h1>
+    <?php if ($lead): ?><p class="hero__lead"><?= e($lead) ?></p><?php endif; ?>
+    <?php if ($extra): ?><div class="hero__acts"><?= $extra ?></div><?php endif; ?>
   </div>
-  <?php if ($img): ?><figure class="phead__media"><?= $img ?></figure></div><?php endif; ?>
 </section>
 <?php
+        return;
+    }
+    ?>
+<section class="phead">
+  <div class="wrap">
+    <?= crumbs_html($crumbs) ?>
+    <h1 class="h1"><?= e($title) ?></h1>
+    <?php if ($lead): ?><p class="lead"><?= e($lead) ?></p><?php endif; ?>
+    <?php if ($extra): ?><div class="btn-row" style="margin-top:22px"><?= $extra ?></div><?php endif; ?>
+  </div>
+</section>
+<?php
+}
+
+/** Abschnittskopf: Dachzeile, Überschrift, Text, Link rechts. */
+function shead(string $eyebrow, string $title, string $text = '', string $link = '', string $href = ''): string
+{
+    return '<div class="shead reveal"><div>' . ($eyebrow ? '<p class="eyebrow">' . e($eyebrow) . '</p>' : '') . '<h2>' . e($title) . '</h2>'
+        . ($text ? '<p>' . e($text) . '</p>' : '') . '</div>'
+        . ($link ? '<a class="alink" href="' . e($href) . '">' . e($link) . ' ' . icon('arrow') . '</a>' : '') . '</div>';
+}
+
+/** Freie, buchbare Termine eines Kurses (je Aufruf zwischengespeichert). */
+function free_dates(array $c): array
+{
+    static $memo = [];
+    $id = trim((string) ($c['hiorg_id'] ?? ''));
+    if ($id === '') {
+        return [];
+    }
+    $key = $id . '|' . $c['slug'];
+    if (!isset($memo[$key])) {
+        $memo[$key] = array_values(array_filter(hiorg_dates($c)['items'], fn($it) => $it['status'] !== 'full' && !empty($it['kid'])));
+    }
+    return $memo[$key];
+}
+
+/** Wert einer Kurs-Angabe („Dauer: …“) aus dem Feld „Fakten“. */
+function course_fact(array $c, string $label): string
+{
+    foreach (pairs($c['facts'] ?? '') as [$k, $v]) {
+        if (mb_strtolower($k) === mb_strtolower($label)) {
+            return $v;
+        }
+    }
+    return '';
+}
+
+/** Kurze Dauer für Karten („9 UE · 08:30–16:30 Uhr“ → „9 UE“). */
+function course_duration(array $c): string
+{
+    return trim(explode('·', course_fact($c, 'Dauer'))[0]);
+}
+
+/** Kurskarte mit Foto, Preis, Dauer und nächstem freien Termin. */
+function course_card(array $c): string
+{
+    $dates = free_dates($c);
+    $towns = array_values(array_unique(array_filter(array_map(fn($it) => hiorg_town($it['details']), $dates))));
+    $tag = $c['category'] === 'brandschutz' ? ($c['group'] ?: 'Brandschutz') : ($c['group'] ?: 'Erste Hilfe');
+    $dur = course_duration($c);
+    if ($dates) {
+        $next = '<p class="kcard__next"><span class="dot"></span>Nächster Termin: ' . e(de_date($dates[0]['date'], 'WW, D. MMM')) . '</p>';
+    } elseif (!empty($c['hiorg_id'])) {
+        $next = '<p class="kcard__next kcard__next--q">Neue Termine folgen</p>';
+    } else {
+        $next = '<p class="kcard__next kcard__next--q">Termin auf Anfrage · auch im Betrieb</p>';
+    }
+    $meta = ($dur ? '<span>' . icon('clock') . e($dur) . '</span>' : '') . ($towns ? '<span>' . icon('pin') . e(implode(' · ', array_slice($towns, 0, 2))) . '</span>' : '');
+    return '<a class="kcard reveal" id="' . e($c['slug']) . '" href="' . course_url($c) . '">'
+        . '<div class="kcard__img">' . course_media($c, '') . '<span class="kcard__tag">' . e($tag) . '</span></div>'
+        . '<div class="kcard__body"><h3>' . e($c['title']) . '</h3><p>' . e($c['teaser']) . '</p>'
+        . ($meta ? '<div class="kcard__meta">' . $meta . '</div>' : '') . $next
+        . '<div class="kcard__foot"><span class="price">' . e($c['price'] ?: 'auf Anfrage') . '</span><span class="alink">Zum Kurs ' . icon('arrow') . '</span></div></div></a>';
+}
+
+/** Themenkarte mit Foto (Startseite, Wegweiser, Leistungen). */
+function topic_card(string $img, string $title, string $text, string $link, string $href): string
+{
+    return '<a class="tcard reveal" href="' . e($href) . '"><div class="tcard__img">' . $img . '</div>'
+        . '<div class="tcard__body"><h3>' . e($title) . '</h3><p>' . e($text) . '</p><span class="alink">' . e($link) . ' ' . icon('arrow') . '</span></div></a>';
+}
+
+/** Ansprechperson aus den Kontakten (nach Name, sonst die erste). */
+function contact_person(string $name = ''): ?array
+{
+    $all = content()['contacts'] ?? [];
+    foreach ($all as $p) {
+        if ($name !== '' && mb_stripos($p['name'], $name) !== false) {
+            return $p;
+        }
+    }
+    return $all[0] ?? null;
+}
+
+function person_photo(?array $p): string
+{
+    return ($p && !empty($p['photo']) && is_file(ROOT . '/' . ltrim($p['photo'], '/'))) ? url($p['photo']) : '';
+}
+
+/** Dunkle Box „Persönliche Beratung“ mit Foto der Ansprechperson. */
+function advice_box(?array $p, string $text = ''): string
+{
+    $img = person_photo($p);
+    $ini = $p ? implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2))) : 'DRK';
+    $text = $text ?: ($p ? $p['name'] . ' · ' . $p['role'] . ' – wir helfen dir, den passenden Kurs zu finden.' : '');
+    return '<section class="section section--tight"><div class="wrap"><div class="cta reveal">'
+        . '<svg class="cta__x" viewBox="0 0 100 100" aria-hidden="true"><path d="M35 0h30v35h35v30H65v35H35V65H0V35h35z"/></svg>'
+        . ($img ? '<img class="cta__face" src="' . e($img) . '" alt="' . e($p['name']) . '" loading="lazy" width="96" height="96">' : '<span class="cta__ini">' . e($ini) . '</span>')
+        . '<div><h2>' . e(page('home', 'cta_title') ?: 'Persönliche Beratung') . '</h2><p>' . e($text) . '</p></div>'
+        . '<div class="btn-row"><a class="btn btn--red" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . e(site('phone')) . '</a>'
+        . '<a class="btn btn--line" href="mailto:' . e(($p['email'] ?? '') ?: site('email')) . '">' . icon('mail') . 'E-Mail schreiben</a></div>'
+        . '</div></div></section>';
+}
+
+/** Rotes Band mit Text und Button. */
+function band(string $title, string $text, string $btn, string $href): string
+{
+    if ($title === '') {
+        return '';
+    }
+    return '<section class="band"><svg class="band__x" viewBox="0 0 100 100" aria-hidden="true"><path d="M35 0h30v35h35v30H65v35H35V65H0V35h35z"/></svg>'
+        . '<div class="wrap band__in"><div><h2>' . e($title) . '</h2>' . ($text ? '<p>' . e($text) . '</p>' : '') . '</div>'
+        . ($btn ? '<a class="btn btn--white" href="' . e($href) . '">' . e($btn) . ' ' . icon('arrow') . '</a>' : '') . '</div></section>';
+}
+
+/** Häufige Fragen als Akkordeon (Liste aus content.json → faq). */
+function faq_list(array $items): string
+{
+    $h = '<div class="acc">';
+    foreach ($items as $f) {
+        $h .= '<details class="acc__item"><summary class="acc__sum"><span class="acc__title">' . e($f['q']) . '</span>' . icon('plus', 'i acc__chev') . '</summary>'
+            . '<div class="acc__body"><div class="prose">' . rich($f['a']) . '</div></div></details>';
+    }
+    return $h . '</div>';
 }
 
 /** Tabelle „Welcher Kurs passt?“ (Zeilen: „Kurs | Spalte | …“, erste Zeile = Überschriften). */
@@ -277,16 +427,6 @@ function compare_table(string $data, bool $compact = false): string
         $h .= '</tr>';
     }
     return $h . '</tbody></table></div></div>';
-}
-
-/** Bild-Platz: hochgeladenes Bild oder gestaltete Fläche mit Symbol. */
-function image_slot(string $slot, string $alt, string $icon = 'heart', string $class = ''): string
-{
-    $src = slot_image($slot);
-    if ($src) {
-        return '<figure class="media ' . e($class) . '"><img src="' . e($src) . '" alt="' . e($alt) . '" loading="lazy" decoding="async"></figure>';
-    }
-    return '<figure class="media media--empty ' . e($class) . '" role="img" aria-label="' . e($alt) . '">' . cross_svg('media__cross', 'currentColor') . icon($icon, 'media__icon') . '</figure>';
 }
 
 /** Foto eines Bildplatzes als <img> (Upload oder Standardfoto), sonst leer. */

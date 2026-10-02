@@ -1,27 +1,31 @@
 <?php
+/** /arbeitssicherheit – Für Unternehmen: Pflichten, Leistungen, Fachkraft, Schulung im Betrieb, Anfrage. */
 require_once __DIR__ . '/../inc/form.php';
 [$err, $old] = form_handle('arbeitssicherheit');
 $P = fn($k) => page('unternehmen', $k);
-// Angebote aus den Kursdaten (Titel/Teaser im Admin gepflegt)
-$pick = function (array $slugs): array {
-    $out = [];
-    foreach ($slugs as $slug => $label) {
-        if ($c = course($slug)) {
-            $out[] = ['title' => $label ?: $c['title'], 'teaser' => $c['teaser'], 'url' => course_url($c), 'c' => $c];
-        }
+
+// Leistungen aus den Kursdaten (Titel/Teaser im Admin gepflegt)
+$cards = [];
+foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'evakuierungsuebung' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
+    if ($c = course($slug)) {
+        $img = photo('kurs-' . $slug, $c['title']) ?: illus_course($c);
+        $cards[] = topic_card($img, $label ?: $c['title'], $c['teaser'], 'Mehr erfahren', course_url($c));
     }
-    return $out;
-};
-$ausbildung = $pick(['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'erste-hilfe-fortbildung' => 'Ersthelfer-Fortbildung', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'evakuierungsuebung' => '']);
-$dienst = $pick(['brandschutzordnung-rettungsplaene' => '', 'brandschutzbeauftragter' => '']);
-$dienst[] = ['title' => page('unternehmen', 'asi_title'), 'teaser' => 'Wir übernehmen Arbeitssicherheitspflichten – Betreuung nach DGUV Vorschrift 2.', 'url' => '#fachkraft', 'c' => ['slug' => 'brandschutzbeauftragter', 'category' => 'brandschutz']];
+}
+$cards[] = topic_card(photo('fachkraft', $P('asi_title')) ?: illus_safety(), $P('asi_title'), 'Betreuung nach DGUV Vorschrift 2 – wir übernehmen Arbeitssicherheitspflichten.', 'Mehr erfahren', '#fachkraft');
+$need = [];
+foreach (lines($P('pflichten')) as $l) {
+    $need[] = array_map('trim', array_pad(explode('|', $l), 4, ''));
+}
+$person = contact_person($P('berater'));
+$pimg = person_photo($person);
 
 layout_start([
     'title' => $P('seo_title'),
     'description' => $P('seo_description'),
     'path' => 'arbeitssicherheit',
     'active' => 'arbeitssicherheit',
-    'breadcrumb' => [['Arbeitssicherheit', 'arbeitssicherheit']],
+    'breadcrumb' => [['Für Unternehmen', 'arbeitssicherheit']],
     'schema' => [[
         '@context' => 'https://schema.org',
         '@type' => 'Service',
@@ -32,76 +36,87 @@ layout_start([
         'areaServed' => 'Landkreis Verden',
     ]],
 ]);
-page_head('', $P('title'), $P('lead'), [['Arbeitssicherheit', 'arbeitssicherheit']],
-    '<div class="btn-row"><a class="btn btn--red" href="#formular">Unverbindlich anfragen</a><a class="btn btn--ghost" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . ' ' . e(site('phone')) . '</a></div>', 'unternehmen');
+page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit']],
+    '<a class="btn btn--red" href="#formular">Unverbindlich anfragen ' . icon('arrow') . '</a><a class="btn btn--line" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . e(site('phone')) . '</a>',
+    'unternehmen');
 ?>
-<section class="section section--tight">
-  <div class="wrap apage">
-    <div class="apage__cols">
-      <?php foreach ([[$P('ausbildung_title'), $ausbildung], [$P('dienst_title'), $dienst]] as [$head, $list]): ?>
-      <div class="apage__col reveal">
-        <h2 class="group-title"><?= e($head) ?></h2>
-        <ul class="alist">
-          <?php foreach ($list as $it): ?>
-          <li><a href="<?= e(str_starts_with($it['url'], '#') ? $it['url'] : $it['url']) ?>">
-            <span class="acc__ico" aria-hidden="true"><?= $it['url'] === '#fachkraft' ? (photo('fachkraft', $it['title'], 'acc__photo') ?: illus_course($it['c'])) : course_media($it['c'], 'acc__photo') ?></span>
-            <span class="alist__txt"><strong><?= e($it['title']) ?></strong><span><?= e($it['teaser']) ?></span></span>
-            <?= icon('arrow', 'i alist__go') ?>
-          </a></li>
-          <?php endforeach; ?>
-        </ul>
+
+<?php if ($need): ?>
+<section class="section">
+  <div class="wrap">
+    <?= shead('Pflichten im Überblick', $P('pflichten_title'), $P('pflichten_lead')) ?>
+    <div class="need">
+      <?php foreach ($need as [$num, $t, $txt, $slug]): $nc = $slug ? course($slug) : null; ?>
+      <div class="need__item reveal">
+        <span class="need__num"><?= e($num) ?></span>
+        <h3><?= e($t) ?></h3>
+        <p><?= e($txt) ?></p>
+        <?php if ($nc): ?><a class="alink" href="<?= course_url($nc) ?>">Zur Ausbildung <?= icon('arrow') ?></a><?php endif; ?>
       </div>
       <?php endforeach; ?>
     </div>
+  </div>
+</section>
+<?php endif; ?>
 
+<section class="section section--alt">
+  <div class="wrap">
+    <?= shead('Leistungen', $P('leistungen_title'), $P('leistungen_lead')) ?>
+    <div class="grid3"><?= implode('', $cards) ?></div>
     <?php if ($kosten = pairs($P('kosten'))): ?>
-    <ul class="apage__kosten reveal"><?php foreach ($kosten as [$k, $v]): ?><li><?= icon('check') ?><span><strong><?= e($k) ?>:</strong> <?= e($v) ?></span></li><?php endforeach; ?></ul>
+    <ul class="kosten reveal"><?php foreach ($kosten as [$k, $v]): ?><li><?= icon('info') ?><span><strong><?= e($k) ?>:</strong> <?= e($v) ?></span></li><?php endforeach; ?></ul>
     <?php endif; ?>
   </div>
 </section>
 
-<section class="section section--soft" id="fachkraft">
-  <div class="wrap apage">
-    <div class="apage__intro reveal">
-      <div><h2 class="h2"><?= e($P('asi_title')) ?></h2><p class="lead"><?= e($P('asi_text')) ?></p></div>
-      <?php if ($img = photo('fachkraft', $P('asi_title'), 'apage__img')): ?><figure class="apage__media"><?= $img ?></figure><?php endif; ?>
-    </div>
-    <div class="apage__three reveal">
-      <?php foreach ([['Leistungen', 'asi_list'], ['Nutzen', 'asi_benefits'], ['Angebot', 'asi_offer']] as [$h, $k]): ?>
-      <div><h3 class="h6"><?= $h ?></h3><ul class="checks checks--sm"><?php foreach (lines($P($k)) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul></div>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
-<section class="section" id="inhouse">
-  <div class="wrap apage">
-    <div class="apage__intro apage__intro--flip reveal">
-      <div><h2 class="h2"><?= e($P('inhouse_title')) ?></h2><?php if ($P('inhouse_text')): ?><p class="lead"><?= e($P('inhouse_text')) ?></p><?php endif; ?></div>
-      <?php if ($img = photo('inhouse', $P('inhouse_title'), 'apage__img')): ?><figure class="apage__media"><?= $img ?></figure><?php endif; ?>
-    </div>
-    <ol class="asteps reveal">
-      <?php foreach (pairs($P('inhouse_steps'), '|') as $i => [$t, $d]): ?>
-      <li><span class="asteps__n"><?= $i + 1 ?></span><strong><?= e($t) ?></strong><span><?= e($d) ?></span></li>
-      <?php endforeach; ?>
-    </ol>
-    <p class="apage__needs reveal"><strong>Voraussetzungen:</strong> <?= e(implode(' · ', lines($P('inhouse_needs')))) ?></p>
-  </div>
-</section>
-
-<section class="section section--soft" id="formular">
-  <div class="wrap apage">
-    <div class="form-wrap form-wrap--narrow">
-      <div class="stack">
-        <h2 class="h2"><?= e($P('form_title')) ?></h2>
-        <p class="lead"><?= e($P('form_text')) ?></p>
-        <ul class="contact-list">
-          <li><a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a></li>
-          <li><a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a></li>
-        </ul>
+<section class="section" id="fachkraft">
+  <div class="wrap">
+    <div class="split">
+      <div class="split__pic reveal"><?= photo('fachkraft', $P('asi_title')) ?: illus_safety() ?></div>
+      <div class="reveal">
+        <p class="eyebrow">DGUV Vorschrift 2</p>
+        <h2 class="h2"><?= e($P('asi_title')) ?></h2>
+        <p class="lead"><?= e($P('asi_text')) ?></p>
+        <ul class="checks"><?php foreach (array_slice(lines($P('asi_list')), 0, 5) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
+        <a class="btn btn--red" href="<?= url('kontakt?thema=arbeitssicherheit') ?>#formular">Angebot anfragen <?= icon('arrow') ?></a>
       </div>
-      <div class="panel"><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'erste-hilfe-ausbildung')); ?></div>
     </div>
+    <div class="three">
+      <?php foreach ([['Nutzen', 'asi_benefits'], ['Angebot', 'asi_offer']] as [$h, $k]): if (!lines($P($k))) continue; ?>
+      <div class="reveal"><h3><?= $h ?></h3><ul class="checks"><?php foreach (lines($P($k)) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul></div>
+      <?php endforeach; ?>
+      <div class="reveal"><h3>Kontakt</h3><p>Fragen zur Betreuung oder ein individuelles Angebot? Wir melden uns schnellstmöglich.</p>
+        <ul class="contact-list"><li><a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a></li><li><a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a></li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section--alt" id="inhouse">
+  <div class="wrap">
+    <?= shead('Ablauf', $P('inhouse_title'), $P('inhouse_text')) ?>
+    <div class="steps">
+      <?php foreach (pairs($P('inhouse_steps'), '|') as $i => [$t, $d]): ?>
+      <div class="step reveal"><span class="step__n"><?= $i + 1 ?></span><b><?= e($t) ?></b><span><?= e($d) ?></span></div>
+      <?php endforeach; ?>
+    </div>
+    <?php if ($needs = lines($P('inhouse_needs'))): ?><p class="needs reveal"><strong>Voraussetzungen:</strong> <?= e(implode(' · ', $needs)) ?></p><?php endif; ?>
+  </div>
+</section>
+
+<?= band($P('band_title'), $P('band_text'), 'Jetzt anfragen', '#formular') ?>
+
+<section class="section" id="formular">
+  <div class="wrap fw">
+    <div class="reveal">
+      <p class="eyebrow">Kontakt</p>
+      <h2 class="h2"><?= e($P('form_title')) ?></h2>
+      <p class="lead"><?= e($P('form_text')) ?></p>
+      <?php if ($person): ?>
+      <div class="person-mini"><?php if ($pimg): ?><img src="<?= e($pimg) ?>" alt="<?= e($person['name']) ?>" loading="lazy" width="64" height="64"><?php endif; ?>
+        <div><b><?= e($person['name']) ?></b><span><?= e($person['role']) ?></span><a href="mailto:<?= e($person['email'] ?: site('email')) ?>"><?= e($person['email'] ?: site('email')) ?></a></div></div>
+      <?php endif; ?>
+    </div>
+    <div class="panel reveal"><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'erste-hilfe-ausbildung')); ?></div>
   </div>
 </section>
 <?php layout_end(); ?>

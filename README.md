@@ -24,15 +24,16 @@ DRK-Kreisverbands Verden e.V. (www.drk-sicherheit.de).
 | `cache/` | Zwischengespeicherte HiOrg-Terminlisten |
 
 ## URLs
-`/` · `/erste-hilfe` · `/brandschutz` · `/unternehmen` · `/termine` · `/termine/{kurs}` ·
-`/arbeitssicherheit` · `/faq` · `/kontakt` · `/impressum` · `/datenschutz` · `/admin` · `/sitemap.xml` · `/robots.txt`
+`/` · `/erste-hilfe` · `/erste-hilfe/{kurs}` · `/brandschutz` · `/brandschutz/{kurs}` · `/arbeitssicherheit` ·
+`/termine` · `/termine/{kurs}` · `/termine/{kurs}/anmeldung/{termin}` · `/faq` · `/kontakt` · `/impressum` · `/datenschutz` ·
+`/admin` · `/sitemap.xml` · `/robots.txt`
 
 Keine `.php`/`.html`-Endungen sichtbar; alte Adressen werden per 301 umgeleitet.
 
 ## Kurstermine (HiOrg-Server)
 Kein iframe: Die öffentlichen Listen `kurse_extern.php?ov=drkv&id=…` werden serverseitig
 abgerufen, 30 Min. zwischengespeichert und im eigenen, mobilen Layout angezeigt.
-„Buchen“ führt je Termin direkt zur HiOrg-Anmeldung. Ist HiOrg nicht erreichbar, wird die
+„Buchen“ öffnet eine eigene Anmeldeseite mit dem HiOrg-Formular. Ist HiOrg nicht erreichbar, wird die
 letzte gespeicherte Liste gezeigt, sonst ein Link zur HiOrg-Seite.
 Die HiOrg-Nummer je Kurs wird im Admin unter **Kurse** gepflegt.
 

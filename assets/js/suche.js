@@ -1,13 +1,11 @@
-/* Terminsuche Startseite: zählt freie Termine live (Kurs · Ort · Wann) und steuert das Such-Menü am Handy. */
+/* Terminsuche: zählt freie Termine live (Kurs · Ort · Wann) und leitet auf die gefilterte Terminliste. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-search]');
   if (!root) return;
   var d = JSON.parse(root.getAttribute('data-search'));
   var form = root.querySelector('[data-search-form]');
-  var sheet = root.querySelector('.ssheet');
-  var state = { kurs: '', ort: '', wann: '' }; // Standard: alle Kurse
-  var touched = false;
+  var state = { kurs: '', ort: '', wann: '' };
 
   function count(k, o, w) {
     return d.termine.filter(function (t) {
@@ -15,54 +13,36 @@
     }).length;
   }
   function label(n) {
-    if (!n) return 'Zum Kurs – aktuell keine freien Termine';
-    return n === 1 ? '1 freien Termin anzeigen' : n + ' freie Termine anzeigen';
-  }
-  function title(slug) {
-    for (var i = 0; i < d.kurse.length; i++) if (d.kurse[i].slug === slug) return d.kurse[i].title;
-    return 'Alle Kurse';
+    if (!n) return 'Zum Kurs';
+    return n === 1 ? '1 Termin finden' : n + ' Termine finden';
   }
 
   function render() {
     var n = count(state.kurs, state.ort, state.wann);
     root.querySelectorAll('[data-count-label]').forEach(function (el) { el.textContent = label(n); });
-    // Desktop: Ort-Auswahl zeigt Anzahl je Ort
+    // Anzahl je Auswahl im Menü (z. B. „Verden (7)“)
+    var kursSel = form.querySelector('[data-f=kurs]');
+    Array.prototype.forEach.call(kursSel.options, function (opt) {
+      if (!opt.dataset.label) opt.dataset.label = opt.textContent;
+      opt.textContent = opt.dataset.label + ' (' + count(opt.value, state.ort, state.wann) + ')';
+    });
     var ortSel = form.querySelector('[data-f=ort]');
     Array.prototype.forEach.call(ortSel.options, function (opt) {
-      if (!opt.value) { opt.textContent = 'Alle Orte'; return; }
-      opt.textContent = opt.value + ' (' + count(state.kurs, opt.value, state.wann) + ')';
-    });
-    // Handy: Kurs-Kacheln und Chips
-    root.querySelectorAll('[data-chips=kurs] .kchip').forEach(function (b) {
-      var c = count(b.getAttribute('data-v'), state.ort, state.wann);
-      var el = b.querySelector('[data-n]');
-      el.textContent = c ? (c === 1 ? '1 freier Termin' : c + ' freie Termine') : 'zurzeit keine Termine';
-      el.classList.toggle('is-zero', !c);
-    });
-    root.querySelectorAll('[data-chips=ort] .schip').forEach(function (b) {
-      var v = b.getAttribute('data-v');
-      b.disabled = !!v && !count(state.kurs, v, state.wann);
+      if (!opt.dataset.label) opt.dataset.label = opt.textContent;
+      opt.textContent = opt.dataset.label + ' (' + count(state.kurs, opt.value, state.wann) + ')';
     });
     ['kurs', 'ort', 'wann'].forEach(function (k) {
-      root.querySelectorAll('[data-chips=' + k + '] button').forEach(function (b) {
-        var on = b.getAttribute('data-v') === state[k];
-        b.classList.toggle('is-on', on);
-        b.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
       var sel = form.querySelector('[data-f=' + k + ']');
       if (sel && sel.value !== state[k]) sel.value = state[k];
     });
     if (window.niceSelectSync) window.niceSelectSync();
-    var sub = root.querySelector('[data-spill-sub]');
-    if (sub && touched) {
-      sub.textContent = title(state.kurs) + ' · ' + (state.ort || 'alle Orte') + (state.wann ? ' · ' + (state.wann === 'we' ? 'Wochenende' : 'unter der Woche') : '');
-    }
   }
 
   function go() {
     var q = [];
     if (state.ort) q.push('ort=' + encodeURIComponent(state.ort));
     if (state.wann) q.push('wann=' + state.wann);
+    if (!state.kurs && d.cat) q.push('bereich=' + encodeURIComponent(d.cat));
     location.href = d.base + (state.kurs ? '/' + encodeURIComponent(state.kurs) : '') + (q.length ? '?' + q.join('&') : '');
   }
 
@@ -70,44 +50,9 @@
     var k = e.target.getAttribute('data-f');
     if (!k) return;
     state[k] = e.target.value;
-    // Ort ohne Termine beim neuen Kurs zurücksetzen
     if (k === 'kurs' && state.ort && !count(state.kurs, state.ort, state.wann)) state.ort = '';
-    touched = true;
     render();
   });
   form.addEventListener('submit', function (e) { e.preventDefault(); go(); });
-
-  root.querySelectorAll('[data-chips]').forEach(function (group) {
-    var k = group.getAttribute('data-chips');
-    group.addEventListener('click', function (e) {
-      var b = e.target.closest('button');
-      if (!b || b.disabled) return;
-      state[k] = b.getAttribute('data-v');
-      if (k === 'kurs' && state.ort && !count(state.kurs, state.ort, state.wann)) state.ort = '';
-      touched = true;
-      render();
-    });
-  });
-
-  // Handy: Such-Menü öffnen/schließen
-  var opener = root.querySelector('[data-sheet-open]');
-  function openSheet() {
-    sheet.hidden = false;
-    requestAnimationFrame(function () { sheet.classList.add('is-open'); });
-    document.body.classList.add('sheet-open');
-    var first = sheet.querySelector('.kchip.is-on') || sheet.querySelector('.kchip');
-    if (first) first.focus({ preventScroll: true });
-  }
-  function closeSheet() {
-    sheet.classList.remove('is-open');
-    document.body.classList.remove('sheet-open');
-    setTimeout(function () { sheet.hidden = true; }, 260);
-    opener.focus({ preventScroll: true });
-  }
-  opener.addEventListener('click', openSheet);
-  sheet.querySelectorAll('[data-sheet-close]').forEach(function (b) { b.addEventListener('click', closeSheet); });
-  sheet.querySelector('[data-sheet-go]').addEventListener('click', go);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !sheet.hidden) closeSheet(); });
-
   render();
 })();

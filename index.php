@@ -24,10 +24,10 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 // Alte Adressen des Vorgänger-Entwurfs / alter Seite dauerhaft umleiten
 $legacy = [
     'index' => '/',
-    'kurs-erste-hilfe' => 'erste-hilfe#erste-hilfe-ausbildung',
-    'kurs-ersthelfer-betrieb' => 'erste-hilfe#erste-hilfe-ausbildung',
-    'kurs-erste-hilfe-kind' => 'erste-hilfe#erste-hilfe-am-kind',
-    'kurs-brandschutzhelfer' => 'brandschutz#brandschutzhelfer',
+    'kurs-erste-hilfe' => 'erste-hilfe/erste-hilfe-ausbildung',
+    'kurs-ersthelfer-betrieb' => 'erste-hilfe/erste-hilfe-ausbildung',
+    'kurs-erste-hilfe-kind' => 'erste-hilfe/erste-hilfe-am-kind',
+    'kurs-brandschutzhelfer' => 'brandschutz/brandschutzhelfer',
     'unternehmen' => 'arbeitssicherheit',
 ];
 if (isset($legacy[$path])) {
@@ -41,7 +41,16 @@ switch ($route) {
 
     case 'erste-hilfe':
     case 'brandschutz':
-        if (count($parts) > 1) {
+        // /erste-hilfe/{kurs} → Kursseite
+        if (count($parts) === 2) {
+            $current = course($parts[1]);
+            if (!$current || ($current['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe') !== $route) {
+                not_found();
+            }
+            require __DIR__ . '/templates/kurs.php';
+            break;
+        }
+        if (count($parts) > 2) {
             not_found();
         }
         $category = $route;
@@ -133,7 +142,7 @@ function not_found(): void
 {
     http_response_code(404);
     layout_start(['title' => 'Seite nicht gefunden | ' . site('name'), 'description' => '', 'noindex' => true]);
-    page_head('Fehler 404', 'Diese Seite gibt es nicht (mehr).', 'Vielleicht finden Sie hier, was Sie suchen:');
+    page_head('', 'Diese Seite gibt es nicht (mehr).', 'Vielleicht ist hier das Richtige dabei:');
     ?>
 <section class="section section--tight"><div class="wrap btn-row">
   <a class="btn btn--red" href="<?= url('termine') ?>">Kurstermine</a>

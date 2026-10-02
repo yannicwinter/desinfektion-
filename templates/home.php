@@ -3,8 +3,9 @@ $P = fn($k) => page('home', $k);
 $featured = array_values(array_filter(courses(), fn($c) => !empty($c['featured'])));
 $faq = array_values(array_filter(content()['faq'] ?? [], fn($f) => !empty($f['start'])));
 if (!$faq) {
-    $faq = array_slice(content()['faq'] ?? [], 0, 4);
+    $faq = array_slice(content()['faq'] ?? [], 0, 5);
 }
+$next = array_values(array_filter(hiorg_dates_all(bookable_courses()), fn($it) => $it['status'] !== 'full' && !empty($it['kid'])));
 
 layout_start([
     'title' => $P('seo_title'),
@@ -20,80 +21,63 @@ layout_start([
     ]],
 ]);
 ?>
-<?php
-$next = array_values(array_filter(hiorg_dates_all(bookable_courses()), fn($it) => $it['status'] !== 'full' && !empty($it['kid'])));
-$first = $next[0] ?? null;
-$ehPrice = (course('erste-hilfe-ausbildung') ?? [])['price'] ?? '';
-$orteAll = array_unique(array_filter(array_map(fn($it) => hiorg_town($it['details']), $next)));
-?>
-<section class="ahero">
-  <div class="wrap ahero__grid">
-    <div class="ahero__text">
-      <?php if ($P('hero_eyebrow')): ?><p class="kicker"><?= e($P('hero_eyebrow')) ?></p><?php endif; ?>
-      <h1 class="ahero__title"><?= e($P('hero_title')) ?></h1>
-      <p class="ahero__lead"><?= e($P('hero_lead')) ?></p>
-      <div class="ahero__acts">
-        <a class="btn btn--red" href="#termine">Kurstermin finden <?= icon('arrow') ?></a>
-        <a class="ulink" href="<?= url('arbeitssicherheit') ?>">Angebot für Unternehmen</a>
-      </div>
-      <dl class="ahero__facts">
-        <?php if ($next): ?><div><dt><?= count($next) ?></dt><dd>freie Termine</dd></div><?php endif; ?>
-        <?php if ($orteAll): ?><div><dt><?= count($orteAll) ?></dt><dd>Kursorte</dd></div><?php endif; ?>
-        <?php if ($ehPrice): ?><div><dt><?= e($ehPrice) ?></dt><dd>Erste-Hilfe-Kurs</dd></div><?php endif; ?>
-      </dl>
-    </div>
-    <div class="ahero__pic">
-      <?= photo('hero', 'Erste-Hilfe-Kurs: Herzdruckmassage an der Übungspuppe', 'ahero__img', false) ?>
-      <?php if ($first): $fc = $first['course']; $book = site('hiorg_booking') !== 'tab' ? url('termine/' . $fc['slug'] . '/anmeldung/' . $first['kid']) : $first['link']; ?>
-      <div class="nextcard">
-        <small>Nächster freier Termin</small>
-        <p><?= e($fc['title']) ?></p>
-        <span><?= e(de_date($first['date'], 'WW, D. MMM')) ?><?= $first['time'] ? ' · ' . e(explode('–', $first['time'])[0]) . ' Uhr' : '' ?><?= hiorg_town($first['details']) ? ' · ' . e(hiorg_town($first['details'])) : '' ?></span>
-        <div><em><?= e($first['free']) ?></em><a href="<?= e($book) ?>">Buchen <?= icon('arrow') ?></a></div>
-      </div>
-      <?php endif; ?>
+<section class="hero">
+  <?= photo('hero', 'Brandschutzhelfer-Ausbildung beim DRK in Verden', 'hero__img', false) ?>
+  <div class="hero__in">
+    <?php if ($P('hero_eyebrow')): ?><span class="badge"><?= icon('shield') ?><?= e($P('hero_eyebrow')) ?></span><?php endif; ?>
+    <h1><?= e($P('hero_title')) ?></h1>
+    <p class="hero__lead"><?= e($P('hero_lead')) ?></p>
+  </div>
+</section>
+
+<?php include __DIR__ . '/partials/suche.php'; ?>
+
+<section class="section">
+  <div class="wrap">
+    <?= shead($P('angebot_eyebrow'), $P('angebot_title'), $P('angebot_lead')) ?>
+    <div class="grid3">
+      <?= topic_card(photo('erste-hilfe', 'Erste Hilfe') ?: illus_page('erste-hilfe'), 'Erste Hilfe', $P('angebot_eh'), 'Erste-Hilfe-Kurse', url('erste-hilfe')) ?>
+      <?= topic_card(photo('brandschutz', 'Brandschutz') ?: illus_page('brandschutz'), 'Brandschutz', $P('angebot_bs'), 'Brandschutz-Angebote', url('brandschutz')) ?>
+      <?= topic_card(photo('unternehmen', 'Für Unternehmen') ?: illus_page('unternehmen'), 'Für Unternehmen', $P('angebot_as'), 'Leistungen für Betriebe', url('arbeitssicherheit')) ?>
     </div>
   </div>
 </section>
 
-<section class="asec asec--grey">
+<?php if ($next): ?>
+<section class="section section--alt">
   <div class="wrap">
-    <h2 class="asec__title"><?= e($P('angebot_title')) ?></h2>
-    <div class="offer">
-      <?php foreach ([['erste-hilfe', 'Erste Hilfe', 'angebot_eh', 'Alle Kurse'], ['brandschutz', 'Brandschutz', 'angebot_bs', 'Mehr erfahren'], ['arbeitssicherheit', 'Arbeitssicherheit', 'angebot_as', 'Für Unternehmen']] as [$slug, $t, $k, $more]): ?>
-      <a class="offer__item" href="<?= url($slug) ?>">
-        <h3><?= e($t) ?></h3>
-        <p><?= e($P($k)) ?></p>
-        <span class="alink"><?= e($more) ?> <?= icon('arrow') ?></span>
-      </a>
-      <?php endforeach; ?>
-    </div>
-  </div>
-</section>
-
-<section class="asec" id="termine">
-  <div class="wrap">
-    <div class="asec__head">
-      <div><h2 class="asec__title"><?= e($P('termine_title')) ?></h2><p class="asec__lead"><?= e($P('termine_lead')) ?></p></div>
-    </div>
-    <?php include __DIR__ . '/partials/suche.php'; ?>
-    <?php if ($next): ?>
-    <ul class="dates dates--list anext">
-      <?= render_dates($next, ['limit' => 5, 'show_course' => true]) ?>
+    <?= shead($P('termine_eyebrow'), $P('termine_title'), $P('termine_lead'), 'Alle ' . count($next) . ' Termine', url('termine')) ?>
+    <ul class="dates reveal">
+      <?= render_dates($next, ['limit' => 4, 'show_course' => true]) ?>
     </ul>
-    <p class="anext__more"><a class="alink" href="<?= url('termine') ?>">Alle <?= count($next) ?> freien Termine <?= icon('arrow') ?></a></p>
-    <?php endif; ?>
   </div>
 </section>
+<?php endif; ?>
 
-<section class="asec asec--grey">
-  <div class="wrap asplit">
-    <figure class="asplit__pic"><?= photo('home', 'Arbeitssicherheit im Betrieb', 'asplit__img') ?></figure>
-    <div class="asplit__text">
-      <p class="kicker"><?= e($P('firma_eyebrow')) ?></p>
-      <h2 class="asec__title"><?= e($P('firma_title')) ?></h2>
-      <p class="asec__lead"><?= e($P('firma_text')) ?></p>
-      <ul class="alist2">
+<?= band($P('band_title'), $P('band_text'), 'Angebot für Unternehmen', url('arbeitssicherheit')) ?>
+
+<?php if ($featured): ?>
+<section class="section">
+  <div class="wrap">
+    <?= shead('Kurse', $P('kurse_title'), $P('kurse_lead'), 'Alle Kurse', url('erste-hilfe')) ?>
+    <div class="grid3">
+      <?php foreach (array_slice($featured, 0, 3) as $c): ?><?= course_card($c) ?><?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
+
+<section class="section section--alt">
+  <div class="wrap split">
+    <div class="split__pic reveal">
+      <?= photo('home', 'Arbeitssicherheit im Betrieb') ?: illus_safety() ?>
+      <?php if ($P('stat_value')): ?><div class="stat"><b><?= e($P('stat_value')) ?></b><span><?= e($P('stat_text')) ?></span></div><?php endif; ?>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow"><?= e($P('firma_eyebrow')) ?></p>
+      <h2 class="h2"><?= e($P('firma_title')) ?></h2>
+      <p class="lead"><?= e($P('firma_text')) ?></p>
+      <ul class="checks">
         <?php foreach (lines($P('firma_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?>
       </ul>
       <a class="btn btn--red" href="<?= url('arbeitssicherheit') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a>
@@ -102,44 +86,37 @@ $orteAll = array_unique(array_filter(array_map(fn($it) => hiorg_town($it['detail
 </section>
 
 <?php if ($faq): ?>
-<section class="asec">
-  <div class="wrap afaq">
-    <div>
-      <h2 class="asec__title">Häufige Fragen</h2>
-      <a class="alink" href="<?= url('faq') ?>">Alle Fragen <?= icon('arrow') ?></a>
+<section class="section">
+  <div class="wrap faqw">
+    <div class="reveal">
+      <p class="eyebrow">FAQ</p>
+      <h2 class="h2">Häufige Fragen</h2>
+      <p class="lead">Kurz und klar beantwortet.</p>
+      <div class="helpbox"><b>Deine Frage ist nicht dabei?</b>Ruf uns an: <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a> · <a href="<?= url('faq') ?>">Alle Fragen</a></div>
     </div>
-    <div class="acc acc--plain">
-      <?php foreach ($faq as $f): ?>
-      <details class="acc__item"><summary class="acc__sum"><span class="acc__title"><?= e($f['q']) ?></span><?= icon('chevron', 'i acc__chev') ?></summary><div class="acc__body"><div class="prose"><?= rich($f['a']) ?></div></div></details>
-      <?php endforeach; ?>
-    </div>
+    <div class="reveal"><?= faq_list($faq) ?></div>
   </div>
 </section>
 <?php endif; ?>
 
-<?php $insta = instagram_posts(6); if ($insta): ?>
-<section class="asec asec--grey insta">
+<?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
+<section class="section section--alt">
   <div class="wrap">
-    <div class="section-head reveal">
-      <div><h2 class="asec__title"><?= e($P('insta_title')) ?></h2></div>
-      <a class="alink" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener">@drk_kreisverband_verden folgen <?= icon('arrow') ?></a>
-    </div>
-    <?php if (!$insta): ?>
-    <ul class="insta__row insta__row--ph">
-      <?php foreach ([['heart', 'Erste Hilfe'], ['flame', 'Brandschutz'], ['users', 'Unser Team'], ['calendar', 'Kurse'], ['shield', 'Arbeitssicherheit'], ['hand', 'Ehrenamt']] as $i => [$ic, $label]): ?>
-      <li><a href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener" class="insta__ph insta__ph--<?= $i % 3 ?>"><?= icon($ic) ?><span><?= e($label) ?></span></a></li>
-      <?php endforeach; ?>
-    </ul>
-    <?php else: ?>
-    <ul class="insta__row">
+    <?= shead('Instagram', $P('insta_title'), $P('insta_lead'), '@drk_kreisverband_verden', site('instagram')) ?>
+    <ul class="insta reveal">
+      <?php if ($insta): ?>
       <?php foreach ($insta as $post): ?>
       <li><a href="<?= e($post['link']) ?>" target="_blank" rel="noopener" title="<?= e($post['caption']) ?>"><img src="<?= e($post['img']) ?>" alt="<?= e($post['caption'] ?: 'Instagram-Beitrag DRK Verden') ?>" loading="lazy" decoding="async" width="600" height="600"></a></li>
       <?php endforeach; ?>
+      <?php else: ?>
+      <?php foreach (['Erste Hilfe', 'Brandschutz', 'Unser Team', 'Kurse', 'Arbeitssicherheit', 'Ehrenamt'] as $label): ?>
+      <li><a class="insta__ph" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener"><?= icon('instagram') ?><span><?= e($label) ?></span></a></li>
+      <?php endforeach; ?>
+      <?php endif; ?>
     </ul>
-    <?php endif; ?>
   </div>
 </section>
 <?php endif; ?>
 
-<?php include __DIR__ . '/partials/cta.php'; ?>
+<?= advice_box(contact_person($P('berater'))) ?>
 <?php layout_end(); ?>

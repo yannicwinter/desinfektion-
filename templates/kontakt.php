@@ -12,12 +12,12 @@ layout_start([
 page_head($P('eyebrow'), $P('title'), $P('lead'), [['Kontakt', 'kontakt']]);
 $map = 'https://www.openstreetmap.org/search?query=' . rawurlencode(site('street') . ', ' . site('zip') . ' ' . site('city'));
 ?>
-<section class="section section--tight" id="formular">
+<section class="section" id="formular">
   <div class="wrap form-wrap">
     <div class="stack">
       <div class="box">
         <h2 class="h5">Zentrale</h2>
-        <ul class="contact-list">
+        <ul class="contact-list" style="margin-top:0">
           <li><a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a></li>
           <li><a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a></li>
           <li><a href="<?= e($map) ?>" target="_blank" rel="noopener"><?= icon('pin') ?><?= e(site('street')) ?>, <?= e(site('zip')) ?> <?= e(site('city')) ?></a></li>
@@ -25,16 +25,16 @@ $map = 'https://www.openstreetmap.org/search?query=' . rawurlencode(site('street
       </div>
       <div class="box">
         <h2 class="h5">Kursorte</h2>
-        <ul class="checks checks--sm"><?php foreach (lines($P('orte')) as $o): ?><li><?= icon('pin') ?><?= e($o) ?></li><?php endforeach; ?></ul>
+        <ul class="checks checks--plain"><?php foreach (lines($P('orte')) as $o): ?><li><?= icon('pin') ?><?= e($o) ?></li><?php endforeach; ?></ul>
       </div>
     </div>
     <div class="panel"><h2 class="h4">Schreib uns</h2><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'sonstiges')); ?></div>
   </div>
 </section>
 
-<section class="section section--soft">
+<section class="section section--alt">
   <div class="wrap">
-    <div class="section-head"><div><span class="eyebrow">Ansprechpersonen</span><h2 class="h2">Direkt zur richtigen Person</h2></div></div>
+    <?= shead('Ansprechpersonen', 'Direkt zur richtigen Person') ?>
     <div class="people">
       <?php foreach (content()['contacts'] ?? [] as $p):
           $ini = implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2)));

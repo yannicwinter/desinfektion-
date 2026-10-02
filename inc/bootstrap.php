@@ -180,7 +180,20 @@ function bookable_courses(): array
 
 function course_url(array $c): string
 {
-    return url(($c['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe') . '#' . $c['slug']);
+    return url(course_path($c));
+}
+
+/** Einfacher URL-Teil aus einem Text („Familie & Kinder“ → „familie-kinder“). */
+function slugify(string $s): string
+{
+    $s = strtr(mb_strtolower($s), ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', '&' => ' ']);
+    return trim(preg_replace('/[^a-z0-9]+/', '-', $s), '-');
+}
+
+/** Pfad der Kursseite, z. B. "erste-hilfe/erste-hilfe-ausbildung". */
+function course_path(array $c): string
+{
+    return (($c['category'] ?? '') === 'brandschutz' ? 'brandschutz' : 'erste-hilfe') . '/' . $c['slug'];
 }
 
 /** Hochgeladenes Bild zu einem Bild-Platz (z. B. "home"), sonst null. */
@@ -219,11 +232,10 @@ function image_slots(): array
 function nav_items(): array
 {
     return [
-        '' => 'Start',
         'erste-hilfe' => 'Erste Hilfe',
         'brandschutz' => 'Brandschutz',
-        'arbeitssicherheit' => 'Arbeitssicherheit',
-        'faq' => 'FAQ',
+        'arbeitssicherheit' => 'Für Unternehmen',
+        'termine' => 'Termine',
         'kontakt' => 'Kontakt',
     ];
 }
@@ -313,6 +325,12 @@ function icon(string $name, string $class = 'i'): string
         'external' => '<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
         'search' => '<circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>',
         'users' => '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
+        'plus' => '<path d="M12 5v14M5 12h14"/>',
+        'award' => '<circle cx="12" cy="8" r="6"/><path d="M15.5 13 17 22l-5-3-5 3 1.5-9"/>',
+        'card' => '<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+        'euro' => '<path d="M4 10h12M4 14h9M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12c0 4.4 3.5 8 7.8 8 2 0 3.8-.8 5.2-2"/>',
+        'info' => '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+        'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6"/>',
     ][$name] ?? '';
     return '<svg class="' . $class . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . $p . '</svg>';
 }

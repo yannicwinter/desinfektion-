@@ -545,19 +545,23 @@ function render_dates(array $items, array $opt = []): string
             echo '<li class="dates__month" data-month="' . $lastMonth . '">' . $months[(int) $d->format('n')] . ' ' . $d->format('Y') . '</li>';
         }
         $book = $inline && !empty($it['kid']) ? url('termine/' . ($c['slug'] ?? '') . '/anmeldung/' . $it['kid']) : $it['link'];
+        $time = $it['time'] ? $it['time'] . ' Uhr' : '';
+        $place = $it['details'] ? hiorg_place_short($it['details']) : '';
         ?>
 <li class="date<?= $full ? ' date--full' : '' ?>" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
   <time class="date__cal" datetime="<?= $d->format('Y-m-d') ?>"><span><?= de_date($d, 'MMM') ?></span><strong><?= $d->format('j') ?></strong></time>
   <div class="date__info">
-    <?php if ($showCourse): ?><span class="date__course"><?= e($c['title'] ?? '') ?></span><?php endif; ?>
-    <span class="date__when"><?= e($when) ?><?= $it['time'] ? '<span class="date__time"> · ' . e($it['time']) . '</span>' : '' ?></span>
-    <?php if ($it['details']): ?><span class="date__details" title="<?= e($it['details']) ?>"><?= icon('pin') ?><?= e(hiorg_place_short($it['details'])) ?></span><?php endif; ?>
+    <span class="date__title"><?= $showCourse ? e($c['title'] ?? '') : e($when) ?></span>
+    <span class="date__meta">
+      <span><?= icon('clock') ?><?= e(trim(($showCourse ? $when : '') . ($showCourse && $time ? ' · ' : '') . $time)) ?></span>
+      <?php if ($place): ?><span title="<?= e($it['details']) ?>"><?= icon('pin') ?><?= e($place) ?></span><?php endif; ?>
+    </span>
   </div>
   <div class="date__side">
     <?php if ($full): ?>
-      <span class="badge badge--full"><?= e($it['free'] ?: 'Ausgebucht') ?></span>
+      <span class="tag-full"><?= e($it['free'] ?: 'Ausgebucht') ?></span>
     <?php else: ?>
-      <?php if ($it['free']): ?><span class="date__free date__free--<?= e($it['status']) ?>"><?= e($it['free']) ?></span><?php endif; ?>
+      <?php if ($it['free']): ?><span class="date__free date__free--<?= e($it['status']) ?>"><span class="dot"></span><?= e($it['free']) ?></span><?php endif; ?>
       <?php if ($showPrice && $it['price']): ?><span class="date__price"><?= e($it['price']) ?></span><?php endif; ?>
       <a class="btn btn--red btn--sm" href="<?= e($book) ?>"<?= $book === $it['link'] ? ' target="_blank" rel="noopener"' : '' ?>>Buchen</a>
     <?php endif; ?>
