@@ -132,7 +132,8 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 /* ---------- Startseite: Foto-Kopf ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;background:var(--dark);color:#fff;text-align:center}
 .hero__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%;z-index:-2}
-.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(20,22,27,.55) 0%,rgba(20,22,27,.35) 45%,rgba(20,22,27,.7) 100%)}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(ellipse 52% 58% at 50% 52%,rgba(20,22,27,.42) 0%,rgba(20,22,27,.16) 70%,rgba(20,22,27,.08) 100%),linear-gradient(180deg,rgba(20,22,27,.12) 0%,rgba(20,22,27,0) 40%,rgba(20,22,27,.28) 100%)}
+.hero h1,.hero__lead{text-shadow:0 2px 18px rgba(0,0,0,.45),0 1px 3px rgba(0,0,0,.35)}
 .hero__in{max-width:900px;margin:0 auto;padding:clamp(56px,8vw,96px) var(--gutter) 150px}
 .hero h1{color:#fff;font-size:clamp(34px,4.6vw,56px);font-weight:700;letter-spacing:-.03em;line-height:1.04;margin:20px 0 18px;text-wrap:balance;text-shadow:0 2px 24px rgba(0,0,0,.25)}
 .hero__lead{font-size:clamp(16.5px,1.6vw,20px);color:rgba(255,255,255,.88);max-width:640px;margin:0 auto}
@@ -142,7 +143,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .crumbs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:14px;color:rgba(255,255,255,.75)}
 .crumbs a:hover{color:#fff}
 .crumbs [aria-current]{color:#fff;font-weight:500}
-.hero--page::before{background:linear-gradient(180deg,rgba(20,22,27,.62) 0%,rgba(20,22,27,.55) 50%,rgba(20,22,27,.72) 100%)}
+.hero--page::before{background:radial-gradient(ellipse 55% 65% at 50% 45%,rgba(20,22,27,.48) 0%,rgba(20,22,27,.2) 70%,rgba(20,22,27,.12) 100%)}
 .hero--page .hero__in{padding-bottom:120px}
 .hero--page h1{font-size:clamp(32px,4.2vw,52px);margin-top:10px}
 .hero--short .hero__in{padding-bottom:clamp(56px,7vw,88px)}

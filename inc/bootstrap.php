@@ -219,7 +219,8 @@ function image_slots(): array
         'home' => 'Startseite – Arbeitssicherheit',
         'erste-hilfe' => 'Seite Erste Hilfe',
         'brandschutz' => 'Seite Brandschutz',
-        'unternehmen' => 'Seite Arbeitssicherheit',
+        'unternehmen' => 'Für Unternehmen – Karte auf der Startseite',
+        'unternehmen-kopf' => 'Für Unternehmen – großes Bild oben',
         'fachkraft' => 'Arbeitssicherheit – Fachkraft',
         'inhouse' => 'Arbeitssicherheit – Schulung im Betrieb',
     ];
