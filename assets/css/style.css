@@ -613,6 +613,10 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 
 @media (max-width:760px){
   body{font-size:15.5px}
+  .hero--home .hero__img{position:relative;inset:auto;display:block;height:210px;object-position:22% 35%}
+  .hero--home .badge{display:none}
+  .hero--home::before{bottom:auto;height:210px;background:linear-gradient(180deg,rgba(20,22,27,0) 55%,var(--dark) 100%)}
+  .hero--home .hero__in{padding-top:8px}
   .hero__in{padding:44px var(--gutter) 116px}
   .hero--page .hero__in{padding-bottom:100px}
   .hero--short .hero__in{padding-bottom:48px}
