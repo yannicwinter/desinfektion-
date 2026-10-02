@@ -247,12 +247,12 @@ function crumbs_html(array $crumbs): string
  * Seitenkopf. Mit $photo: großes Foto mit Titel (wie die Startseite),
  * $overlap = true lässt unten Platz für eine überlappende Leiste (Suche, Infoleiste).
  */
-function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false): void
+function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false, bool $full = false): void
 {
     $img = $photo ? photo($photo, $title, 'hero__img', false) : '';
     if ($img) {
         ?>
-<section class="hero hero--page<?= $overlap ? '' : ' hero--short' ?>">
+<section class="hero hero--page<?= $overlap ? '' : ' hero--short' ?><?= $full ? ' hero--full' : '' ?>">
   <?= $img ?>
   <div class="hero__in">
     <?= crumbs_html($crumbs) ?>

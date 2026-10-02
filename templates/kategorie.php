@@ -19,7 +19,7 @@ layout_start([
     'breadcrumb' => [[$P('title'), $category]],
     'schema' => array_map(fn($c) => course_schema($c), $list),
 ]);
-page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', $category, true);
+page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', $category, true, true);
 $searchCategory = $category;
 include __DIR__ . '/partials/suche.php';
 ?>

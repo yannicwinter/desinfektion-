@@ -147,6 +147,9 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .hero--page .hero__in{padding-bottom:120px}
 .hero--page h1{font-size:clamp(32px,4.2vw,52px);margin-top:10px}
 .hero--short .hero__in{padding-bottom:clamp(56px,7vw,88px)}
+/* Ganzes Foto zeigen (Seitenverhältnis 2:1): Startseite, Erste Hilfe, Brandschutz */
+.hero--full{min-height:min(50vw,760px);display:flex;flex-direction:column;justify-content:center}
+.hero--full .hero__in{width:100%}
 
 /* ---------- Terminsuche ---------- */
 .hsearch{position:relative;z-index:5;margin-top:-58px}
@@ -616,10 +619,11 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 
 @media (max-width:760px){
   body{font-size:15.5px}
-  .hero--home .hero__img{position:relative;inset:auto;display:block;height:210px;object-position:58% 40%}
-  .hero--home .badge{display:none}
-  .hero--home::before{bottom:auto;height:210px;background:linear-gradient(180deg,rgba(20,22,27,0) 55%,var(--dark) 100%)}
-  .hero--home .hero__in{padding-top:8px}
+  .hero--full{min-height:0;display:block}
+  .hero--full .hero__img{position:relative;inset:auto;display:block;height:auto;aspect-ratio:2/1;object-position:50% 50%}
+  .hero--full .badge{display:none}
+  .hero--full::before{bottom:auto;height:50vw;background:linear-gradient(180deg,rgba(20,22,27,0) 70%,var(--dark) 100%)}
+  .hero--full .hero__in{padding-top:8px}
   .hero__in{padding:44px var(--gutter) 116px}
   .hero--page .hero__in{padding-bottom:100px}
   .hero--short .hero__in{padding-bottom:48px}
