@@ -21,8 +21,8 @@ layout_start([
     ]],
 ]);
 ?>
-<section class="hero hero--home hero--full">
-  <?= photo('hero', 'Brandschutzhelfer-Ausbildung beim DRK in Verden', 'hero__img', false) ?>
+<section class="hero hero--home hero--photo">
+  <?= photo('hero', 'Erste-Hilfe- und Brandschutz-Ausbildung beim DRK in Verden', 'hero__img', false) ?>
   <div class="hero__in">
     <?php if ($P('hero_eyebrow')): ?><span class="badge"><?= icon('shield') ?><?= e($P('hero_eyebrow')) ?></span><?php endif; ?>
     <h1><?= e($P('hero_title')) ?></h1>
