@@ -245,16 +245,15 @@ function crumbs_html(array $crumbs): string
 }
 
 /**
- * Seitenkopf. Mit $photo: großes Foto mit Titel (wie die Startseite),
- * $overlap = true lässt unten Platz für eine überlappende Leiste (Suche, Infoleiste).
+ * Seitenkopf. Mit $photo: Foto komplett in eigenem Format (`hero_media`), Titel am Desktop links im Verlauf,
+ * mobil darunter. $overlap = true lässt unten Platz für eine überlappende Leiste (Suche, Infoleiste).
  */
-function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false, bool $full = false, bool $wide = false): void
+function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false): void
 {
-    $img = $photo ? photo($photo, $title, 'hero__img', false) : '';
-    if ($img) {
+    if ($photo && slot_image($photo)) {
         ?>
-<section class="hero hero--page<?= $overlap ? '' : ' hero--short' ?><?= $full ? ' hero--full' : '' ?><?= $wide ? ' hero--photo' : '' ?>">
-  <?= $img ?>
+<section class="hero hero--photo hero--page<?= $overlap ? ' hero--overlap' : ' hero--short' ?>">
+  <?= hero_media($photo, $title) ?>
   <div class="hero__in">
     <?= crumbs_html($crumbs) ?>
     <h1><?= e($title) ?></h1>
@@ -440,6 +439,14 @@ function photo(string $slot, string $alt, string $class = '', bool $lazy = true)
     }
     return '<img class="' . e($class) . '" src="' . e($src) . '" alt="' . e($alt) . '"' . ($lazy ? ' loading="lazy"' : ' fetchpriority="high"') . ' decoding="async">'
         . (is_ai_slot($slot) ? '<span class="ki-tag" title="Dieses Bild wurde mit künstlicher Intelligenz erzeugt.">KI-generiert</span>' : '');
+}
+
+/** Kopffoto: komplett sichtbar (eigenes Seitenverhältnis, Höhe begrenzt); freie Ränder füllt eine unscharfe Kopie. */
+function hero_media(string $slot, string $alt): string
+{
+    $src = slot_image($slot);
+    return '<div class="hero__blur" style="background-image:url(\'' . e($src) . '\')" aria-hidden="true"></div>'
+        . '<div class="hero__media" style="--ar:' . slot_ratio($slot) . '">' . photo($slot, $alt, 'hero__img', false) . '</div>';
 }
 
 /** Bild-Slots mit KI-erzeugten Fotos (Admin → Allgemein, „KI-Bilder“) – werden sichtbar gekennzeichnet. */

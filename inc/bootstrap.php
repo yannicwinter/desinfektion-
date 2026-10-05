@@ -205,16 +205,32 @@ function course_path(array $c): string
 /** Hochgeladenes Bild zu einem Bild-Platz (z. B. "home"), sonst null. */
 function slot_image(string $slot): ?string
 {
-    // Nur im Admin hochgeladene Bilder
+    $f = slot_file($slot);
+    if (!$f) {
+        return null;
+    }
+    return str_starts_with($f, UPLOAD_DIR) ? url('uploads/' . basename($f)) . '?v=' . filemtime($f) : asset('img/foto/' . $slot . '.jpg');
+}
+
+/** Datei eines Bildplatzes: im Admin hochgeladen, sonst Standardfoto (assets/img/foto), sonst null (gezeichnetes Motiv). */
+function slot_file(string $slot): ?string
+{
     foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
         $f = UPLOAD_DIR . '/' . $slot . '.' . $ext;
         if (is_file($f)) {
-            return url('uploads/' . $slot . '.' . $ext) . '?v=' . filemtime($f);
+            return $f;
         }
     }
-    // Standardfoto (assets/img/foto), sonst gezeichnetes Motiv (inc/illus.php)
     $f = ROOT . '/assets/img/foto/' . $slot . '.jpg';
-    return is_file($f) ? asset('img/foto/' . $slot . '.jpg') : null;
+    return is_file($f) ? $f : null;
+}
+
+/** Seitenverhältnis (Breite/Höhe) eines Bildplatzes – damit Kopffotos immer komplett erscheinen. */
+function slot_ratio(string $slot): float
+{
+    $f = slot_file($slot);
+    $s = $f ? @getimagesize($f) : false;
+    return $s && $s[1] > 0 ? round($s[0] / $s[1], 4) : 2.0;
 }
 
 /** Bildplätze für den Admin: feste Seitenbilder + ein Bild je Kurs. */
