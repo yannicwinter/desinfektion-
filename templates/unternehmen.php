@@ -38,7 +38,7 @@ layout_start([
 ]);
 page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit']],
     '<a class="btn btn--red" href="#formular">Unverbindlich anfragen ' . icon('arrow') . '</a><a class="btn btn--line" href="tel:' . e(site('phone_link')) . '">' . icon('phone') . e(site('phone')) . '</a>',
-    'unternehmen-kopf');
+    'hero', false, false, true);
 ?>
 
 <?php if ($need): ?>

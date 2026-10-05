@@ -19,7 +19,12 @@ layout_start([
     'breadcrumb' => [[$P('title'), $category]],
     'schema' => array_map(fn($c) => course_schema($c), $list),
 ]);
-page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', $category, true, true);
+// Brandschutz nutzt den Kopf der Startseite (ganzes Foto, Text links im Verlauf)
+if ($isFire) {
+    page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', 'hero', true, false, true);
+} else {
+    page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', $category, true, true);
+}
 $searchCategory = $category;
 include __DIR__ . '/partials/suche.php';
 ?>
