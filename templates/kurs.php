@@ -38,7 +38,7 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
     <div class="reveal">
       <p class="eyebrow">Kursinhalt</p>
       <h2>Darum geht's</h2>
-      <p class="kgrid__text"><?= e($c['text']) ?></p>
+      <div class="kgrid__text"><?php foreach (paragraphs($c['text']) as $par): ?><p><?= e($par) ?></p><?php endforeach; ?></div>
       <?php if ($learn = lines($c['learn'])): ?>
       <h2><?= $cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du' ?></h2>
       <ul class="checks checks--2 checks--plain"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>

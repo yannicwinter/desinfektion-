@@ -104,6 +104,12 @@ function lines(?string $s): array
     return array_values(array_filter(array_map('trim', preg_split('/\R/', (string) $s)), 'strlen'));
 }
 
+/** Text in Absätze teilen (getrennt durch Leerzeile). */
+function paragraphs(?string $s): array
+{
+    return array_values(array_filter(array_map('trim', preg_split('/\R\s*\R/', trim((string) $s))), 'strlen'));
+}
+
 /** "Label: Wert"-Zeilen als [[Label, Wert], ...]. */
 function pairs(?string $s, string $sep = ':'): array
 {

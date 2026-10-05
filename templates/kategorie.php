@@ -1,5 +1,5 @@
 <?php
-/** Bereichsseite /erste-hilfe bzw. /brandschutz: Foto-Kopf, Terminsuche, Wegweiser, alle Kurse als Karten. */
+/** Bereichsseite /erste-hilfe bzw. /brandschutz: Foto-Kopf, Terminsuche, Wegweiser, Einleitung, alle Kurse als Karten, „Gut zu wissen“. */
 $P = fn($k) => page($category, $k);
 $list = courses($category);
 $groups = [];
@@ -39,7 +39,25 @@ include __DIR__ . '/partials/suche.php';
 </section>
 <?php endif; ?>
 
+<?php if ($P('intro_title')): ?>
 <section class="section section--alt">
+  <div class="wrap intro">
+    <div class="reveal">
+      <p class="eyebrow"><?= e($P('intro_eyebrow')) ?></p>
+      <h2 class="h2"><?= e($P('intro_title')) ?></h2>
+      <?php foreach (paragraphs($P('intro_text')) as $par): ?><p class="intro__p"><?= e($par) ?></p><?php endforeach; ?>
+    </div>
+    <?php if ($il = lines($P('intro_list'))): ?>
+    <div class="intro__box reveal">
+      <h3><?= e($P('intro_list_title')) ?></h3>
+      <ul class="checks checks--plain"><?php foreach ($il as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
+    </div>
+    <?php endif; ?>
+  </div>
+</section>
+<?php endif; ?>
+
+<section class="section">
   <div class="wrap">
     <?= shead('Alle Kurse', $P('kurse_title') ?: $P('title') . ' im Überblick', $P('kurse_lead') ?: 'Preis, Dauer und nächster freier Termin auf einen Blick.') ?>
     <?php foreach ($groups as $g => $items): ?>
@@ -56,6 +74,19 @@ include __DIR__ . '/partials/suche.php';
     <?php endif; ?>
   </div>
 </section>
+
+<?php if ($know = lines($P('wissen'))): ?>
+<section class="section section--alt">
+  <div class="wrap">
+    <?= shead('Auf einen Blick', $P('wissen_title') ?: 'Gut zu wissen', $P('wissen_lead')) ?>
+    <div class="know">
+      <?php foreach ($know as $k): [$kt, $kx, $ki] = array_map('trim', array_pad(explode('|', $k), 3, '')); ?>
+      <div class="know__item reveal"><span class="know__ic"><?= icon($ki ?: 'info') ?></span><h3><?= e($kt) ?></h3><p><?= e($kx) ?></p></div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <?= band($P('band_title'), $P('band_text'), 'Mehr für Unternehmen', url('arbeitssicherheit')) ?>
 

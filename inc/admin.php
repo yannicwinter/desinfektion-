@@ -31,6 +31,11 @@ const FIELD_LABELS = [
     'wege_eyebrow' => ['Wegweiser – Dachzeile', ''], 'wege_title' => ['Wegweiser – Überschrift', ''], 'wege_lead' => ['Wegweiser – Text', ''],
     'wege' => ['Wegweiser – Karten', 'Eine Zeile je Karte: Titel | Text | Ziel (Pfad) | Bild (z. B. kurs-erste-hilfe-ausbildung).'],
     'faq_title' => ['Häufige Fragen – Überschrift', ''],
+    'intro_eyebrow' => ['Einleitung – Dachzeile', ''], 'intro_title' => ['Einleitung – Überschrift', 'Leer = Abschnitt ausblenden.'],
+    'intro_text' => ['Einleitung – Text', 'Absätze durch eine Leerzeile trennen.'],
+    'intro_list_title' => ['Einleitung – Kasten-Überschrift', ''], 'intro_list' => ['Einleitung – Kasten-Liste', 'Ein Punkt pro Zeile.'],
+    'wissen_title' => ['„Gut zu wissen“ – Überschrift', ''], 'wissen_lead' => ['„Gut zu wissen“ – Text', ''],
+    'wissen' => ['„Gut zu wissen“ – Kacheln', 'Eine Zeile je Kachel: Titel | Text | Symbol (clock, euro, shield, award, pin, users, info).'],
     'pflichten_title' => ['Pflichten – Überschrift', ''], 'pflichten_lead' => ['Pflichten – Text', ''],
     'pflichten' => ['Pflichten – Karten', 'Eine Zeile je Karte: Zahl | Titel | Text | Kurs (Kurz-Name, z. B. brandschutzhelfer).'],
     'leistungen_title' => ['Leistungen – Überschrift', ''], 'leistungen_lead' => ['Leistungen – Text', ''],
@@ -284,7 +289,7 @@ function field_input(string $name, string $label, string $value, string $help = 
 
 function is_multi(string $key, string $value): bool
 {
-    return str_contains($value, "\n") || mb_strlen($value) > 90 || (bool) preg_match('/(text|body|list|steps|needs|orte|lead|description)$/', $key);
+    return str_contains($value, "\n") || mb_strlen($value) > 90 || (bool) preg_match('/(text|body|list|steps|needs|orte|lead|description|wissen|wege|pflichten|kosten)$/', $key);
 }
 
 function admin_general(): void
@@ -429,7 +434,7 @@ function admin_course(): void
     echo field_input('price', 'Preis (Anzeige)', $k['price'], 'Z. B. „55 €“. Leer lassen, wenn variabel.');
     echo '</div>';
     echo field_input('teaser', 'Kurzbeschreibung (eine Zeile)', $k['teaser'], 'Erscheint auf den Kurskarten und oben auf der Kursseite.');
-    echo field_input('text', 'Beschreibung', $k['text'], 'Bitte kurz halten – 2 bis 3 Sätze.', true);
+    echo field_input('text', 'Beschreibung', $k['text'], 'Absätze durch eine Leerzeile trennen. Kurz halten – 2 bis 3 kurze Absätze.', true);
     echo field_input('learn', 'Inhalte', $k['learn'], 'Ein Punkt pro Zeile.', true);
     echo field_input('facts', 'Eckdaten', $k['facts'], 'Eine Zeile pro Angabe: „Dauer: 9 UE“', true);
     echo field_input('keywords', 'Suchbegriffe für den Kursfinder', $k['keywords'], 'Mit Komma trennen: Wörter, mit denen Leute nach diesem Kurs fragen (z. B. „Führerschein, Fahrschule“).', true);

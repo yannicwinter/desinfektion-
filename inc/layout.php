@@ -203,7 +203,7 @@ function course_schema(array $c, array $dates = []): array
         '@context' => 'https://schema.org',
         '@type' => 'Course',
         'name' => $c['title'],
-        'description' => $c['teaser'] . ' ' . $c['text'],
+        'description' => preg_replace('/\s+/', ' ', $c['teaser'] . ' ' . $c['text']),
         'url' => abs_url(!empty($c['hiorg_id']) ? 'termine/' . $c['slug'] : ltrim(course_url($c), '/')),
         'inLanguage' => 'de',
         'provider' => ['@id' => abs_url('/') . '#org', '@type' => 'Organization', 'name' => site('org'), 'sameAs' => abs_url('/')],
