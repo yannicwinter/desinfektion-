@@ -78,6 +78,7 @@ function layout_start(array $meta): void
     </a>
     <nav class="nav" aria-label="Hauptnavigation">
       <ul class="nav__list">
+        <li><a href="<?= url('/') ?>"<?= ($meta['path'] ?? '') === '/' ? ' aria-current="page"' : '' ?>>Start</a></li>
         <?php foreach (nav_items() as $slug => $label): ?>
         <li><a href="<?= url($slug) ?>"<?= $active === $slug || ($slug === 'termine' && $active === 'anmeldung') ? ' aria-current="page"' : '' ?>><?= e($label) ?></a></li>
         <?php endforeach; ?>

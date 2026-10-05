@@ -9,7 +9,7 @@
 - „Buchen“ führt auf /termine/{kurs}/anmeldung/{kid}: eigene Seite, HiOrg-Formular (tn_anmeldung.php) als iframe eingebettet (HiOrg sendet X-Frame-Options: ALLOWALL). Eigenes Formular nicht möglich: HiOrg-API hat keine Kursanmeldung, Zahlung per PayPal hängt an der HiOrg-Sitzung. `site.hiorg_booking` = „tab“ → neuer Tab.
 - Animationen bewusst sparsam: Kreuz blendet einmal ein, dezentes Einblenden beim Scrollen, keine Dauer-Animationen.
 - Design: Schrift Inter (400–700, lokal in `assets/fonts`), DRK-Rot #E60005 als Akzent, helle Flächen (#F5F6F8), kleine Rundungen (4–8 px), feine Linien, Schatten nur für schwebende Elemente (Suche, Infoleiste). Dunkle Leiste oben (`site.topbar`), dunkler Footer. Gemeinsame Bausteine in `inc/layout.php`: `page_head` (Foto-Kopf), `shead`, `course_card`, `topic_card`, `band`, `faq_list`, `advice_box`.
-- Menü: Erste Hilfe · Brandschutz · Für Unternehmen · Termine · Kontakt (FAQ im Footer).
+- Menü: Start · Erste Hilfe · Brandschutz · Für Unternehmen · Termine · Kontakt (FAQ im Footer); bis 1260 px kompakt („Kurs buchen“ nur als Symbol).
 - Öffentliche Seiten setzen keine Cookies (Formular nutzt signiertes Token); Session nur im Admin.
 - Sprache: Deutsch, kurze Texte. Privat-Angebote in Du-Form, Betriebsthemen neutral (kein „Sie“, kein „ihr/euch“ außer in Fragen).  Unbekanntes als `[PLATZHALTER]`.
 - Lokal testen: `php -S 127.0.0.1:8080` mit einem Router, der `.htaccess` nachbildet.

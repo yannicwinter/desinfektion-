@@ -112,10 +112,13 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .nav a[aria-current="page"]{color:var(--ink)}
 .nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--red)}
 .header__cta{flex-shrink:0}
-@media (max-width:1180px){
-  .brand img{height:34px}
-  .nav__list{gap:20px}
+@media (max-width:1260px){
+  .header__in{gap:20px}
+  .brand img{height:30px}
+  .nav__list{gap:16px}
   .nav a{font-size:14.5px}
+  .header__cta span{display:none}
+  .header__cta{width:44px;padding:0;justify-content:center}
 }
 
 /* ---------- Abschnitte ---------- */
@@ -128,6 +131,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .shead p{color:var(--muted);font-size:17px;margin-top:10px;max-width:620px}
 .shead p.eyebrow{color:var(--red);font-size:12px;margin-top:0}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 
 /* ---------- Startseite: Foto-Kopf ---------- */
 .hero{position:relative;isolation:isolate;overflow:hidden;background:var(--dark);color:#fff;text-align:center}
@@ -605,6 +609,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .brand img{height:30px}
   .header__cta{margin-left:auto}
   .grid3{grid-template-columns:1fr 1fr}
+  .grid4{grid-template-columns:1fr 1fr}
   .split,.faqw,.kgrid,.fw,.form-wrap,.signup__grid{grid-template-columns:1fr}
   .stat{right:16px;bottom:-24px}
   .split__pic{margin-bottom:24px}
@@ -682,6 +687,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .trust{flex-direction:column;align-items:flex-start;gap:8px;margin-top:20px;padding:0 4px}
   .shead{flex-direction:column;align-items:flex-start;gap:12px}
   .grid3{grid-template-columns:1fr;gap:16px}
+  .grid4{grid-template-columns:1fr;gap:16px}
   .date{grid-template-columns:52px minmax(0,1fr);gap:4px 14px;padding:16px}
   .date__cal{width:52px;grid-row:span 2;align-self:start}
   .date__cal strong{font-size:21px}

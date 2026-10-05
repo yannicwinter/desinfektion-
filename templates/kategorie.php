@@ -33,7 +33,7 @@ include __DIR__ . '/partials/suche.php';
 <section class="section wege">
   <div class="wrap">
     <?= shead($P('wege_eyebrow') ?: 'Wegweiser', $P('wege_title'), $P('wege_lead')) ?>
-    <div class="grid3">
+    <div class="<?= count($wege) === 4 ? 'grid4' : 'grid3' ?>">
       <?php foreach ($wege as $w):
           [$t, $txt, $href, $slot] = array_map('trim', array_pad(explode('|', $w), 4, ''));
           $img = ($slot ? photo($slot, $t) : '') ?: photo($category, $t); ?>

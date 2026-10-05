@@ -6,7 +6,7 @@ $P = fn($k) => page('unternehmen', $k);
 
 // Leistungen aus den Kursdaten (Titel/Teaser im Admin gepflegt)
 $cards = [];
-foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'evakuierungsuebung' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
+foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'evakuierungsuebung' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
     if ($c = course($slug)) {
         $img = photo('kurs-' . $slug, $c['title']) ?: illus_course($c);
         $cards[] = topic_card($img, $label ?: $c['title'], $c['teaser'], 'Mehr erfahren', course_url($c));
@@ -62,7 +62,7 @@ page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit'
 <section class="section section--alt">
   <div class="wrap">
     <?= shead('Leistungen', $P('leistungen_title'), $P('leistungen_lead')) ?>
-    <div class="grid3"><?= implode('', $cards) ?></div>
+    <div class="grid4"><?= implode('', $cards) ?></div>
     <?php if ($kosten = pairs($P('kosten'))): ?>
     <ul class="kosten reveal"><?php foreach ($kosten as [$k, $v]): ?><li><?= icon('info') ?><span><strong><?= e($k) ?>:</strong> <?= e($v) ?></span></li><?php endforeach; ?></ul>
     <?php endif; ?>
