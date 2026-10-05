@@ -468,6 +468,20 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .kosten strong{color:var(--ink)}
 .fw{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(32px,5vw,56px);align-items:start}
 .fw .lead{margin-top:14px}
+.pcard{margin-top:28px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg)}
+.pcard__t{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
+.pcard__p{display:flex;gap:14px;align-items:center}
+.pcard__p img,.pcard__ph{width:60px;height:60px;border-radius:50%;object-fit:cover;flex-shrink:0}
+.pcard__ph{display:grid;place-items:center;background:var(--red-t);color:var(--red)}
+.pcard__p b{display:block;color:var(--ink);font-size:16.5px}
+.pcard__p span{display:block;font-size:14px;color:var(--muted)}
+.pcard__c{display:grid;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+.pcard__c a{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:500;color:var(--ink);word-break:break-word}
+.pcard__c a:hover{color:var(--red)}
+.pcard__c .i{width:18px;height:18px;color:var(--red);flex-shrink:0}
+.pcard__more{margin-top:14px;font-size:14px;color:var(--muted)}
+.pcard__more b{color:var(--ink)}
+.pcard__more a{color:var(--red);font-weight:500}
 .person-mini{display:flex;gap:16px;align-items:center;margin-top:28px;padding:18px 20px;background:#fff;border:1px solid var(--line);border-radius:var(--r)}
 .person-mini img{width:64px;height:64px;border-radius:50%;object-fit:cover}
 .person-mini b{display:block;color:var(--ink)}
@@ -518,8 +532,8 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 /* ---------- Seite Termine ---------- */
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
 .tab{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;font-size:14.5px;font-weight:500;color:var(--text);white-space:nowrap;transition:border-color .2s,background .2s,color .2s}
-.tab:hover{border-color:var(--ink);color:var(--ink)}
-.tab[aria-current="page"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.tab:hover{border-color:var(--red);color:var(--red)}
+.tab[aria-current="page"]{background:var(--red-t);border-color:var(--red);color:var(--red);font-weight:600}
 .dates-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .dates-tools .field--inline{flex:0 1 auto}
 .dates-tools .nsel{min-width:170px}

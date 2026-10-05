@@ -21,7 +21,7 @@
         "whatsapp": "",
         "instagram_feed_url": "",
         "topbar": "DRK-Kreisverband Verden e.V. · Anerkannte Ausbildungsstelle der Berufsgenossenschaften",
-        "ki_bilder": "hero, erste-hilfe, kurs-kinder-helfen-kindern, kurs-forstehjelp-schulen, kurs-fresh-up-arztpraxen, kurs-aed-reanimationstraining, kurs-erste-hilfe-am-hund, kurs-erste-hilfe-am-welpen"
+        "ki_bilder": "hero, erste-hilfe, kurs-erste-hilfe-ausbildung, kurs-erste-hilfe-fortbildung, kurs-kinder-helfen-kindern, kurs-forstehjelp-schulen, kurs-fresh-up-arztpraxen, kurs-aed-reanimationstraining, kurs-erste-hilfe-am-hund, kurs-erste-hilfe-am-welpen, kurs-brandschutzhelfer, kurs-feuerloeschertraining, kurs-evakuierungsuebung, kurs-brandschutzordnung-rettungsplaene, kurs-brandschutzbeauftragter, kurs-erste-hilfe-am-kind"
     },
     "pages": {
         "home": {
@@ -198,7 +198,8 @@
             "cta": "termine",
             "featured": "1",
             "active": "1",
-            "keywords": "führerschein, fahrschule, fahrerlaubnis, grundkurs, lebensrettende sofortmaßnahmen, ersthelfer, bg-lehrgang"
+            "keywords": "führerschein, fahrschule, fahrerlaubnis, grundkurs, lebensrettende sofortmaßnahmen, ersthelfer, bg-lehrgang",
+            "contact": "Jan Wille"
         },
         {
             "slug": "erste-hilfe-fortbildung",
@@ -214,7 +215,8 @@
             "cta": "termine",
             "featured": "",
             "active": "1",
-            "keywords": "auffrischung, auffrischen, wiederholung, refresh, fortbildung, verlängern"
+            "keywords": "auffrischung, auffrischen, wiederholung, refresh, fortbildung, verlängern",
+            "contact": "Jan Wille"
         },
         {
             "slug": "erste-hilfe-am-kind",
@@ -230,7 +232,8 @@
             "cta": "termine",
             "featured": "1",
             "active": "1",
-            "keywords": "baby, säugling, kleinkind, eltern, mutter, vater, kita, erzieher, tagesmutter, babysitter, oma, opa, enkel, notfälle bei kindern"
+            "keywords": "baby, säugling, kleinkind, eltern, mutter, vater, kita, erzieher, tagesmutter, babysitter, oma, opa, enkel, notfälle bei kindern",
+            "contact": "Jan Wille"
         },
         {
             "slug": "erste-hilfe-party",
@@ -246,7 +249,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "party, zuhause, privat, freunde, feier, junggesellen, hausbesuch"
+            "keywords": "party, zuhause, privat, freunde, feier, junggesellen, hausbesuch",
+            "contact": "Jan Wille"
         },
         {
             "slug": "kinder-helfen-kindern",
@@ -262,7 +266,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "kinder helfen kindern, grundschule, vorschule, kindergarten, rettungswagen, urkunde, comic"
+            "keywords": "kinder helfen kindern, grundschule, vorschule, kindergarten, rettungswagen, urkunde, comic",
+            "contact": "Sigrid Renz"
         },
         {
             "slug": "forstehjelp-schulen",
@@ -278,7 +283,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "førstehjelp, forstehjelp, schule, schulklasse, schüler, norwegen, projekttag, bronze, silber, gold, platin"
+            "keywords": "førstehjelp, forstehjelp, schule, schulklasse, schüler, norwegen, projekttag, bronze, silber, gold, platin",
+            "contact": "Jan Wille"
         },
         {
             "slug": "fresh-up-arztpraxen",
@@ -294,7 +300,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "arztpraxis, praxis, arzt, ärztin, praxisteam, mfa, zahnarzt, fresh up"
+            "keywords": "arztpraxis, praxis, arzt, ärztin, praxisteam, mfa, zahnarzt, fresh up",
+            "contact": "Jan Wille"
         },
         {
             "slug": "aed-reanimationstraining",
@@ -310,7 +317,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "aed, defi, defibrillator, reanimation, wiederbelebung, herzdruckmassage, herzstillstand"
+            "keywords": "aed, defi, defibrillator, reanimation, wiederbelebung, herzdruckmassage, herzstillstand",
+            "contact": "Jan Wille"
         },
         {
             "slug": "erste-hilfe-am-hund",
@@ -326,7 +334,8 @@
             "cta": "termine",
             "featured": "",
             "active": "1",
-            "keywords": "hund, hunde, hundekurs, tier, vierbeiner, pfote, dummy-hund"
+            "keywords": "hund, hunde, hundekurs, tier, vierbeiner, pfote, dummy-hund",
+            "contact": "Christopher von Speckelsen"
         },
         {
             "slug": "erste-hilfe-am-welpen",
@@ -342,7 +351,8 @@
             "cta": "termine",
             "featured": "",
             "active": "1",
-            "keywords": "welpe, welpen, junghund, welpenkurs"
+            "keywords": "welpe, welpen, junghund, welpenkurs",
+            "contact": "Christopher von Speckelsen"
         },
         {
             "slug": "brandschutzhelfer",
@@ -358,7 +368,8 @@
             "cta": "termine",
             "featured": "1",
             "active": "1",
-            "keywords": "brandschutzhelfer, evakuierungshelfer, brandschutz, brandschutzschulung, asr a2.2"
+            "keywords": "brandschutzhelfer, evakuierungshelfer, brandschutz, brandschutzschulung, asr a2.2",
+            "contact": "Matthias True"
         },
         {
             "slug": "feuerloeschertraining",
@@ -374,7 +385,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "feuerlöscher, feuerlöschertraining, löschtraining, löschübung"
+            "keywords": "feuerlöscher, feuerlöschertraining, löschtraining, löschübung",
+            "contact": "Matthias True"
         },
         {
             "slug": "evakuierungsuebung",
@@ -390,7 +402,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "evakuierung, räumungsübung, räumung, alarmübung, übung"
+            "keywords": "evakuierung, räumungsübung, räumung, alarmübung, übung",
+            "contact": "Matthias True"
         },
         {
             "slug": "brandschutzordnung-rettungsplaene",
@@ -406,7 +419,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "brandschutzordnung, fluchtplan, rettungsplan, flucht- und rettungsplan, gefährdungsbeurteilung, dokumente"
+            "keywords": "brandschutzordnung, fluchtplan, rettungsplan, flucht- und rettungsplan, gefährdungsbeurteilung, dokumente",
+            "contact": "Matthias True"
         },
         {
             "slug": "brandschutzbeauftragter",
@@ -422,7 +436,8 @@
             "cta": "anfrage",
             "featured": "",
             "active": "1",
-            "keywords": "brandschutzbeauftragter, brandschutzpflichten, externer brandschutzbeauftragter"
+            "keywords": "brandschutzbeauftragter, brandschutzpflichten, externer brandschutzbeauftragter",
+            "contact": "Matthias True"
         }
     ],
     "faq": [

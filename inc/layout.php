@@ -357,6 +357,44 @@ function contact_person(string $name = ''): ?array
     return $all[0] ?? null;
 }
 
+/** Ansprechperson eines Kurses (Feld „contact“), sonst Standard je Bereich. */
+function course_contact(array $c): ?array
+{
+    $name = trim((string) ($c['contact'] ?? '')) ?: ($c['category'] === 'brandschutz' ? 'Matthias True' : 'Jan Wille');
+    return contact_person($name);
+}
+
+/** Person nach Aufgabe (z. B. „Kosten“), ohne Rückfall auf die erste Person. */
+function contact_by_role(string $role): ?array
+{
+    foreach (content()['contacts'] ?? [] as $p) {
+        if (mb_stripos($p['role'], $role) !== false) {
+            return $p;
+        }
+    }
+    return null;
+}
+
+/** Kasten mit Foto, Name, Aufgabe, E-Mail und Telefon einer Ansprechperson. */
+function person_card(?array $p, string $title = 'Noch Fragen?'): string
+{
+    if (!$p) {
+        return '';
+    }
+    $img = person_photo($p);
+    $mail = $p['email'] ?: site('email');
+    $tel = $p['phone'] ?: site('phone');
+    $telLink = preg_replace('/[^\d+]/', '', preg_replace('/\s*\(.*\)$/', '', $tel));
+    if (str_starts_with($telLink, '0')) {
+        $telLink = '+49' . substr($telLink, 1);
+    }
+    return '<div class="pcard"><p class="pcard__t">' . e($title) . '</p><div class="pcard__p">'
+        . ($img ? '<img src="' . e($img) . '" alt="' . e($p['name']) . '" loading="lazy" width="64" height="64">' : '<span class="pcard__ph">' . icon('users') . '</span>')
+        . '<div><b>' . e($p['name']) . '</b><span>' . e($p['role']) . '</span></div></div>'
+        . '<ul class="pcard__c"><li><a href="mailto:' . e($mail) . '">' . icon('mail') . e($mail) . '</a></li>'
+        . '<li><a href="tel:' . e($telLink) . '">' . icon('phone') . e($tel) . '</a></li></ul></div>';
+}
+
 function person_photo(?array $p): string
 {
     return ($p && !empty($p['photo']) && is_file(ROOT . '/' . ltrim($p['photo'], '/'))) ? url($p['photo']) : '';

@@ -72,7 +72,10 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
 <section class="section section--alt">
   <div class="wrap faqw">
     <div class="reveal"><p class="eyebrow">FAQ</p><h2 class="h2">Fragen zum Kurs</h2>
-      <div class="helpbox"><b>Noch Fragen?</b>Ruf uns an: <a href="tel:<?= e(site('phone_link')) ?>"><?= e(site('phone')) ?></a></div></div>
+      <?= person_card(course_contact($c), 'Deine Ansprechperson') ?>
+      <?php if (($pay = contact_by_role('Kosten')) && $pay['name'] !== (course_contact($c)['name'] ?? '')): ?>
+      <p class="pcard__more"><b>Kosten &amp; Abrechnung:</b> <?= e($pay['name']) ?> · <a href="mailto:<?= e($pay['email']) ?>"><?= e($pay['email']) ?></a></p>
+      <?php endif; ?></div>
     <div class="reveal"><?= faq_list($faq) ?></div>
   </div>
 </section>

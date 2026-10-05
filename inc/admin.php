@@ -391,7 +391,7 @@ function admin_course(): void
             $idx = $i;
         }
     }
-    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1', 'keywords' => ''];
+    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1', 'keywords' => '', 'contact' => ''];
     $k = $idx !== null ? array_merge($empty, $c['courses'][$idx]) : $empty;
     $err = '';
 
@@ -438,6 +438,11 @@ function admin_course(): void
     echo field_input('text', 'Beschreibung', $k['text'], 'Absätze durch eine Leerzeile trennen. Kurz halten – 2 bis 3 kurze Absätze.', true);
     echo field_input('learn', 'Inhalte', $k['learn'], 'Ein Punkt pro Zeile.', true);
     echo field_input('facts', 'Eckdaten', $k['facts'], 'Eine Zeile pro Angabe: „Dauer: 9 UE“', true);
+    $opts = '<option value="">Standard (Erste Hilfe: Jan Wille, Brandschutz: Matthias True)</option>';
+    foreach ($c['contacts'] ?? [] as $pp) {
+        $opts .= '<option value="' . e($pp['name']) . '"' . ($k['contact'] === $pp['name'] ? ' selected' : '') . '>' . e($pp['name'] . ' – ' . $pp['role']) . '</option>';
+    }
+    echo '<label class="field"><span>Ansprechperson bei „Fragen zum Kurs“</span><select name="contact">' . $opts . '</select></label>';
     echo field_input('keywords', 'Suchbegriffe für den Kursfinder', $k['keywords'], 'Mit Komma trennen: Wörter, mit denen Leute nach diesem Kurs fragen (z. B. „Führerschein, Fahrschule“).', true);
     echo '<div class="form__checks">';
     echo '<label class="check"><input type="checkbox" name="active" value="1"' . (!empty($k['active']) ? ' checked' : '') . '><span>Auf der Website anzeigen</span></label>';
