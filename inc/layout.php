@@ -438,7 +438,16 @@ function photo(string $slot, string $alt, string $class = '', bool $lazy = true)
     if (!$src) {
         return '';
     }
-    return '<img class="' . e($class) . '" src="' . e($src) . '" alt="' . e($alt) . '"' . ($lazy ? ' loading="lazy"' : ' fetchpriority="high"') . ' decoding="async">';
+    return '<img class="' . e($class) . '" src="' . e($src) . '" alt="' . e($alt) . '"' . ($lazy ? ' loading="lazy"' : ' fetchpriority="high"') . ' decoding="async">'
+        . (is_ai_slot($slot) ? '<span class="ki-tag" title="Dieses Bild wurde mit künstlicher Intelligenz erzeugt.">KI-generiert</span>' : '');
+}
+
+/** Bild-Slots mit KI-erzeugten Fotos (Admin → Allgemein, „KI-Bilder“) – werden sichtbar gekennzeichnet. */
+function is_ai_slot(string $slot): bool
+{
+    static $slots = null;
+    $slots ??= array_filter(array_map('trim', preg_split('/[,\s]+/', (string) site('ki_bilder'))));
+    return in_array($slot, $slots, true);
 }
 
 /** Kursbild: Foto, sonst gezeichnetes Motiv. */

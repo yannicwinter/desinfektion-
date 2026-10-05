@@ -79,6 +79,7 @@ const SITE_LABELS = [
     'instagram_feed_url' => 'Instagram-Feed-Link von behold.so (JSON-Feed-URL, z. B. https://feeds.behold.so/…)',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
+    'ki_bilder' => 'KI-Bilder: Bild-Plätze mit KI-erzeugtem Foto, durch Komma getrennt (z. B. hero, erste-hilfe) – werden mit „KI-generiert“ gekennzeichnet. Bei neuem Foto anpassen.',
 ];
 
 function admin_dispatch(string $section): void
