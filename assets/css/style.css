@@ -179,7 +179,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 /* ---------- Terminsuche ---------- */
 .hsearch{position:relative;z-index:5;margin-top:-58px}
 .sbox{background:#fff;border-radius:var(--r-lg);box-shadow:var(--sh3);border:1px solid rgba(0,0,0,.04);padding:10px}
-.sbar{display:grid;grid-template-columns:1.45fr 1fr 1fr auto;align-items:center}
+.sbar{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr) minmax(0,1fr) auto;align-items:center}
 .sbar__f{position:relative;display:flex;align-items:center;gap:14px;padding:8px 20px;border-right:1px solid var(--line);cursor:pointer;border-radius:var(--r);transition:background .15s}
 .sbar__f:nth-child(3){border-right:0}
 .sbar__f>.i{width:22px;height:22px;color:var(--red)}
@@ -623,6 +623,15 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
    Tablet & Handy
    ========================================================== */
 @media (max-width:1000px){
+  .sbar{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .sbar__f:nth-child(3){border-right:0}
+  .sbar__go{grid-column:1/-1;margin:6px 4px 2px}
+  .hero--photo .hero__blur{inset:-60px;filter:blur(36px) brightness(.42) saturate(1.15)}
+  .hero--photo .hero__img{-webkit-mask-image:linear-gradient(180deg,#000 62%,rgba(0,0,0,.55) 82%,transparent 100%);mask-image:linear-gradient(180deg,#000 62%,rgba(0,0,0,.55) 82%,transparent 100%)}
+  .hero--photo .hero__in{margin-top:-34px;text-align:left}
+  .hero--photo .crumbs,.hero--photo .hero__acts{justify-content:flex-start}
+  .hero--photo .hero__lead{margin:0;color:rgba(255,255,255,.9)}
+  .hero--photo h1{text-shadow:0 2px 18px rgba(0,0,0,.45)}
   .intro{grid-template-columns:1fr}
   .know{grid-template-columns:1fr 1fr}
   :root{--header:64px}
@@ -684,14 +693,9 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .know__ic{grid-row:span 2;margin:0}
   .intro__box{padding:24px 22px}
   body{font-size:15.5px}
-  .hero--full{min-height:0;display:block}
-  .hero--full .hero__img{position:relative;inset:auto;display:block;height:auto;aspect-ratio:2/1;object-position:50% 50%}
-  .hero--full .badge{display:none}
-  .hero--full::before{bottom:auto;height:50vw;background:linear-gradient(180deg,rgba(20,22,27,0) 70%,var(--dark) 100%)}
-  .hero--full .hero__in{padding-top:8px}
   .hero--photo .badge{display:none}
-  .hero--photo .hero__blur{display:none}
   .hero--photo .hero__media{max-height:none}
+  .hero--photo .ki-tag{top:8px;right:8px;font-size:10.5px;padding:3px 7px}
   .hero--photo .hero__in{padding:28px var(--gutter) 116px}
   .hero__in{padding:44px var(--gutter) 116px}
   .hero--page .hero__in{padding-bottom:100px}
