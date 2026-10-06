@@ -6,7 +6,7 @@ $P = fn($k) => page('unternehmen', $k);
 
 // Leistungen aus den Kursdaten (Titel/Teaser im Admin gepflegt)
 $cards = [];
-foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
+foreach (['erste-hilfe-im-betrieb' => '', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
     if ($c = course($slug)) {
         $img = photo('kurs-' . $slug, $c['title']) ?: illus_course($c);
         $cards[] = topic_card($img, $label ?: $c['title'], $c['teaser'], 'Mehr erfahren', course_url($c));
@@ -106,7 +106,7 @@ page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit'
         <div><b><?= e($person['name']) ?></b><span><?= e($person['role']) ?></span><a href="mailto:<?= e($person['email'] ?: site('email')) ?>"><?= e($person['email'] ?: site('email')) ?></a></div></div>
       <?php endif; ?>
     </div>
-    <div class="panel reveal"><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'erste-hilfe-ausbildung')); ?></div>
+    <div class="panel reveal"><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'erste-hilfe-im-betrieb')); ?></div>
   </div>
 </section>
 <?php layout_end(); ?>

@@ -20,7 +20,7 @@ if ($slug !== '') {
 } else {
     $list = $bereich ? array_values(array_filter($all, fn($c) => $c['category'] === $bereich)) : $all;
     $items = hiorg_dates_all($list);
-    $failed = !$items && !array_filter(array_map(fn($c) => is_file(hiorg_cache_file((string) $c['hiorg_id'])), $list));
+    $failed = !$items && !array_filter(array_map(fn($c) => is_file(hiorg_cache_file(hiorg_first_id($c))), $list));
     $title = $P('title');
     $seoTitle = $P('seo_title');
     $seoDesc = $P('seo_description');

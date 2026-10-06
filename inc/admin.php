@@ -422,7 +422,7 @@ function admin_course(): void
             $k[$f] = trim(str_replace("\r\n", "\n", (string) ($_POST[$f] ?? '')));
         }
         $k['slug'] = trim((string) preg_replace('/[^a-z0-9]+/', '-', strtolower(strtr($k['slug'] ?: $k['title'], ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'Ä' => 'ae', 'Ö' => 'oe', 'Ü' => 'ue', 'ø' => 'o', 'Ø' => 'o'])), '-'));
-        $k['hiorg_id'] = preg_replace('/\D/', '', $k['hiorg_id']);
+        $k['hiorg_id'] = implode(', ', array_map(fn($x) => $x[1] !== '' ? $x[0] . ':' . $x[1] : $x[0], hiorg_ids($k)));
         $k['category'] = $k['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe';
         foreach ($c['courses'] as $i => $o) {
             if ($o['slug'] === $k['slug'] && $i !== $idx) {
@@ -453,7 +453,7 @@ function admin_course(): void
     echo field_input('slug', 'Kürzel für die Web-Adresse', $k['slug'], 'Wird aus dem Titel erzeugt, wenn leer. Z. B. /termine/erste-hilfe-am-kind');
     echo '<label class="field"><span>Bereich</span><select name="category"><option value="erste-hilfe"' . ($k['category'] === 'erste-hilfe' ? ' selected' : '') . '>Erste Hilfe</option><option value="brandschutz"' . ($k['category'] === 'brandschutz' ? ' selected' : '') . '>Brandschutz</option></select></label>';
     echo field_input('group', 'Gruppe', $k['group'], 'Zwischenüberschrift auf der Bereichsseite, z. B. „Familie & Kinder“.');
-    echo field_input('hiorg_id', 'HiOrg-Kursliste (id)', $k['hiorg_id'], 'Die Zahl hinter „id=“ im HiOrg-Link. Leer = nur Anfrage, keine Online-Termine.');
+    echo field_input('hiorg_id', 'HiOrg-Kursliste (id)', $k['hiorg_id'], 'Die Zahl hinter „id=“ im HiOrg-Link. Mehrere Listen mit Bezeichnung möglich, z. B. „3871:Ausbildung, 3872:Fortbildung“. Leer = nur Anfrage, keine Online-Termine.');
     echo field_input('price', 'Preis (Anzeige)', $k['price'], 'Z. B. „55 €“. Leer lassen, wenn variabel.');
     echo '</div>';
     echo field_input('teaser', 'Kurzbeschreibung (eine Zeile)', $k['teaser'], 'Erscheint auf den Kurskarten und oben auf der Kursseite.');
@@ -622,14 +622,10 @@ function admin_dates(): void
     admin_start('Termine prüfen', 'termine');
     echo '<form method="post" class="btn-row">' . csrf_field() . '<button class="btn btn--dark btn--sm">Zwischenspeicher leeren</button></form>';
     echo '<p class="muted small">Termine werden alle ' . e(site('hiorg_cache_minutes') ?: '30') . ' Minuten von HiOrg-Server abgeholt. Hier sehen Sie, was die Website aktuell erkennt.</p>';
-    $ids = [];
-    foreach (bookable_courses() as $c) {
-        $ids[$c['hiorg_id']][] = $c['title'];
-    }
     foreach (bookable_courses() as $c) {
         $res = hiorg_dates($c);
-        $dup = count($ids[$c['hiorg_id']]) > 1 ? '<div class="notice notice--err small">Achtung: HiOrg-id ' . e($c['hiorg_id']) . ' ist mehreren Kursen zugeordnet (' . e(implode(', ', $ids[$c['hiorg_id']])) . ').</div>' : '';
-        $file = hiorg_cache_file($c['hiorg_id']);
+        $dup = '';
+        $file = hiorg_cache_file(hiorg_first_id($c));
         $age = is_file($file) ? 'Stand: ' . date('d.m.Y H:i', filemtime($file)) : 'nicht abgerufen';
         echo '<details class="panel admin-diag"' . ($dup ? ' open' : '') . '><summary><strong>' . e($c['title']) . '</strong> <span class="pill">' . ($res['ok'] ? count($res['items']) . ' Termine' : 'nicht erreichbar') . '</span> <span class="muted small">' . e($age) . '</span></summary>' . $dup;
         echo '<p class="small"><a href="' . e($res['source']) . '" target="_blank" rel="noopener">' . e($res['source']) . '</a> · <a href="' . url('termine/' . $c['slug']) . '" target="_blank">Seite ansehen</a></p>';

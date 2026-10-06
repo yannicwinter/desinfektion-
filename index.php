@@ -25,7 +25,9 @@ header('Referrer-Policy: strict-origin-when-cross-origin');
 $legacy = [
     'index' => '/',
     'kurs-erste-hilfe' => 'erste-hilfe/erste-hilfe-ausbildung',
-    'kurs-ersthelfer-betrieb' => 'erste-hilfe/erste-hilfe-ausbildung',
+    'kurs-ersthelfer-betrieb' => 'erste-hilfe/erste-hilfe-im-betrieb',
+    'erste-hilfe/erste-hilfe-fortbildung' => 'erste-hilfe/erste-hilfe-im-betrieb',
+    'termine/erste-hilfe-fortbildung' => 'termine/erste-hilfe-im-betrieb',
     'kurs-erste-hilfe-kind' => 'erste-hilfe/erste-hilfe-am-kind',
     'kurs-brandschutzhelfer' => 'brandschutz/brandschutzhelfer',
     'unternehmen' => 'arbeitssicherheit',

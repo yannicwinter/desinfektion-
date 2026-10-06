@@ -110,34 +110,88 @@ function hiorg_fgc(array $ids): array
 }
 
 /**
+ * HiOrg-Listen eines Kurses. Feld „hiorg_id“: eine id („3871“) oder mehrere mit Bezeichnung,
+ * z. B. „3871:Ausbildung, 3872:Fortbildung“ (Termine werden zusammengeführt und markiert).
+ * @return array<int, array{0:string, 1:string}> [[id, Bezeichnung], …]
+ */
+function hiorg_ids(array $course): array
+{
+    $out = [];
+    foreach (preg_split('/[,;]+/', (string) ($course['hiorg_id'] ?? '')) as $part) {
+        [$id, $label] = array_pad(array_map('trim', explode(':', $part, 2)), 2, '');
+        $id = preg_replace('/\D/', '', $id);
+        if ($id !== '') {
+            $out[] = [$id, $label];
+        }
+    }
+    return $out;
+}
+
+/** Erste HiOrg-id eines Kurses (für Preis, Cache-Prüfung). */
+function hiorg_first_id(array $course): string
+{
+    return hiorg_ids($course)[0][0] ?? '';
+}
+
+/** Termine einer HiOrg-Liste für einen Kurs (mit Bezeichnung „variant“ bei mehreren Listen). */
+function hiorg_items(array $course, string $id, string $label, string $html): array
+{
+    $sub = $course;
+    $sub['hiorg_id'] = $id;
+    $items = hiorg_parse($html, $sub);
+    foreach ($items as &$it) {
+        $it['course'] = $course; // Buchung läuft über die Kursseite
+        $it['variant'] = $label;
+    }
+    unset($it);
+    return $items;
+}
+
+/**
  * Termine eines Kurses (sortiert, nur zukünftige).
  * @return array{ok:bool, items:array, source:string}
  */
 function hiorg_dates(array $course, bool $force = false): array
 {
-    $id = trim((string) ($course['hiorg_id'] ?? ''));
-    if ($id === '') {
+    $ids = hiorg_ids($course);
+    if (!$ids) {
         return ['ok' => false, 'items' => [], 'source' => ''];
     }
-    $html = hiorg_fetch_many([$id], $force)[$id];
-    return ['ok' => $html !== '', 'items' => hiorg_parse($html, $course), 'source' => hiorg_list_url($id)];
+    $htmls = hiorg_fetch_many(array_column($ids, 0), $force);
+    $items = [];
+    $ok = false;
+    foreach ($ids as [$id, $label]) {
+        $ok = $ok || ($htmls[$id] ?? '') !== '';
+        array_push($items, ...hiorg_items($course, $id, count($ids) > 1 ? $label : '', $htmls[$id] ?? ''));
+    }
+    usort($items, fn($a, $b) => $a['ts'] <=> $b['ts']);
+    return ['ok' => $ok, 'items' => $items, 'source' => hiorg_list_url($ids[0][0])];
 }
 
 /** Termine mehrerer Kurse, zusammengeführt und nach Datum sortiert. */
 function hiorg_dates_all(array $courses): array
 {
-    $htmls = hiorg_fetch_many(array_map(fn($c) => trim((string) $c['hiorg_id']), $courses));
+    $all = [];
+    foreach ($courses as $c) {
+        foreach (hiorg_ids($c) as [$id]) {
+            $all[] = $id;
+        }
+    }
+    $htmls = hiorg_fetch_many(array_values(array_unique($all)));
     $items = [];
     $seen = [];
     foreach ($courses as $c) {
-        $id = trim((string) $c['hiorg_id']);
-        // Gleiche HiOrg-Liste bei zwei Kursen nur einmal anzeigen
-        if (isset($seen[$id])) {
-            continue;
-        }
-        $seen[$id] = true;
-        foreach (hiorg_parse($htmls[$id] ?? '', $c) as $it) {
-            $items[] = $it;
+        $ids = hiorg_ids($c);
+        foreach ($ids as [$id, $label]) {
+            foreach (hiorg_items($c, $id, count($ids) > 1 ? $label : '', $htmls[$id] ?? '') as $it) {
+                // Gleicher Termin bei zwei Kursen (gleiche HiOrg-Liste) nur einmal anzeigen
+                $key = $it['kid'] ?: $id . '|' . $it['ts'];
+                if (isset($seen[$key])) {
+                    continue;
+                }
+                $seen[$key] = true;
+                $items[] = $it;
+            }
         }
     }
     usort($items, fn($a, $b) => $a['ts'] <=> $b['ts']);
@@ -551,7 +605,7 @@ function render_dates(array $items, array $opt = []): string
 <li class="date<?= $full ? ' date--full' : '' ?>" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
   <time class="date__cal" datetime="<?= $d->format('Y-m-d') ?>"><span><?= de_date($d, 'MMM') ?></span><strong><?= $d->format('j') ?></strong></time>
   <div class="date__info">
-    <span class="date__title"><?= $showCourse ? e($c['title'] ?? '') : e($when) ?></span>
+    <span class="date__title"><?= $showCourse ? e($c['title'] ?? '') : e($when) ?><?php if (!empty($it['variant'])): ?> <span class="date__var"><?= e($it['variant']) ?></span><?php endif; ?></span>
     <span class="date__meta">
       <span><?= icon('clock') ?><?= e(trim(($showCourse ? $when : '') . ($showCourse && $time ? ' · ' : '') . $time)) ?></span>
       <?php if ($place): ?><span title="<?= e($it['details']) ?>"><?= icon('pin') ?><?= e($place) ?></span><?php endif; ?>

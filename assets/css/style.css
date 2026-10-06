@@ -537,6 +537,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .tab{display:inline-flex;align-items:center;min-height:40px;padding:0 16px;border:1px solid var(--line-2);border-radius:var(--r);background:#fff;font-size:14.5px;font-weight:500;color:var(--text);white-space:nowrap;transition:border-color .2s,background .2s,color .2s}
 .tab:hover{border-color:var(--red);color:var(--red)}
 .tab[aria-current="page"]{background:var(--red-t);border-color:var(--red);color:var(--red);font-weight:600}
+.date__var{display:inline-block;margin-left:8px;padding:2px 8px;border-radius:4px;background:var(--red-t);color:var(--red);font-size:12px;font-weight:600;vertical-align:2px}
 .dates-tools{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}
 .dates-tools .field--inline{flex:0 1 auto}
 .dates-tools .nsel{min-width:170px}

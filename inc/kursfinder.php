@@ -42,6 +42,7 @@ function kursfinder_api(string $slug): void
             'few' => $it['status'] === 'few',
             'price' => $it['price'],
             'book' => url('termine/' . $c['slug'] . '/anmeldung/' . $it['kid']),
+            'variant' => $it['variant'] ?? '',
         ];
     }
     echo json_encode([
@@ -66,7 +67,7 @@ function kursfinder_config(): array
 
     // Suchbegriffe für die Freitext-Eingabe (Wortanfänge, klein geschrieben)
     $keywords = [
-        'erste-hilfe-fortbildung' => ['fortbildung', 'auffrisch', 'wiederhol', 'refresh', 'verlänger'],
+        'erste-hilfe-im-betrieb' => ['fortbildung', 'auffrisch', 'wiederhol', 'refresh', 'verlänger', 'betrieb', 'firma', 'ersthelfer', 'berufsgenossenschaft', 'unfallkasse'],
         'erste-hilfe-am-welpen' => ['welpe'],
         'erste-hilfe-am-hund' => ['hund', 'tier'],
         'erste-hilfe-am-kind' => ['kind', 'baby', 'säugling', 'eltern', 'mama', 'papa', 'kita', 'erzieh', 'tagesmutter', 'babysitt', 'enkel', 'oma', 'opa'],
