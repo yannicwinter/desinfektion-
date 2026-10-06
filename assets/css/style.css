@@ -110,7 +110,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .nav a{position:relative;display:block;padding:30px 0;font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;transition:color .2s}
 .nav a:hover{color:var(--ink)}
 .nav a[aria-current="page"]{color:var(--ink)}
-.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:21px;height:2px;border-radius:2px;background:var(--red)}
+.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:25px;height:2px;border-radius:2px;background:var(--red)}
 .header__cta{flex-shrink:0}
 @media (max-width:1260px){
   .header__in{gap:20px}

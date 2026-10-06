@@ -67,26 +67,8 @@ layout_start([
 </section>
 <?php endif; ?>
 
-<section class="section section--alt">
-  <div class="wrap split">
-    <div class="split__pic reveal">
-      <?= photo('home', 'Arbeitssicherheit im Betrieb') ?: illus_safety() ?>
-      <?php if ($P('stat_value')): ?><div class="stat"><b><?= e($P('stat_value')) ?></b><span><?= e($P('stat_text')) ?></span></div><?php endif; ?>
-    </div>
-    <div class="reveal">
-      <p class="eyebrow"><?= e($P('firma_eyebrow')) ?></p>
-      <h2 class="h2"><?= e($P('firma_title')) ?></h2>
-      <p class="lead"><?= e($P('firma_text')) ?></p>
-      <ul class="checks">
-        <?php foreach (lines($P('firma_list')) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?>
-      </ul>
-      <a class="btn btn--red" href="<?= url('arbeitssicherheit') ?>">Leistungen für Unternehmen <?= icon('arrow') ?></a>
-    </div>
-  </div>
-</section>
-
 <?php if ($faq): ?>
-<section class="section">
+<section class="section section--alt">
   <div class="wrap faqw">
     <div class="reveal">
       <p class="eyebrow">FAQ</p>
@@ -100,7 +82,7 @@ layout_start([
 <?php endif; ?>
 
 <?php $insta = instagram_posts(6); if ($insta || site('instagram')): ?>
-<section class="section section--alt">
+<section class="section">
   <div class="wrap">
     <?= shead('Instagram', $P('insta_title'), $P('insta_lead'), '@drk_kreisverband_verden', site('instagram')) ?>
     <ul class="insta reveal">
