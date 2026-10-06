@@ -249,6 +249,9 @@ function image_slots(): array
     foreach (content()['courses'] ?? [] as $c) {
         $slots['kurs-' . $c['slug']] = 'Kurs: ' . $c['title'];
     }
+    for ($i = 1; $i <= 6; $i++) {
+        $slots['insta-' . $i] = 'Instagram ' . $i . ' (nur ohne Zugangsschlüssel)';
+    }
     return $slots;
 }
 

@@ -40,11 +40,20 @@ Die HiOrg-Nummer je Kurs wird im Admin unter **Kurse** gepflegt.
 ## Passwort vergessen
 Per FTP `data/admin.json` löschen und `/admin` neu einrichten.
 
-## Instagram-Feed (Behold.so)
-1. Auf behold.so kostenlos registrieren und das Instagram-Konto verbinden.
-2. Einen Feed vom Typ **JSON** anlegen und den Feed-Link kopieren (`https://feeds.behold.so/…`).
-3. Im Admin unter **Allgemein → Instagram-Feed-Link** einfügen.
-Die Beiträge werden stündlich geladen und die Bilder lokal gespeichert. Ohne Link erscheinen Platzhalter.
+## Instagram-Feed (offizielle Schnittstelle, ohne Fremddienst)
+Einmalig, ca. 20–30 Minuten:
+1. Instagram-App → Profil → Einstellungen → **Kontotyp und Tools** → auf **professionelles Konto** (Business oder Creator) umstellen.
+2. Auf **developers.facebook.com** mit einem Facebook-Konto anmelden → **Meine Apps → App erstellen** → Anwendungsfall
+   **„Nachrichten und Inhalte auf Instagram verwalten“** (bzw. Typ „Business“) wählen, Name z. B. „DRK Website“.
+3. In der App links **Instagram → API-Einrichtung mit Instagram-Login** öffnen.
+4. Unter **„Zugriffsschlüssel generieren“** auf **Konto hinzufügen** klicken und sich mit den Instagram-Zugangsdaten
+   von @drk_kreisverband_verden anmelden. Danach **Schlüssel generieren** → Token kopieren.
+5. Im Website-Admin unter **Allgemein → Zugangsschlüssel (Token) von Meta** einfügen und speichern.
+   Die Website prüft den Schlüssel sofort und zeigt „Verbunden mit @…“.
+
+Danach läuft alles automatisch: Beiträge werden alle 3 Std. abgerufen, Bilder lokal gespeichert, der Schlüssel
+wird alle 7 Tage verlängert (sonst liefe er nach 60 Tagen ab). Besucher laden nichts von Instagram.
+Ohne Schlüssel erscheinen die Bilder „Instagram 1–6“ (Admin → Bilder, Links unter Allgemein), sonst Platzhalter.
 
 ## Kursfinder
 Der „Kurs finden“-Knopf (unten rechts) fragt nach Zweck, Ort und Tag und zeigt die nächsten freien

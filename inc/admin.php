@@ -76,7 +76,7 @@ const SITE_LABELS = [
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'topbar' => 'Text in der dunklen Leiste ganz oben',
     'instagram' => 'Instagram-Link',
-    'instagram_feed_url' => 'Instagram-Feed-Link von behold.so (JSON-Feed-URL, z. B. https://feeds.behold.so/…)',
+    'instagram_links' => 'Instagram ohne Schlüssel: Links zu den Beiträgen der Bilder „Instagram 1–6“ (unter „Bilder“), einer pro Zeile',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
     'ki_bilder' => 'KI-Bilder: Bild-Plätze mit KI-erzeugtem Foto, durch Komma getrennt (z. B. hero, erste-hilfe) – werden mit „KI-generiert“ gekennzeichnet. Bei neuem Foto anpassen.',
@@ -301,7 +301,17 @@ function admin_general(): void
             $c['site'][$k] = trim((string) ($_POST['site'][$k] ?? ''));
         }
         $c['site']['url'] = rtrim($c['site']['url'], '/');
-        save_content($c) ? flash('Gespeichert.') : flash('Speichern fehlgeschlagen – Schreibrechte für data/ prüfen.', 'err');
+        $igErr = '';
+        if (isset($_POST['ig_token']) && trim((string) $_POST['ig_token']) !== '') {
+            $igErr = instagram_set_token((string) $_POST['ig_token']);
+        } elseif (!empty($_POST['ig_remove'])) {
+            instagram_set_token('');
+        }
+        if ($igErr) {
+            flash($igErr, 'err');
+        } else {
+            save_content($c) ? flash('Gespeichert.') : flash('Speichern fehlgeschlagen – Schreibrechte für data/ prüfen.', 'err');
+        }
         redirect('admin/allgemein');
     }
     admin_start('Allgemein', 'allgemein');
@@ -309,7 +319,19 @@ function admin_general(): void
     foreach (SITE_LABELS as $k => $l) {
         echo field_input("site[$k]", $l, (string) ($c['site'][$k] ?? ''));
     }
-    echo '</div><button class="btn btn--red">Speichern</button></form>';
+    echo '</div>';
+    $ig = instagram_state();
+    echo '<h2 class="h5" style="margin-top:28px">Instagram-Feed (offizielle Schnittstelle)</h2>';
+    if (!empty($ig['token'])) {
+        echo '<p class="notice' . (!empty($ig['error']) ? ' notice--err' : '') . '">Verbunden mit <b>@' . e((string) ($ig['username'] ?? '')) . '</b> · Schlüssel gültig bis ' . date('d.m.Y', (int) ($ig['expires'] ?? 0)) . ' (wird automatisch verlängert)'
+            . (!empty($ig['fetched']) ? ' · zuletzt abgerufen ' . date('d.m.Y H:i', (int) $ig['fetched']) : '')
+            . (!empty($ig['error']) ? '<br>' . e((string) $ig['error']) : '') . '</p>';
+        echo '<label class="check"><input type="checkbox" name="ig_remove" value="1"><span>Verbindung trennen</span></label>';
+    } else {
+        echo '<p>Noch nicht verbunden. Ohne Schlüssel erscheinen die Bilder „Instagram 1–6“ (unter „Bilder“), sonst Platzhalter.</p>';
+    }
+    echo '<label class="field"><span>' . (!empty($ig['token']) ? 'Neuen Zugangsschlüssel eintragen (optional)' : 'Zugangsschlüssel (Token) von Meta') . '</span><input name="ig_token" type="password" autocomplete="off" value=""><small>Wird sicher in data/instagram.json gespeichert und nie angezeigt. Nicht das Instagram-Passwort eintragen!</small></label>';
+    echo '<button class="btn btn--red">Speichern</button></form>';
     admin_end();
 }
 

@@ -7,4 +7,5 @@ data/backups/*
 data/content.json.tmp
 .DS_Store
 data/secret.key
+data/instagram.json
 dist/

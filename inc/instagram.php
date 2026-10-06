@@ -1,19 +1,84 @@
 <?php
 /**
- * Instagram-Feed über Behold.so: Behold verbindet das Instagram-Konto und liefert einen
- * JSON-Feed-Link (kein Token, keine Meta-App nötig). Die Website lädt den Feed stündlich
- * serverseitig und speichert die Bilder lokal in uploads/instagram/ – Besucher laden nichts
- * von Instagram oder Behold (DSGVO). Link im Admin unter „Allgemein“ eintragen.
+ * Instagram-Feed ohne Fremddienst:
+ * 1. Offizielle Instagram-Schnittstelle (Instagram API mit Instagram-Login). Der Zugangsschlüssel (Token)
+ *    liegt in data/instagram.json (gesperrt), wird im Admin unter „Allgemein“ eingetragen und alle
+ *    7 Tage automatisch verlängert (gilt sonst 60 Tage). Abruf serverseitig alle 3 Std., Bilder lokal
+ *    in uploads/instagram/ – Besucher laden nichts von Instagram (keine Cookies, DSGVO).
+ * 2. Rückfall: im Admin hochgeladene Bilder „Instagram 1–6“ + Links (site.instagram_links).
+ * 3. Sonst Platzhalter-Kacheln (templates/home.php).
  */
 declare(strict_types=1);
 
 const IG_DIR = UPLOAD_DIR . '/instagram'; // öffentlich erreichbar (Bilder); feed.json ist per .htaccess gesperrt
+const IG_TOKEN_FILE = DATA_DIR . '/instagram.json';
+const IG_API = 'https://graph.instagram.com';
 
 /** @return array<int, array{img:string, link:string, caption:string, date:string}> */
 function instagram_posts(int $limit = 6): array
 {
-    $feedUrl = trim(site('instagram_feed_url'));
-    if ($feedUrl === '') {
+    $posts = instagram_api_posts();
+    return array_slice($posts ?: instagram_manual_posts(), 0, $limit);
+}
+
+/** Gespeicherter Token-Stand: token, refreshed (Zeitpunkt), expires, error, fetched. */
+function instagram_state(): array
+{
+    return is_file(IG_TOKEN_FILE) ? (json_decode((string) file_get_contents(IG_TOKEN_FILE), true) ?: []) : [];
+}
+
+function instagram_save_state(array $s): void
+{
+    file_put_contents(IG_TOKEN_FILE, json_encode($s, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    @chmod(IG_TOKEN_FILE, 0600);
+}
+
+/** Neuen Token aus dem Admin übernehmen und sofort testen. Liefert Fehlertext oder ''. */
+function instagram_set_token(string $token): string
+{
+    $token = trim($token);
+    if ($token === '') {
+        instagram_save_state([]);
+        @unlink(IG_DIR . '/feed.json');
+        return '';
+    }
+    $me = json_decode(instagram_get(IG_API . '/me?fields=user_id,username&access_token=' . rawurlencode($token)), true);
+    if (empty($me['username'])) {
+        return 'Der Schlüssel wurde nicht akzeptiert: ' . ($me['error']['message'] ?? 'keine Antwort von Instagram') . '.';
+    }
+    instagram_save_state(['token' => $token, 'username' => $me['username'], 'refreshed' => time(), 'expires' => time() + 60 * 86400, 'error' => '']);
+    @unlink(IG_DIR . '/feed.json');
+    return '';
+}
+
+/** Token verlängern, wenn er älter als 7 Tage ist (Instagram erlaubt das ab 24 Std. Alter). */
+function instagram_token(): string
+{
+    $s = instagram_state();
+    $token = (string) ($s['token'] ?? '');
+    if ($token === '') {
+        return '';
+    }
+    if (($s['refreshed'] ?? 0) < time() - 7 * 86400) {
+        $r = json_decode(instagram_get(IG_API . '/refresh_access_token?grant_type=ig_refresh_token&access_token=' . rawurlencode($token)), true);
+        if (!empty($r['access_token'])) {
+            $s['token'] = $token = (string) $r['access_token'];
+            $s['expires'] = time() + (int) ($r['expires_in'] ?? 60 * 86400);
+            $s['error'] = '';
+        } else {
+            $s['error'] = 'Verlängerung fehlgeschlagen: ' . ($r['error']['message'] ?? 'keine Antwort');
+        }
+        // bei Fehler morgen erneut versuchen, sonst in 7 Tagen
+        $s['refreshed'] = $s['error'] ? time() - 6 * 86400 : time();
+        instagram_save_state($s);
+    }
+    return $token;
+}
+
+/** Beiträge über die offizielle Schnittstelle (3 Std. Cache, bei Fehlern alter Stand). */
+function instagram_api_posts(): array
+{
+    if (!is_file(IG_TOKEN_FILE)) {
         return [];
     }
     if (!is_dir(IG_DIR)) {
@@ -21,54 +86,64 @@ function instagram_posts(int $limit = 6): array
     }
     $cacheFile = IG_DIR . '/feed.json';
     $cached = is_file($cacheFile) ? (json_decode((string) file_get_contents($cacheFile), true) ?: []) : [];
-    if ($cached && filemtime($cacheFile) > time() - 3600) {
-        return array_slice($cached, 0, $limit);
+    if (is_file($cacheFile) && filemtime($cacheFile) > time() - 3 * 3600) {
+        return $cached;
     }
-
-    $items = [];
-    $json = json_decode(instagram_get($feedUrl), true);
-    foreach (($json['posts'] ?? (isset($json[0]) ? $json : [])) as $m) {
-        $items[] = [
-            'id' => (string) ($m['id'] ?? ''),
-            'src' => (string) ($m['sizes']['medium']['mediaUrl'] ?? $m['thumbnailUrl'] ?? $m['mediaUrl'] ?? ''),
-            'link' => (string) ($m['permalink'] ?? ''),
-            'caption' => (string) (($m['altText'] ?? '') ?: ($m['prunedCaption'] ?? $m['caption'] ?? '')),
-            'date' => (string) ($m['timestamp'] ?? ''),
-        ];
+    $token = instagram_token();
+    if ($token === '') {
+        return [];
     }
-    if (!$items) {
-        @touch($cacheFile); // Fehler: alten Stand behalten, in 1 Std. erneut versuchen
-        return array_slice($cached, 0, $limit);
+    $json = json_decode(instagram_get(IG_API . '/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&limit=12&access_token=' . rawurlencode($token)), true);
+    $s = instagram_state();
+    if (!isset($json['data'])) {
+        $s['error'] = 'Abruf fehlgeschlagen: ' . ($json['error']['message'] ?? 'keine Antwort von Instagram');
+        instagram_save_state($s);
+        @touch($cacheFile); // alten Stand behalten, in 3 Std. erneut versuchen
+        return $cached;
     }
 
     $posts = [];
-    foreach ($items as $m) {
-        $id = preg_replace('/[^A-Za-z0-9_-]/', '', $m['id']) ?: md5($m['src']);
-        if ($m['src'] === '') {
+    foreach ($json['data'] as $m) {
+        $src = (string) (($m['media_type'] ?? '') === 'VIDEO' ? ($m['thumbnail_url'] ?? '') : ($m['media_url'] ?? ''));
+        $id = preg_replace('/[^A-Za-z0-9_-]/', '', (string) ($m['id'] ?? '')) ?: md5($src);
+        if ($src === '') {
             continue;
         }
         $file = IG_DIR . '/' . $id . '.jpg';
-        if (!is_file($file) && !instagram_store_image($m['src'], $file)) {
+        if (!is_file($file) && !instagram_store_image($src, $file)) {
             continue;
         }
         $posts[] = [
             'img' => url('uploads/instagram/' . $id . '.jpg'),
-            'link' => $m['link'] ?: site('instagram'),
-            'caption' => mb_substr(trim(preg_replace('/\s+/u', ' ', $m['caption'])), 0, 140),
-            'date' => substr($m['date'], 0, 10),
+            'link' => (string) ($m['permalink'] ?? '') ?: site('instagram'),
+            'caption' => mb_substr(trim((string) preg_replace('/\s+/u', ' ', (string) ($m['caption'] ?? ''))), 0, 140),
+            'date' => substr((string) ($m['timestamp'] ?? ''), 0, 10),
         ];
-        if (count($posts) >= 12) {
-            break;
-        }
     }
     file_put_contents($cacheFile, json_encode($posts, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    $s['error'] = '';
+    $s['fetched'] = time();
+    instagram_save_state($s);
     $keep = array_map(fn($p) => basename($p['img']), $posts);
     foreach (glob(IG_DIR . '/*.jpg') ?: [] as $f) {
         if (!in_array(basename($f), $keep, true)) {
             @unlink($f);
         }
     }
-    return array_slice($posts, 0, $limit);
+    return $posts;
+}
+
+/** Rückfall: Bilder „Instagram 1–6“ aus dem Admin, Links zeilenweise in site.instagram_links. */
+function instagram_manual_posts(): array
+{
+    $links = lines(site('instagram_links'));
+    $posts = [];
+    for ($i = 1; $i <= 6; $i++) {
+        if ($img = slot_image('insta-' . $i)) {
+            $posts[] = ['img' => $img, 'link' => $links[$i - 1] ?? site('instagram'), 'caption' => '', 'date' => ''];
+        }
+    }
+    return $posts;
 }
 
 function instagram_get(string $url): string
@@ -77,9 +152,7 @@ function instagram_get(string $url): string
         return (string) @file_get_contents($url);
     }
     $ch = curl_init($url);
-    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_FOLLOWLOCATION => true,
-        // Referer = eigene Adresse, falls im Behold-Feed eine Domain-Sperre aktiv ist
-        CURLOPT_REFERER => abs_url('/'), CURLOPT_HTTPHEADER => ['Origin: ' . rtrim(abs_url('/'), '/')]]);
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_FOLLOWLOCATION => true]);
     $r = (string) curl_exec($ch);
     curl_close($ch);
     return $r;
