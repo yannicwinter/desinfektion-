@@ -147,7 +147,7 @@ function layout_end(): void
 </nav>
 <div class="more" id="mehr" role="dialog" aria-modal="true" aria-label="Weitere Seiten" hidden>
   <div class="more__backdrop" data-more-close></div>
-  <div class="more__sheet">
+  <div class="more__sheet" tabindex="-1">
     <span class="more__grip" aria-hidden="true"></span>
     <div class="more__head"><b>Mehr</b><button class="more__x" type="button" data-more-close aria-label="Schließen"><?= icon('plus') ?></button></div>
     <div class="more__tiles">

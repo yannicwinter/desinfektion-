@@ -152,8 +152,7 @@
       requestAnimationFrame(function () { more.classList.add('is-open'); });
       document.body.classList.add('more-open');
       moreBtn.setAttribute('aria-expanded', 'true');
-      var first = more.querySelector('a');
-      if (first) first.focus();
+      more.querySelector('.more__sheet').focus({ preventScroll: true });
     };
     var closeMore = function (e) {
       more.classList.remove('is-open');
@@ -279,3 +278,18 @@
   });
   window.niceSelectSync = function () { all.forEach(function (x) { x.sync(); }); };
 })();
+
+// Handy im Chrome-Modus „Desktop-Website“: Layout ist ~980 px breit, alles winzig. Tab-Leiste & Co. auf Handygröße zoomen.
+(function () {
+  var fit = function () {
+    var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;
+    var sw = Math.min(screen.width, screen.height);
+    var z = window.innerWidth / sw;
+    var on = touch && sw <= 540 && window.innerWidth <= 1000 && z > 1.3;
+    document.documentElement.classList.toggle('tb-zoom', on);
+    document.documentElement.style.setProperty('--tb-zoom', on ? Math.min(z, 2.6).toFixed(2) : '1');
+  };
+  fit();
+  window.addEventListener('resize', fit);
+})();
+

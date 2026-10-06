@@ -657,21 +657,23 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .kfacts>div:nth-child(-n+2){border-bottom:1px solid var(--line)}
   .signup__help{display:none}
   .signup__mhelp{display:block}
-  /* Tab-Leiste: schwebende Leiste, auf jedem Gerät gleich breit (max. 480 px) und mittig */
-  body{padding-bottom:calc(92px + env(safe-area-inset-bottom))}
+  /* Tab-Leiste: unten angedockt wie eine App-Leiste; Inhalt max. 560 px mittig, damit sie auf breiten Geräten nicht zerfließt */
+  body{padding-bottom:calc(78px + env(safe-area-inset-bottom))}
   .footer{padding-bottom:28px}
-  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);align-items:center;position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom));z-index:60;width:min(calc(100% - 20px),480px);transform:translateX(-50%);padding:6px;background:rgba(255,255,255,.94);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);border:1px solid rgba(20,22,27,.08);border-radius:20px;box-shadow:0 12px 32px -12px rgba(20,22,27,.35),0 2px 6px rgba(20,22,27,.06)}
-  .tabbar__item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:54px;border:0;background:none;padding:0;font:500 11px/1.2 inherit;font-family:inherit;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.005em}
-  .tabbar__item{min-width:0}
+  .tabbar{display:grid;grid-template-columns:repeat(5,1fr);align-items:end;position:fixed;left:0;right:0;bottom:0;z-index:60;padding:6px max(6px,calc((100% - 560px) / 2)) calc(6px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);-webkit-backdrop-filter:saturate(1.6) blur(16px);backdrop-filter:saturate(1.6) blur(16px);border-top:1px solid var(--line);box-shadow:0 -6px 20px -12px rgba(20,22,27,.18)}
+  .tabbar__item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-width:0;min-height:60px;border:0;background:none;padding:0;font-family:inherit;font-size:12px;font-weight:500;line-height:1.2;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
   .tabbar__item>span:last-child{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .tabbar__icon{display:grid;place-items:center;width:46px;height:30px;border-radius:12px;transition:background .2s,color .2s}
-  .tabbar__icon .i{width:22px;height:22px}
+  .tabbar__icon{display:grid;place-items:center;width:52px;height:32px;border-radius:12px;transition:background .2s,color .2s}
+  .tabbar__icon .i{width:24px;height:24px}
   .tabbar__item[aria-current="page"]{color:var(--red);font-weight:600}
   .tabbar__item[aria-current="page"] .tabbar__icon{background:var(--red-t)}
   .tabbar__item--main{color:var(--ink);font-weight:600}
-  .tabbar__item--main .tabbar__icon{width:48px;height:36px;border-radius:12px;background:var(--red);color:#fff;box-shadow:0 8px 18px -8px rgba(230,0,5,.7)}
+  .tabbar__item--main .tabbar__icon{width:56px;height:56px;margin-top:-24px;border-radius:16px;background:var(--red);color:#fff;box-shadow:0 10px 22px -8px rgba(230,0,5,.6),0 0 0 4px #fff}
+  .tabbar__item--main .tabbar__icon .i{width:26px;height:26px}
   .tabbar__item--main[aria-current="page"]{color:var(--red)}
   .tabbar__item--main[aria-current="page"] .tabbar__icon{background:var(--red-d)}
+  /* Chrome „Desktop-Website“ auf dem Handy: Leiste wieder auf Handygröße hochskalieren (main.js setzt --tb-zoom) */
+  .tb-zoom .tabbar,.tb-zoom .more__sheet,.tb-zoom .kf-launch{zoom:var(--tb-zoom,1)}
   /* „Mehr“: Blatt von unten, Kacheln */
   .more{display:block;position:fixed;inset:0;z-index:70}
   .more[hidden]{display:none!important}
@@ -679,6 +681,8 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .more__sheet{position:absolute;left:50%;bottom:0;width:min(100%,560px);display:flex;flex-direction:column;gap:14px;padding:10px 16px calc(18px + env(safe-area-inset-bottom));background:#fff;border-radius:20px 20px 0 0;transform:translate(-50%,100%);transition:transform .28s var(--ease)}
   .more.is-open .more__backdrop{opacity:1}
   .more.is-open .more__sheet{transform:translate(-50%,0)}
+  .more__sheet:focus{outline:none}
+  .more__tile:focus:not(:focus-visible){outline:none}
   .more__grip{align-self:center;width:40px;height:4px;border-radius:4px;background:#D6D8DC}
   .more__head{display:flex;align-items:center;justify-content:space-between}
   .more__head b{font-size:18px;color:var(--ink)}
@@ -696,7 +700,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .more__insta{width:48px;padding:0;justify-content:center}
   body.more-open{overflow:hidden}
   /* Kursfinder */
-  .kf-launch{right:14px;bottom:calc(96px + env(safe-area-inset-bottom));height:48px;padding:0 16px 0 14px;font-size:14.5px}
+  .kf-launch{right:14px;bottom:calc(88px + env(safe-area-inset-bottom));height:48px;padding:0 16px 0 14px;font-size:14.5px}
   .kf{right:0;left:0;bottom:0;width:auto;height:min(88dvh,720px);border-radius:12px 12px 0 0;transform-origin:bottom center;padding-bottom:env(safe-area-inset-bottom)}
   .kf-open .tabbar{visibility:hidden}
 }
@@ -771,9 +775,8 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .footer__bottom{flex-direction:column;gap:8px}
 }
 @media (max-width:480px){
-  .tabbar{width:calc(100% - 16px);padding:5px 3px;bottom:calc(8px + env(safe-area-inset-bottom))}
-  .tabbar__item{font-size:10.5px}
-  .tabbar__icon{width:40px}
+  .tabbar__item{font-size:11.5px}
+  .tabbar__icon{width:46px}
   .header__cta{display:none!important}
   .brand{flex:1 1 auto}
   .brand img{width:100%;height:auto;max-height:36px;object-fit:contain;object-position:left center}
@@ -837,6 +840,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .form__checks{display:flex;gap:24px;flex-wrap:wrap}
 
 @media (max-width:359px){
-  .tabbar__item{font-size:9.5px;letter-spacing:-.02em}
-  .tabbar__icon{width:36px}
+  .tabbar__item{font-size:10.5px;letter-spacing:-.01em}
+  .tabbar__icon{width:40px}
+  .tabbar__item--main .tabbar__icon{width:50px;height:50px}
 }
