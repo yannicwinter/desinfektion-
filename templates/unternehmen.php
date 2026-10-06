@@ -71,17 +71,7 @@ page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit'
 
 <section class="section" id="fachkraft">
   <div class="wrap">
-    <div class="split">
-      <div class="split__pic reveal"><?= photo('fachkraft', $P('asi_title')) ?: illus_safety() ?></div>
-      <div class="reveal">
-        <p class="eyebrow">DGUV Vorschrift 2</p>
-        <h2 class="h2"><?= e($P('asi_title')) ?></h2>
-        <p class="lead"><?= e($P('asi_text')) ?></p>
-        <ul class="checks"><?php foreach (array_slice(lines($P('asi_list')), 0, 5) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
-        <a class="btn btn--red" href="<?= url('kontakt?thema=arbeitssicherheit') ?>#formular">Angebot anfragen <?= icon('arrow') ?></a>
-      </div>
-    </div>
-    <div class="three">
+    <div class="three" style="margin-top:0">
       <?php foreach ([['Nutzen', 'asi_benefits'], ['Angebot', 'asi_offer']] as [$h, $k]): if (!lines($P($k))) continue; ?>
       <div class="reveal"><h3><?= $h ?></h3><ul class="checks"><?php foreach (lines($P($k)) as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul></div>
       <?php endforeach; ?>
