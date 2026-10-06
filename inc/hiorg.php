@@ -531,8 +531,11 @@ function date_filter_options(array $items): array
 {
     static $months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
     static $days = [1 => 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'];
-    $o = ['ort' => [], 'monat' => [], 'wtag' => []];
+    $o = ['art' => [], 'ort' => [], 'monat' => [], 'wtag' => []];
     foreach ($items as $it) {
+        if (!empty($it['variant'])) {
+            $o['art'][$it['variant']] = $it['variant'];
+        }
         if ($t = hiorg_town($it['details'])) {
             $o['ort'][$t] = $t;
         }
@@ -602,7 +605,7 @@ function render_dates(array $items, array $opt = []): string
         $time = $it['time'] ? $it['time'] . ' Uhr' : '';
         $place = $it['details'] ? hiorg_place_short($it['details']) : '';
         ?>
-<li class="date<?= $full ? ' date--full' : '' ?>" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
+<li class="date<?= $full ? ' date--full' : '' ?>" data-art="<?= e($it['variant'] ?? '') ?>" data-kurs="<?= e($c['slug'] ?? '') ?>" data-ort="<?= e(hiorg_town($it['details'])) ?>" data-monat="<?= $d->format('Y-m') ?>" data-wtag="<?= $d->format('N') ?>">
   <time class="date__cal" datetime="<?= $d->format('Y-m-d') ?>"><span><?= de_date($d, 'MMM') ?></span><strong><?= $d->format('j') ?></strong></time>
   <div class="date__info">
     <span class="date__title"><?= $showCourse ? e($c['title'] ?? '') : e($when) ?><?php if (!empty($it['variant'])): ?> <span class="date__var"><?= e($it['variant']) ?></span><?php endif; ?></span>

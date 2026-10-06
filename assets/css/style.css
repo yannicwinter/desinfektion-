@@ -411,6 +411,13 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .kgrid .eyebrow{margin-bottom:12px}
 .kgrid__text{font-size:17px;margin-bottom:34px}
 .kgrid__text p+p{margin-top:14px}
+.parts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:-6px 0 36px}
+.part{display:flex;flex-direction:column;gap:8px;padding:22px;border:1px solid var(--line);border-top:3px solid var(--red);border-radius:var(--r-lg);background:#fff}
+.part h3{font-size:19px}
+.part p{font-size:15.5px;line-height:1.6}
+.part .part__meta{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
+.part__meta .i{width:17px;height:17px;color:var(--red)}
+.part .alink{margin-top:auto;padding-top:4px}
 /* Bereichsseiten: Einleitung + „Gut zu wissen“ */
 .intro{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(32px,6vw,72px);align-items:start}
 .intro .eyebrow{margin-bottom:12px}
@@ -707,6 +714,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 }
 
 @media (max-width:760px){
+  .parts{grid-template-columns:1fr}
   .know{grid-template-columns:1fr;gap:14px}
   .know__item{display:grid;grid-template-columns:auto 1fr;column-gap:16px;padding:20px}
   .know__ic{grid-row:span 2;margin:0}

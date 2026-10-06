@@ -72,9 +72,9 @@ if ($slug !== '') {
     <?php if ($items): ?>
     <?php $fo = date_filter_options($items); ?>
     <form class="dates-tools" data-date-filter onsubmit="return false">
-      <?php foreach (['ort' => ['Ort', 'Alle Orte'], 'monat' => ['Monat', 'Alle Monate'], 'wtag' => ['Wochentag', 'Alle Tage']] as $key => [$label, $allLabel]): if (count($fo[$key]) < 2 && !($key === 'wtag' && !empty($_GET['wann'])) && !($key === 'ort' && !empty($_GET['ort']))) continue; ?>
+      <?php foreach (['art' => ['Art', 'Ausbildung & Fortbildung'], 'ort' => ['Ort', 'Alle Orte'], 'monat' => ['Monat', 'Alle Monate'], 'wtag' => ['Wochentag', 'Alle Tage']] as $key => [$label, $allLabel]): if (count($fo[$key]) < 2 && !($key === 'wtag' && !empty($_GET['wann'])) && !($key === 'ort' && !empty($_GET['ort']))) continue; ?>
       <label class="field field--inline"><span class="sr-only"><?= $label ?></span>
-        <?php $pre = $key === 'ort' ? (string) ($_GET['ort'] ?? '') : ($key === 'wtag' ? (string) ($_GET['wann'] ?? '') : ''); ?>
+        <?php $pre = (string) ($_GET[['ort' => 'ort', 'wtag' => 'wann', 'art' => 'art'][$key] ?? ''] ?? ''); ?>
         <select name="<?= $key ?>" data-nice aria-label="<?= $label ?>"><option value=""><?= $allLabel ?></option>
           <?php if ($key === 'wtag'): ?><option value="wk"<?= $pre === 'wk' ? ' selected' : '' ?>>Unter der Woche</option><option value="we"<?= $pre === 'we' ? ' selected' : '' ?>>Am Wochenende</option><?php endif; ?>
           <?php foreach ($fo[$key] as $v => $l): ?><option value="<?= e((string) $v) ?>"<?= $pre !== '' && $pre === (string) $v ? ' selected' : '' ?>><?= e($l) ?></option><?php endforeach; ?>

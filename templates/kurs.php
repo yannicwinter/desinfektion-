@@ -8,7 +8,7 @@ $bookable = !empty($c['hiorg_id']);
 $facts = pairs($c['facts'] ?? '');
 $top = array_slice($facts, 0, 4);
 $rest = array_slice($facts, 4);
-$icons = ['dauer' => 'clock', 'preis' => 'euro', 'kosten' => 'euro', 'ort' => 'pin', 'format' => 'pin', 'frist' => 'shield', 'auffrischung' => 'shield', 'teilnahme' => 'users', 'für' => 'users', 'gruppe' => 'users', 'welpen' => 'heart', 'übung' => 'check', 'module' => 'clock', 'zeiten' => 'clock'];
+$icons = ['ausbildung' => 'award', 'fortbildung' => 'shield', 'inhouse' => 'building', 'dauer' => 'clock', 'preis' => 'euro', 'kosten' => 'euro', 'ort' => 'pin', 'format' => 'pin', 'frist' => 'shield', 'auffrischung' => 'shield', 'teilnahme' => 'users', 'für' => 'users', 'gruppe' => 'users', 'welpen' => 'heart', 'übung' => 'check', 'module' => 'clock', 'zeiten' => 'clock'];
 $others = array_values(array_filter(courses($cat), fn($o) => $o['slug'] !== $c['slug']));
 usort($others, fn($a, $b) => (($b['group'] === $c['group']) <=> ($a['group'] === $c['group'])) ?: ((int) !empty($b['hiorg_id']) <=> (int) !empty($a['hiorg_id'])));
 
@@ -37,6 +37,18 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <p class="eyebrow">Kursinhalt</p>
       <h2>Darum geht's</h2>
       <div class="kgrid__text"><?php foreach (paragraphs($c['text']) as $par): ?><p><?= e($par) ?></p><?php endforeach; ?></div>
+      <?php if ($parts = lines($c['parts'] ?? '')): ?>
+      <div class="parts">
+        <?php foreach ($parts as $pl): [$pt, $px, $pm] = array_map('trim', array_pad(explode('|', $pl), 3, '')); ?>
+        <div class="part">
+          <h3><?= e($pt) ?></h3>
+          <p><?= e($px) ?></p>
+          <?php if ($pm): ?><p class="part__meta"><?= icon('clock') ?><?= e($pm) ?></p><?php endif; ?>
+          <?php if ($bookable): ?><a class="alink" href="<?= url('termine/' . $c['slug']) ?>?art=<?= rawurlencode($pt) ?>">Termine <?= e($pt) ?> <?= icon('arrow') ?></a><?php endif; ?>
+        </div>
+        <?php endforeach; ?>
+      </div>
+      <?php endif; ?>
       <?php if ($learn = lines($c['learn'])): ?>
       <h2><?= e(($c['learn_title'] ?? '') ?: ($cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du')) ?></h2>
       <ul class="checks checks--2 checks--plain"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>

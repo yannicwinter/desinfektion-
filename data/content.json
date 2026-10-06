@@ -206,10 +206,10 @@
             "category": "erste-hilfe",
             "group": "Beruf & Betrieb",
             "title": "Erste Hilfe im Betrieb",
-            "teaser": "Ausbildung und Fortbildung für betriebliche Ersthelfer – die Kosten übernimmt meist die BG.",
-            "text": "Gerade weil es in Betrieben immer wieder zu Notfällen kommt, sollten möglichst viele Beschäftigte als betriebliche Ersthelfer ausgebildet sein. Jeder Betrieb ist dazu verpflichtet (§ 10 ArbSchG, DGUV Vorschrift 1).\n\nAusbildung: In 9 Unterrichtseinheiten lernen Beschäftigte – ganz ohne Vorkenntnisse –, in lebensbedrohlichen wie in alltäglichen Situationen sicher zu helfen. Fortbildung: Betriebliche Ersthelfer frischen ihr Wissen innerhalb von 24 Monaten auf (GUV: 36 Monate). Wird die Frist überschritten, ist wieder die komplette Ausbildung nötig.\n\nDie Kosten übernimmt in den meisten Fällen die Berufsgenossenschaft. Bitte vorab mit der BG klären, ob und in welchem Umfang die Kosten übernommen werden, und uns die Kostenübernahme im Original zusenden. Wir schulen nach den Vorgaben der Unfallversicherungsträger und sind von ihnen geprüft.\n\nAuf Wunsch auch als Inhouse-Schulung direkt im Betrieb – Termin und Uhrzeit nach Absprache.",
+            "teaser": "Ersthelfer-Ausbildung und Fortbildung für Betriebe – die Kosten übernimmt meist die Berufsgenossenschaft.",
+            "text": "Gerade weil es in Betrieben immer wieder zu Notfällen kommt, sollten möglichst viele Beschäftigte als betriebliche Ersthelfer ausgebildet sein. Jeder Betrieb ist dazu verpflichtet (§ 10 ArbSchG, DGUV Vorschrift 1). Dafür gibt es zwei Lehrgänge: die Ausbildung für neue Ersthelfer und die Fortbildung, mit der Ersthelfer ihr Wissen alle zwei Jahre auffrischen.\n\nDie Kosten übernimmt in den meisten Fällen die Berufsgenossenschaft bzw. Unfallkasse. Bitte vorab klären, ob und in welchem Umfang die Kosten übernommen werden, und uns die Kostenübernahme im Original zusenden. Wir schulen nach den Vorgaben der Unfallversicherungsträger und sind von ihnen geprüft.\n\nBeide Lehrgänge gibt es als offene Termine bei uns – oder als Inhouse-Schulung direkt im Betrieb, Termin und Uhrzeit nach Absprache.",
             "learn": "Notruf & Eigenschutz\nBewusstlosigkeit & stabile Seitenlage\nHerz-Lungen-Wiederbelebung & AED\nWunden & starke Blutungen\nHerzinfarkt, Schlaganfall, Schock\nTypische Notfälle am Arbeitsplatz",
-            "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nKosten: meist über die BG\nFortbildung: alle 2 Jahre (GUV: 3 Jahre)\nInhouse: direkt im Betrieb möglich",
+            "facts": "Ausbildung: 9 UE · für neue Ersthelfer\nFortbildung: 9 UE · alle 2 Jahre (GUV: 3)\nKosten: meist über die BG\nInhouse: direkt im Betrieb möglich",
             "price": "",
             "hiorg_id": "3871:Ausbildung, 3872:Fortbildung",
             "cta": "termine",
@@ -217,7 +217,8 @@
             "active": "1",
             "keywords": "ersthelfer, betrieb, firma, arbeitgeber, bg, berufsgenossenschaft, unfallkasse, guv, bg-lehrgang, fortbildung, auffrischung, wiederholung",
             "contact": "Jan Wille",
-            "learn_title": "Inhalte"
+            "learn_title": "Inhalte von Aus- und Fortbildung",
+            "parts": "Ausbildung | Für Beschäftigte, die neu Ersthelfer werden – oder deren letzte Aus- bzw. Fortbildung länger als 2 Jahre zurückliegt. Ganz ohne Vorkenntnisse: alle wichtigen Maßnahmen von Notruf bis Wiederbelebung, mit viel Praxis. | 9 UE · 08:30–16:30 Uhr\nFortbildung | Für betriebliche Ersthelfer, deren letzte Aus- oder Fortbildung höchstens 2 Jahre zurückliegt (GUV: 3 Jahre). Wiederholen und vertiefen, mit typischen Notfällen aus dem Arbeitsalltag und eigenen Erfahrungen. | 9 UE · 08:30–16:30 Uhr"
         },
         {
             "slug": "erste-hilfe-am-kind",

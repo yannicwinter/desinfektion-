@@ -413,7 +413,7 @@ function admin_course(): void
             $idx = $i;
         }
     }
-    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1', 'keywords' => '', 'contact' => '', 'learn_title' => ''];
+    $empty = ['slug' => '', 'category' => 'erste-hilfe', 'group' => '', 'title' => '', 'teaser' => '', 'text' => '', 'learn' => '', 'facts' => '', 'price' => '', 'hiorg_id' => '', 'cta' => 'termine', 'featured' => '', 'active' => '1', 'keywords' => '', 'contact' => '', 'learn_title' => '', 'parts' => ''];
     $k = $idx !== null ? array_merge($empty, $c['courses'][$idx]) : $empty;
     $err = '';
 
@@ -458,6 +458,7 @@ function admin_course(): void
     echo '</div>';
     echo field_input('teaser', 'Kurzbeschreibung (eine Zeile)', $k['teaser'], 'Erscheint auf den Kurskarten und oben auf der Kursseite.');
     echo field_input('text', 'Beschreibung', $k['text'], 'Absätze durch eine Leerzeile trennen. Kurz halten – 2 bis 3 kurze Absätze.', true);
+    echo field_input('parts', 'Bausteine (z. B. Ausbildung / Fortbildung)', $k['parts'], 'Eine Zeile je Baustein: Titel | Text | Dauer. Der Titel muss zur Bezeichnung der HiOrg-Liste passen (z. B. „Ausbildung“).', true);
     echo field_input('learn_title', 'Überschrift der Inhalte', $k['learn_title'], 'Leer = „Das lernst du“ (Erste Hilfe) bzw. „Inhalte“ (Brandschutz).');
     echo field_input('learn', 'Inhalte', $k['learn'], 'Ein Punkt pro Zeile.', true);
     echo field_input('facts', 'Eckdaten', $k['facts'], 'Eine Zeile pro Angabe: „Dauer: 9 UE“', true);
