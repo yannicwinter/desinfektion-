@@ -110,7 +110,7 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .nav a{position:relative;display:block;padding:30px 0;font-size:15px;font-weight:500;color:var(--text);white-space:nowrap;transition:color .2s}
 .nav a:hover{color:var(--ink)}
 .nav a[aria-current="page"]{color:var(--ink)}
-.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:3px;background:var(--red)}
+.nav a[aria-current="page"]::after{content:"";position:absolute;left:0;right:0;bottom:21px;height:2px;border-radius:2px;background:var(--red)}
 .header__cta{flex-shrink:0}
 @media (max-width:1260px){
   .header__in{gap:20px}
@@ -221,9 +221,10 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 
 /* ---------- Karten ---------- */
 .tcard,.kcard{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;transition:box-shadow .25s,border-color .25s}
-.tcard:hover,.kcard:hover{box-shadow:var(--sh2);border-color:var(--line-2)}
+.tcard:hover,.kcard:hover,.tcard:focus-visible,.kcard:focus-visible{box-shadow:var(--sh2);border-color:var(--line-2)}
+.tcard:focus,.kcard:focus,.wege a:focus{outline:none}
 /* Kennzeichnung KI-erzeugter Bilder */
-.ki-tag{position:absolute;top:12px;right:12px;z-index:4;padding:4px 9px;border-radius:4px;background:rgba(20,22,27,.62);color:#fff;font-size:11.5px;font-weight:600;letter-spacing:.02em;line-height:1.3;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.ki-tag{position:absolute;top:8px;right:8px;z-index:4;padding:2px 6px;border-radius:3px;background:rgba(20,22,27,.5);color:#fff;font-size:10px;font-weight:500;letter-spacing:.02em;line-height:1.3;pointer-events:none;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .split__pic .ki-tag{top:12px;right:12px}
 .tcard__img,.kcard__img{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--bg2)}
 .tcard__img img,.kcard__img img{width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease)}
@@ -468,6 +469,8 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .kosten strong{color:var(--ink)}
 .fw{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(32px,5vw,56px);align-items:start}
 .fw .lead{margin-top:14px}
+.sidebox__person{padding:0 20px 20px}
+.sidebox__person .pcard{margin-top:0;padding:18px;background:var(--bg2);border:0}
 .pcard{margin-top:28px;padding:22px;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg)}
 .pcard__t{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:14px}
 .pcard__p{display:flex;gap:14px;align-items:center}
@@ -695,7 +698,6 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   body{font-size:15.5px}
   .hero--photo .badge{display:none}
   .hero--photo .hero__media{max-height:none}
-  .hero--photo .ki-tag{top:8px;right:8px;font-size:10.5px;padding:3px 7px}
   .hero--photo .hero__in{padding:28px var(--gutter) 116px}
   .hero__in{padding:44px var(--gutter) 116px}
   .hero--page .hero__in{padding-bottom:100px}
@@ -758,15 +760,16 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .footer__bottom{flex-direction:column;gap:8px}
 }
 @media (max-width:480px){
+  .header__cta{display:none!important}
+  .brand{flex:1 1 auto}
+  .brand img{width:100%;height:auto;max-height:36px;object-fit:contain;object-position:left center}
   .kf-launch span{display:none}
   .kf-launch{width:50px;padding:0;justify-content:center}
   .kf__input input{font-size:16px}
   .header__cta span{display:none}
   .header__cta{width:44px;padding:0}
 }
-@media (max-width:360px){
-  .brand img{height:26px}
-}
+
 
 /* ==========================================================
    Admin

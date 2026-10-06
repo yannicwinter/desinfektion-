@@ -72,7 +72,6 @@ function layout_start(array $meta): void
   <div class="wrap header__in">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
       <picture>
-        <source media="(max-width:480px)" srcset="<?= asset('img/logo-drk-mittelweser-kurz.png') ?>">
         <img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V.">
       </picture>
     </a>

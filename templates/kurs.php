@@ -9,8 +9,6 @@ $facts = pairs($c['facts'] ?? '');
 $top = array_slice($facts, 0, 4);
 $rest = array_slice($facts, 4);
 $icons = ['dauer' => 'clock', 'preis' => 'euro', 'kosten' => 'euro', 'ort' => 'pin', 'format' => 'pin', 'frist' => 'shield', 'auffrischung' => 'shield', 'teilnahme' => 'users', 'für' => 'users', 'gruppe' => 'users', 'welpen' => 'heart', 'übung' => 'check', 'module' => 'clock', 'zeiten' => 'clock'];
-$faqGroups = $cat === 'brandschutz' ? ['Brandschutzhelfer'] : ['Erste-Hilfe-Kurse'];
-$faq = array_slice(array_values(array_filter(content()['faq'] ?? [], fn($f) => in_array($f['group'] ?? '', $faqGroups, true))), 0, 4);
 $others = array_values(array_filter(courses($cat), fn($o) => $o['slug'] !== $c['slug']));
 usort($others, fn($a, $b) => (($b['group'] === $c['group']) <=> ($a['group'] === $c['group'])) ?: ((int) !empty($b['hiorg_id']) <=> (int) !empty($a['hiorg_id'])));
 
@@ -40,7 +38,7 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <h2>Darum geht's</h2>
       <div class="kgrid__text"><?php foreach (paragraphs($c['text']) as $par): ?><p><?= e($par) ?></p><?php endforeach; ?></div>
       <?php if ($learn = lines($c['learn'])): ?>
-      <h2><?= $cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du' ?></h2>
+      <h2><?= e(($c['learn_title'] ?? '') ?: ($cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du')) ?></h2>
       <ul class="checks checks--2 checks--plain"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
       <?php endif; ?>
       <?php if ($rest): ?>
@@ -64,22 +62,15 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
         <a class="btn btn--red" href="<?= url('kontakt?thema=' . $c['slug']) ?>#formular"><?= icon('mail') ?> Unverbindlich anfragen</a>
         <a class="btn btn--ghost" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> <?= e(site('phone')) ?></a></div>
       <?php endif; ?>
+      <div class="sidebox__person">
+        <?= person_card(course_contact($c), 'Deine Ansprechperson') ?>
+        <?php if (($pay = contact_by_role('Kosten')) && $pay['name'] !== (course_contact($c)['name'] ?? '')): ?>
+        <p class="pcard__more"><b>Kosten &amp; Abrechnung:</b> <?= e($pay['name']) ?> · <a href="mailto:<?= e($pay['email']) ?>"><?= e($pay['email']) ?></a></p>
+        <?php endif; ?>
+      </div>
     </aside>
   </div>
 </section>
-
-<?php if ($faq): ?>
-<section class="section section--alt">
-  <div class="wrap faqw">
-    <div class="reveal"><p class="eyebrow">FAQ</p><h2 class="h2">Fragen zum Kurs</h2>
-      <?= person_card(course_contact($c), 'Deine Ansprechperson') ?>
-      <?php if (($pay = contact_by_role('Kosten')) && $pay['name'] !== (course_contact($c)['name'] ?? '')): ?>
-      <p class="pcard__more"><b>Kosten &amp; Abrechnung:</b> <?= e($pay['name']) ?> · <a href="mailto:<?= e($pay['email']) ?>"><?= e($pay['email']) ?></a></p>
-      <?php endif; ?></div>
-    <div class="reveal"><?= faq_list($faq) ?></div>
-  </div>
-</section>
-<?php endif; ?>
 
 <?php if ($others): ?>
 <section class="section">

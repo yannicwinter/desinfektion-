@@ -6,7 +6,7 @@ $P = fn($k) => page('unternehmen', $k);
 
 // Leistungen aus den Kursdaten (Titel/Teaser im Admin gepflegt)
 $cards = [];
-foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'evakuierungsuebung' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
+foreach (['erste-hilfe-ausbildung' => 'Ersthelfer im Betrieb', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
     if ($c = course($slug)) {
         $img = photo('kurs-' . $slug, $c['title']) ?: illus_course($c);
         $cards[] = topic_card($img, $label ?: $c['title'], $c['teaser'], 'Mehr erfahren', course_url($c));
