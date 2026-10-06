@@ -149,16 +149,18 @@ function layout_end(): void
   <div class="more__backdrop" data-more-close></div>
   <div class="more__sheet">
     <span class="more__grip" aria-hidden="true"></span>
-    <ul class="more__list">
-      <li><a href="<?= url('arbeitssicherheit') ?>"><?= icon('building') ?><span><strong>Für Unternehmen</strong><small>Arbeitssicherheit · Fachkraft · Schulung im Betrieb</small></span></a></li>
-      <li><a href="<?= url('faq') ?>"><?= icon('search') ?><span><strong>Häufige Fragen</strong><small>Prüfung, Gültigkeit, Kosten</small></span></a></li>
-      <li><a href="<?= url('kontakt') ?>"><?= icon('users') ?><span><strong>Kontakt</strong><small>Ansprechpersonen & Formular</small></span></a></li>
-    </ul>
-    <div class="more__actions">
-      <a class="btn btn--ghost" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> Anrufen</a>
-      <a class="btn btn--ghost" href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?> E-Mail</a>
+    <div class="more__head"><b>Mehr</b><button class="more__x" type="button" data-more-close aria-label="Schließen"><?= icon('plus') ?></button></div>
+    <div class="more__tiles">
+      <a class="more__tile" href="<?= url('arbeitssicherheit') ?>"><span class="more__ic"><?= icon('building') ?></span><strong>Für Unternehmen</strong><small>Ersthelfer, Brandschutz, Fachkraft</small></a>
+      <a class="more__tile" href="<?= url('kontakt') ?>"><span class="more__ic"><?= icon('users') ?></span><strong>Kontakt</strong><small>Ansprechpersonen &amp; Kursorte</small></a>
+      <a class="more__tile" href="<?= url('faq') ?>"><span class="more__ic"><?= icon('info') ?></span><strong>Häufige Fragen</strong><small>Prüfung, Gültigkeit, Kosten</small></a>
+      <button class="more__tile" type="button" data-kf-open data-more-close><span class="more__ic"><?= icon('search') ?></span><strong>Kurs finden</strong><small>In 4 Fragen zum Termin</small></button>
     </div>
-    <button class="more__close" type="button" data-more-close>Schließen</button>
+    <div class="more__contact">
+      <a class="btn btn--red" href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?> Anrufen</a>
+      <a class="btn btn--ghost" href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?> E-Mail</a>
+      <?php if (site('instagram')): ?><a class="btn btn--ghost more__insta" href="<?= e(site('instagram')) ?>" target="_blank" rel="noopener" aria-label="Instagram"><?= icon('instagram') ?></a><?php endif; ?>
+    </div>
   </div>
 </div>
 <?php if (($GLOBALS['__active'] ?? '') !== 'anmeldung'): ?>

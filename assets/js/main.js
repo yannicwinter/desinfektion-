@@ -155,12 +155,12 @@
       var first = more.querySelector('a');
       if (first) first.focus();
     };
-    var closeMore = function () {
+    var closeMore = function (e) {
       more.classList.remove('is-open');
       document.body.classList.remove('more-open');
       moreBtn.setAttribute('aria-expanded', 'false');
       setTimeout(function () { more.hidden = true; }, reduce ? 0 : 250);
-      moreBtn.focus();
+      if (!(e && e.currentTarget && e.currentTarget.hasAttribute && e.currentTarget.hasAttribute('data-kf-open'))) moreBtn.focus();
     };
     moreBtn.addEventListener('click', openMore);
     more.querySelectorAll('[data-more-close]').forEach(function (b) { b.addEventListener('click', closeMore); });
