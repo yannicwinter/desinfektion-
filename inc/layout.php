@@ -59,15 +59,7 @@ function layout_start(array $meta): void
 </head>
 <body class="page-<?= e($active ?: 'home') ?>">
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
-<div class="topbar">
-  <div class="wrap topbar__in">
-    <span><?= icon('shield') ?><?= e(site('topbar') ?: site('org')) ?></span>
-    <nav aria-label="Kontakt">
-      <a href="tel:<?= e(site('phone_link')) ?>"><?= icon('phone') ?><?= e(site('phone')) ?></a>
-      <a href="mailto:<?= e(site('email')) ?>"><?= icon('mail') ?><?= e(site('email')) ?></a>
-    </nav>
-  </div>
-</div>
+<?php nav_rail($active, (string) ($meta['path'] ?? '')); ?>
 <header class="header">
   <div class="wrap header__in">
     <a class="brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
@@ -75,18 +67,46 @@ function layout_start(array $meta): void
         <img src="<?= asset('img/logo-drk-mittelweser.png') ?>" width="1100" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser – DRK-Kreisverband Verden e.V.">
       </picture>
     </a>
-    <nav class="nav" aria-label="Hauptnavigation">
-      <ul class="nav__list">
-        <li><a href="<?= url('/') ?>"<?= ($meta['path'] ?? '') === '/' ? ' aria-current="page"' : '' ?>>Start</a></li>
-        <?php foreach (nav_items() as $slug => $label): ?>
-        <li><a href="<?= url($slug) ?>"<?= $active === $slug || ($slug === 'termine' && $active === 'anmeldung') ? ' aria-current="page"' : '' ?>><?= e($label) ?></a></li>
-        <?php endforeach; ?>
-      </ul>
-    </nav>
     <a class="btn btn--red btn--sm header__cta" href="<?= url('termine') ?>" aria-label="Kurs buchen"><?= icon('calendar') ?><span>Kurs buchen</span></a>
   </div>
 </header>
 <main id="inhalt">
+<?php
+}
+
+
+/** Seitenleiste am Desktop: Logo, Hauptnavigation, Kontakt (ab 1001 px statt Topbar und Kopfleiste). */
+function nav_rail(string $active, string $path): void
+{
+    $icons = ['erste-hilfe' => 'heart', 'brandschutz' => 'flame', 'arbeitssicherheit' => 'building', 'termine' => 'calendar', 'kontakt' => 'users'];
+    $items = [['', 'Start', 'home']];
+    foreach (nav_items() as $slug => $label) {
+        $items[] = [$slug, $label, $icons[$slug] ?? 'grid'];
+    }
+    ?>
+<aside class="rail">
+  <a class="rail__brand" href="<?= url('/') ?>" aria-label="<?= e(site('name')) ?> · <?= e(site('org')) ?> – Startseite">
+    <img class="rail__logo" src="<?= asset('img/logo-drk-mittelweser-kurz.png') ?>" width="752" height="105" alt="Deutsches Rotes Kreuz – DRK Arbeitssicherheit Mittelweser">
+    <?= cross_svg('rail__mark') ?>
+  </a>
+  <nav class="rail__nav" aria-label="Hauptnavigation">
+    <ul>
+      <?php foreach ($items as [$slug, $label, $ic]):
+          $on = $slug === '' ? $path === '/' : ($active === $slug || ($slug === 'termine' && $active === 'anmeldung')); ?>
+      <li><a class="rail__item" href="<?= url($slug === '' ? '/' : $slug) ?>" title="<?= e($label) ?>"<?= $on ? ' aria-current="page"' : '' ?>><?= icon($ic) ?><span><?= e($label) ?></span></a></li>
+      <?php endforeach; ?>
+      <li class="rail__sep"><a class="rail__item rail__item--sub" href="<?= url('faq') ?>" title="Häufige Fragen"<?= $active === 'faq' ? ' aria-current="page"' : '' ?>><?= icon('info') ?><span>Häufige Fragen</span></a></li>
+    </ul>
+  </nav>
+  <div class="rail__foot">
+    <a class="btn btn--red rail__cta" href="<?= url('termine') ?>" aria-label="Kurs buchen"><?= icon('calendar') ?><span>Kurs buchen</span></a>
+    <ul class="rail__contact">
+      <li><a href="tel:<?= e(site('phone_link')) ?>" title="<?= e(site('phone')) ?>"><?= icon('phone') ?><span><?= e(site('phone')) ?></span></a></li>
+      <li><a href="mailto:<?= e(site('email')) ?>" title="<?= e(site('email')) ?>"><?= icon('mail') ?><span><?= e(site('email')) ?></span></a></li>
+    </ul>
+    <p class="rail__claim"><?= icon('shield') ?><span><?= e(site('topbar') ?: site('org')) ?></span></p>
+  </div>
+</aside>
 <?php
 }
 
