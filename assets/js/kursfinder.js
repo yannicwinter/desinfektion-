@@ -96,6 +96,7 @@
 
   // ---------- Gesprächsablauf ----------
   function start() {
+    closeFrame();
     gen++;
     queue = Promise.resolve();
     log.innerHTML = '';
@@ -113,7 +114,9 @@
     if (cfg.titles['erste-hilfe-am-kind']) list.push({ label: 'Für Kinder', go: function () { pick('erste-hilfe-am-kind'); } });
     if (cfg.titles['erste-hilfe-am-hund']) list.push({ label: 'Für meinen Hund', go: askHund });
     if (cfg.titles['brandschutzhelfer']) list.push({ label: 'Brandschutzhelfer', go: function () { pick('brandschutzhelfer', 'Die Kosten trägt der Arbeitgeber.'); } });
+    if (cfg.firmTopics.length) list.push({ label: 'Für unser Team / Betrieb', go: firm });
     list.push({ label: 'Etwas anderes', go: other });
+    list.push({ label: 'Ich habe eine Frage', go: quick });
     choices(list);
   }
 
@@ -223,6 +226,7 @@
     hits.slice(0, 3).forEach(function (x) {
       var card = el('a', 'kf__date');
       card.href = x.book;
+      if (cfg.inline && x.frame) card.addEventListener('click', function (e) { e.preventDefault(); openFrame(x, d.title); });
       var cal = el('span', 'kf__cal');
       cal.appendChild(el('small', null, x.month));
       cal.appendChild(el('strong', null, x.day));
@@ -241,6 +245,80 @@
       { label: 'Mehr zum Kurs', href: d.info },
       { label: 'Neu starten', go: start }
     ]);
+  }
+
+  // Anmeldung direkt im Kursfinder (HiOrg-Formular eingebettet); „Zurück“ führt zu den Terminen
+  function openFrame(x, kurs) {
+    closeFrame();
+    var wrap = el('div', 'kf__frame');
+    var bar = el('div', 'kf__framebar');
+    var back = el('button', 'kf__back', '← Termine');
+    back.type = 'button';
+    back.addEventListener('click', closeFrame);
+    var head = el('div', 'kf__frametitle');
+    head.appendChild(el('strong', null, 'Anmeldung'));
+    head.appendChild(el('span', null, kurs + (x.variant ? ' (' + x.variant + ')' : '') + ' · ' + x.label));
+    var big = el('a', 'kf__big', 'Groß ↗');
+    big.href = x.book;
+    big.title = 'Anmeldung auf eigener Seite öffnen';
+    bar.appendChild(back); bar.appendChild(head); bar.appendChild(big);
+    var f = document.createElement('iframe');
+    f.src = x.frame;
+    f.title = 'Anmeldeformular ' + kurs;
+    f.referrerPolicy = 'strict-origin-when-cross-origin';
+    wrap.appendChild(bar);
+    wrap.appendChild(el('p', 'kf__framehint', 'Die Anmeldung läuft über HiOrg, unser Kursverwaltungssystem.'));
+    wrap.appendChild(f);
+    box.appendChild(wrap);
+    box.classList.add('kf--frame');
+  }
+  function closeFrame() {
+    var f = box.querySelector('.kf__frame');
+    if (f) f.remove();
+    box.classList.remove('kf--frame');
+  }
+
+  // 2) Für Betriebe: Thema, Teilnehmerzahl, Ort → vorausgefüllte Anfrage
+  function firm() {
+    state.firm = {};
+    say('Gern! Wir schulen Teams bei uns oder direkt im Betrieb. Worum geht es?');
+    var list = cfg.firmTopics.map(function (t) { return { label: t.title, go: function () { state.firm.slug = t.slug; state.firm.title = t.title; firmCount(); } }; });
+    list.push({ label: 'Fachkraft für Arbeitssicherheit', go: function () { state.firm.slug = 'arbeitssicherheit'; state.firm.title = 'Fachkraft für Arbeitssicherheit'; firmSend(); } });
+    list.push({ label: 'Etwas anderes', go: function () { state.firm.slug = 'sonstiges'; state.firm.title = ''; firmCount(); } });
+    choices(list);
+  }
+  function firmCount() {
+    say('Wie viele Personen sollen ungefähr teilnehmen?');
+    choices(['bis 10', '11–20', 'mehr als 20', 'Weiß ich noch nicht'].map(function (n) {
+      return { label: n, go: function () { state.firm.n = n === 'Weiß ich noch nicht' ? '' : n; firmPlace(); } };
+    }));
+  }
+  function firmPlace() {
+    say('Wo soll die Schulung stattfinden?');
+    choices([
+      { label: 'Bei uns im Betrieb (Inhouse)', go: function () { state.firm.ort = 'bei uns im Betrieb (Inhouse)'; firmSend(); } },
+      { label: 'Beim DRK', go: function () { state.firm.ort = 'beim DRK'; firmSend(); } },
+      { label: 'Egal / Beratung gewünscht', go: function () { state.firm.ort = ''; firmSend(); } }
+    ]);
+  }
+  function firmSend() {
+    var f = state.firm;
+    var msg = 'Anfrage über den Kursfinder' + (f.title ? ': ' + f.title : '') + (f.n ? ', ca. ' + f.n + ' Teilnehmende' : '') + (f.ort ? ', Schulung ' + f.ort : '') + '.';
+    var url = cfg.firma + '?thema=' + encodeURIComponent(f.slug) + (f.n ? '&teilnehmer=' + encodeURIComponent(f.n) : '') + '&nachricht=' + encodeURIComponent(msg) + '#formular';
+    say('Alles klar. Ich habe die Anfrage schon vorbereitet – bitte nur noch Name und E-Mail ergänzen. Wir melden uns schnellstmöglich mit Termin und Angebot.' + (f.slug === 'erste-hilfe-im-betrieb' ? ' Tipp: Die Kosten für Ersthelfer übernimmt meist die Berufsgenossenschaft.' : ''));
+    choices([
+      { label: 'Anfrage abschicken', href: url, primary: true },
+      { label: 'Lieber anrufen', href: cfg.phoneLink },
+      { label: 'Neu starten', go: start }
+    ]);
+  }
+
+  // 4) Häufige Fragen als Schnellauswahl
+  function quick() {
+    say('Was möchtest du wissen? Du kannst deine Frage auch unten eintippen.');
+    var list = cfg.quick.map(function (q) { return { label: q, go: function () { freeText(q, true); } }; });
+    list.push({ label: 'Zurück zur Kurssuche', go: ask });
+    choices(list);
   }
 
   function noDates(d) {
@@ -269,8 +347,8 @@
     (cfg.orte || []).forEach(function (o) { if (t.indexOf(o.toLowerCase()) !== -1) state.ort = o; });
   }
 
-  function freeText(text) {
-    me(text);
+  function freeText(text, shown) {
+    if (!shown) me(text);
     clearChoices();
     var t = ' ' + text.toLowerCase() + ' ';
     state.text = t;
@@ -310,6 +388,7 @@
     if (a.type === 'faq') {
       choices([
         { label: 'Passenden Kurs finden', go: ask, primary: true },
+        { label: 'Weitere Frage', go: quick },
         { label: 'Alle Fragen', href: cfg.faq },
         { label: 'Neu starten', go: start }
       ]);
@@ -347,6 +426,7 @@
     setTimeout(function () { input.focus({ preventScroll: true }); }, 60);
   }
   function close() {
+    closeFrame();
     box.classList.remove('is-open');
     document.body.classList.remove('kf-open');
     if (launch) { launch.setAttribute('aria-expanded', 'false'); launch.focus(); }

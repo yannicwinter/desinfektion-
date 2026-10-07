@@ -89,7 +89,9 @@ function form_render(array $err, array $old, string $preset = ''): void
 {
     $topics = form_topics();
     $sel = $old['thema'] ?? $preset;
-    $v = fn($k) => e($old[$k] ?? '');
+    // Vorbelegung aus der Adresse (z. B. vom Kursfinder): nur unkritische Felder, gekürzt und escaped
+    $pre = fn($k) => in_array($k, ['teilnehmer', 'nachricht', 'firma'], true) ? mb_substr(trim((string) ($_GET[$k] ?? '')), 0, 500) : '';
+    $v = fn($k) => e($old[$k] ?? $pre($k));
     if (!empty($_GET['gesendet'])): ?>
 <div class="notice notice--ok" role="status"><h3 class="h5">Vielen Dank!</h3><p>Die Anfrage ist angekommen. Wir melden uns schnellstmöglich.</p></div>
 <?php return; endif; ?>

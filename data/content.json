@@ -505,6 +505,12 @@
             "start": ""
         },
         {
+            "group": "Erste-Hilfe-Kurse",
+            "q": "Wie lange dauert ein Kurs?",
+            "a": "Erste-Hilfe-Ausbildung, Erste Hilfe im Betrieb und Erste Hilfe am Kind: 9 Unterrichtseinheiten, meist 08:30–16:30 Uhr. Erste Hilfe am Hund und am Welpen: ca. 3 Stunden. Brandschutz- und Evakuierungshelfer: 5 Unterrichtseinheiten, 09:00–13:00 oder 13:00–18:00 Uhr.",
+            "start": ""
+        },
+        {
             "group": "Buchung",
             "q": "Wie melde ich mich an?",
             "a": "Online über unsere [Kurstermine](/termine) – die Anmeldung ist für die Teilnahme erforderlich.",
@@ -526,6 +532,30 @@
             "group": "Buchung",
             "q": "Ist der Kurs barrierefrei? Gibt es Kurse auf Englisch?",
             "a": "Sag uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich.",
+            "start": ""
+        },
+        {
+            "group": "Buchung",
+            "q": "Was kostet ein Kurs?",
+            "a": "Erste-Hilfe-Ausbildung und Erste Hilfe am Kind kosten aktuell 60 €, Erste Hilfe am Hund und am Welpen 50 €, Brandschutz- und Evakuierungshelfer 125 € pro Person. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft die Kosten. Den genauen Preis siehst du bei jedem Termin.",
+            "start": ""
+        },
+        {
+            "group": "Buchung",
+            "q": "Wie bezahle ich?",
+            "a": "Direkt bei der Online-Anmeldung, z. B. per PayPal. Für betriebliche Ersthelfer wird über die Berufsgenossenschaft abgerechnet – bitte die Kostenübernahme vorher klären.",
+            "start": ""
+        },
+        {
+            "group": "Buchung",
+            "q": "Wo finden die Kurse statt?",
+            "a": "In Verden (DRK Kreisverband, Lindhooper Str. 20/22, und Aller-Weser-Zentrum, Lindhooper Str. 57), in Achim (DRK-Zentrum, Bahnhofstraße 31) und in Ottersberg (Grüne Straße 24). Den Ort siehst du bei jedem Termin. Für Betriebe kommen wir auch vor Ort.",
+            "start": ""
+        },
+        {
+            "group": "Buchung",
+            "q": "Gibt es Termine am Wochenende?",
+            "a": "Ja, viele Kurse gibt es auch samstags oder sonntags. In den [Kursterminen](/termine?wann=we) kannst du nach „Am Wochenende“ filtern.",
             "start": ""
         },
         {

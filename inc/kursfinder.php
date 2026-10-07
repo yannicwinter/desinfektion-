@@ -43,6 +43,7 @@ function kursfinder_api(string $slug): void
             'price' => $it['price'],
             'book' => url('termine/' . $c['slug'] . '/anmeldung/' . $it['kid']),
             'variant' => $it['variant'] ?? '',
+            'frame' => (string) ($it['link'] ?? ''),
         ];
     }
     echo json_encode([
@@ -94,6 +95,11 @@ function kursfinder_config(): array
         'phone' => site('phone'),
         'phoneLink' => 'tel:' . site('phone_link'),
         'orte' => kursfinder_orte(),
+        'inline' => site('hiorg_booking') !== 'tab',
+        'firma' => url('arbeitssicherheit'),
+        'firmTopics' => array_values(array_filter(array_map(fn($s) => $has($s) ? ['slug' => $s, 'title' => $title($s)] : null,
+            ['erste-hilfe-im-betrieb', 'brandschutzhelfer', 'feuerloeschertraining', 'aed-reanimationstraining', 'fresh-up-arztpraxen', 'brandschutzordnung-rettungsplaene']))),
+        'quick' => ['Was kostet ein Kurs?', 'Wie lange dauert ein Kurs?', 'Was muss ich mitbringen?', 'Wie lange ist die Bescheinigung gültig?', 'Wo finden die Kurse statt?', 'Wie bezahle ich?'],
     ];
 }
 
@@ -125,7 +131,7 @@ function kursfinder_markup(): string
 <section class="kf" id="kursfinder" role="dialog" aria-modal="false" aria-labelledby="kf-title" hidden data-kf-config='<?= $cfg ?>'>
   <header class="kf__head">
     <img class="kf__logo" src="<?= asset('img/logo-drk.png') ?>" width="333" height="105" alt="Deutsches Rotes Kreuz">
-    <div class="kf__title"><strong id="kf-title">Kursfinder</strong><span>In 3 Fragen zum Kurs</span></div>
+    <div class="kf__title"><strong id="kf-title">Kursfinder</strong><span>Kurs, Termin &amp; Antworten</span></div>
     <button class="kf__icon" type="button" data-kf-restart title="Neu starten" aria-label="Neu starten"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
     <button class="kf__icon" type="button" data-kf-close aria-label="Schließen"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </header>
@@ -253,6 +259,13 @@ function kf_score(array $doc, array $q, string $qJoined, array $idx): float
 /** Antwort auf eine Freitext-Frage: bester Kurs, beste FAQ, erkannte Absicht. */
 function kursfinder_answer(string $question): array
 {
+    // Wortgleiche FAQ-Frage (z. B. aus der Schnellauswahl) direkt beantworten
+    $norm = fn($x) => trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($x)));
+    foreach (content()['faq'] ?? [] as $f) {
+        if ($norm($f['q']) === $norm($question)) {
+            return ['type' => 'faq', 'faq' => ['q' => $f['q'], 'a' => trim(strip_tags(rich($f['a'])))], 'fixed' => $question];
+        }
+    }
     $question = kf_correct($question); // Tippfehler großzügig korrigieren
     $q = kf_tokens($question);
     $raw = mb_strtolower($question);
