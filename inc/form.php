@@ -46,6 +46,12 @@ function form_handle(string $returnPath): array
     if (empty($_POST['datenschutz'])) {
         $err[] = 'Bitte der Datenschutzerklärung zustimmen.';
     }
+    // Spam-Schutz: gehashte IP je Stunde zählen; Zähldateien nach 2 Std. löschen (siehe Datenschutzerklärung)
+    foreach (glob(CACHE_DIR . '/form-*.cnt') ?: [] as $old) {
+        if (filemtime($old) < time() - 7200) {
+            @unlink($old);
+        }
+    }
     $ipFile = CACHE_DIR . '/form-' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . date('YmdH')) . '.cnt';
     $count = is_file($ipFile) ? (int) file_get_contents($ipFile) : 0;
     if ($count >= 5) {
