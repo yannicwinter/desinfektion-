@@ -124,8 +124,8 @@ function kursfinder_markup(): string
 </button>
 <section class="kf" id="kursfinder" role="dialog" aria-modal="false" aria-labelledby="kf-title" hidden data-kf-config='<?= $cfg ?>'>
   <header class="kf__head">
-    <span class="kf__avatar" aria-hidden="true"><?= cross_svg('', '#fff') ?></span>
-    <div><strong id="kf-title">Kursfinder</strong><span>Passenden Kurs in 3 Fragen</span></div>
+    <img class="kf__logo" src="<?= asset('img/logo-drk.png') ?>" width="333" height="105" alt="Deutsches Rotes Kreuz">
+    <div class="kf__title"><strong id="kf-title">Kursfinder</strong><span>In 3 Fragen zum Kurs</span></div>
     <button class="kf__icon" type="button" data-kf-restart title="Neu starten" aria-label="Neu starten"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg></button>
     <button class="kf__icon" type="button" data-kf-close aria-label="Schließen"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
   </header>

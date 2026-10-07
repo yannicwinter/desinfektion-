@@ -582,8 +582,9 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .kf__head>div{display:flex;flex-direction:column;line-height:1.25;flex:1;min-width:0}
 .kf__head strong{font-weight:600;color:var(--ink)}
 .kf__head div span{font-size:13px;color:var(--muted)}
-.kf__avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--red);flex-shrink:0}
-.kf__avatar svg{width:20px;height:20px}
+.kf__logo{height:34px;width:auto;flex-shrink:0}
+.kf__head .kf__title{padding-left:12px;border-left:1px solid var(--line-2)}
+.kf__title strong,.kf__title span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kf__icon{display:grid;place-items:center;width:38px;height:38px;border:0;border-radius:var(--r);background:none;color:var(--muted);cursor:pointer}
 .kf__icon:hover{background:var(--bg2);color:var(--ink)}
 .kf__icon .i{width:19px;height:19px}
