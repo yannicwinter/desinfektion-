@@ -163,7 +163,7 @@ function layout_end(): void
     </div>
   </div>
 </div>
-<?php if (($GLOBALS['__active'] ?? '') !== 'anmeldung'): ?>
+<?php if (!in_array($GLOBALS['__active'] ?? '', ['anmeldung', 'impressum', 'datenschutz'], true)): ?>
 <?= kursfinder_markup() ?>
 <script src="<?= asset('js/kursfinder.js') ?>" defer></script>
 <?php endif; ?>

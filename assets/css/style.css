@@ -70,7 +70,9 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .prose a{color:var(--red);text-decoration:underline;text-underline-offset:3px}
 .prose .list{display:flex;flex-direction:column;gap:6px;padding-left:20px;list-style:disc}
 .prose strong{color:var(--ink);font-weight:600}
-.prose--legal{max-width:780px}
+.prose--legal{max-width:780px;gap:18px}
+.prose--legal p strong:first-child{display:inline-block;margin-top:10px;font-size:17px}
+.prose--legal .list{gap:4px}
 .alink{display:inline-flex;align-items:center;gap:7px;font-weight:600;color:var(--red);white-space:nowrap}
 .alink .i{width:17px;height:17px;transition:transform .2s var(--ease)}
 .alink:hover .i,a:hover .alink .i{transform:translateX(3px)}
