@@ -26,6 +26,7 @@ $map = 'https://www.openstreetmap.org/search?query=' . rawurlencode(site('street
       <div class="box">
         <h2 class="h5">Kursorte</h2>
         <ul class="checks checks--plain"><?php foreach (lines($P('orte')) as $o): ?><li><?= icon('pin') ?><?= e($o) ?></li><?php endforeach; ?></ul>
+        <?= place_notice([], true) ?>
       </div>
     </div>
     <div class="panel"><h2 class="h4">Schreib uns</h2><?php form_render($err, $old, (string) ($_GET['thema'] ?? 'sonstiges')); ?></div>

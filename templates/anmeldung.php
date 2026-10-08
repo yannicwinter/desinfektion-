@@ -40,6 +40,8 @@ layout_start([
             <?php if ($it['free']): ?><li><?= icon('users') ?><span><?= e($it['free']) ?></span></li><?php endif; ?>
             <?php if ($it['price']): ?><li><?= icon('check') ?><span><?= e($it['price']) ?> · Betriebe: Abrechnung über BG möglich</span></li><?php endif; ?>
           </ul>
+          <?= place_notice([$it]) ?>
+          <?php if (($bg = doc_url('bg-formular')) && ($current['category'] ?? '') === 'erste-hilfe'): ?><p class="small docs-line"><?= icon('info') ?> <span>Über den Arbeitgeber? <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular BG (PDF)</a></span></p><?php endif; ?>
           <a class="alink small" href="<?= url('termine/' . $current['slug']) ?>">Anderen Termin wählen <?= icon('arrow') ?></a>
         </div>
         <div class="box box--soft signup__help">
@@ -54,7 +56,7 @@ layout_start([
         <div class="signup__frame">
           <iframe src="<?= e($it['link']) ?>" title="Anmeldeformular <?= e($current['title']) ?>" referrerpolicy="strict-origin-when-cross-origin" data-signup-frame></iframe>
         </div>
-        <p class="muted small signup__note">Die Anmeldung und ggf. Zahlung laufen über unser Buchungssystem HiOrg-Server. Funktioniert etwas nicht? <a href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Formular in neuem Tab öffnen</a></p>
+        <p class="muted small signup__note">Die Anmeldung und ggf. Zahlung laufen über unser Buchungssystem HiOrg-Server.<?php if ($agb = doc_url('agb')): ?> Es gelten unsere <a href="<?= e($agb) ?>" target="_blank" rel="noopener">AGB</a>.<?php endif; ?> Funktioniert etwas nicht? <a href="<?= e($it['link']) ?>" target="_blank" rel="noopener">Formular in neuem Tab öffnen</a></p>
         <p class="muted small signup__mhelp">Fragen zur Anmeldung? <a href="mailto:<?= e($mail) ?>"><?= e($mail) ?></a></p>
       </div>
     </div>

@@ -413,6 +413,16 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
 .kgrid .eyebrow{margin-bottom:12px}
 .kgrid__text{font-size:17px;margin-bottom:34px}
 .kgrid__text p+p{margin-top:14px}
+.pnotice{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;margin:0 0 16px;border:1px solid #F3C98B;border-left:4px solid #E58A00;border-radius:var(--r);background:#FFF8EC;font-size:14.5px;line-height:1.55;color:var(--text)}
+.pnotice .i{width:20px;height:20px;color:#C46F00;flex-shrink:0;margin-top:1px}
+.pnotice b{color:var(--ink)}
+.pnotice a{color:var(--red);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.sidebox__body--notice{padding:0 20px 4px}
+.sidebox__body--notice .pnotice{margin:0}
+.dates-hint,.docs-line{display:flex;gap:10px;align-items:flex-start;margin:0 0 16px;font-size:14px;line-height:1.55}
+.dates-hint .i,.docs-line .i{width:18px;height:18px;color:var(--red);flex-shrink:0;margin-top:2px}
+.dates-hint a,.docs-line a{color:var(--red);font-weight:600}
+.sidebox__foot--multi{display:flex;flex-direction:column;align-items:center;gap:10px}
 .parts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:-6px 0 36px}
 .part{display:flex;flex-direction:column;gap:8px;padding:22px;border:1px solid var(--line);border-top:3px solid var(--red);border-radius:var(--r-lg);background:#fff}
 .part h3{font-size:19px}
@@ -865,3 +875,18 @@ button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
   .tabbar__icon{width:40px}
   .tabbar__item--main .tabbar__icon{width:50px;height:50px}
 }
+
+/* Wartungsmodus: Hinweis für Admins + Wartungsseite */
+.mbar { background: #FFF3CD; color: #5C4400; font-size: 14px; text-align: center; padding: 8px 16px; border-bottom: 1px solid #F0D98C; }
+.mbar a { color: inherit; font-weight: 600; }
+body.maint-page { padding: 0 !important; margin: 0; }
+.maint { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 16px; background: var(--bg2); text-align: center; }
+.maint__box { width: 100%; max-width: 560px; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 40px 32px; }
+.maint__logo { display: block; width: 100%; max-width: 360px; height: auto; margin: 0 auto 32px; }
+.maint h1 { font-size: clamp(24px, 4vw, 32px); margin: 0 0 12px; }
+.maint p { color: var(--text); margin: 0 0 12px; }
+.maint__when { font-weight: 600; color: var(--ink) !important; }
+.maint__contact { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 24px; }
+.maint__foot { margin-top: 24px; font-size: 13px; color: var(--muted); }
+.maint__foot a { color: inherit; }
+@media (max-width: 520px) { .maint__box { padding: 28px 20px; } }

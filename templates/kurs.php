@@ -4,12 +4,17 @@ $c = $current;
 $cat = $c['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe';
 $catTitle = page($cat, 'title');
 $dates = free_dates($c);
-$bookable = !empty($c['hiorg_id']);
+$sources = dates_sources($c);
+$bookable = !empty($c['hiorg_id']) || $sources;
+$srcBy = [];
+foreach ($sources as [$sl, $sc]) {
+    $srcBy[$sl] = $sc;
+}
 $facts = pairs($c['facts'] ?? '');
 $top = array_slice($facts, 0, 4);
 $rest = array_slice($facts, 4);
 $icons = ['ausbildung' => 'award', 'fortbildung' => 'shield', 'inhouse' => 'building', 'dauer' => 'clock', 'preis' => 'euro', 'kosten' => 'euro', 'ort' => 'pin', 'format' => 'pin', 'frist' => 'shield', 'auffrischung' => 'shield', 'teilnahme' => 'users', 'für' => 'users', 'gruppe' => 'users', 'welpen' => 'heart', 'übung' => 'check', 'module' => 'clock', 'zeiten' => 'clock'];
-$others = array_values(array_filter(courses($cat), fn($o) => $o['slug'] !== $c['slug']));
+$others = array_values(array_filter(listed_courses($cat), fn($o) => $o['slug'] !== $c['slug']));
 usort($others, fn($a, $b) => (($b['group'] === $c['group']) <=> ($a['group'] === $c['group'])) ?: ((int) !empty($b['hiorg_id']) <=> (int) !empty($a['hiorg_id'])));
 
 layout_start([
@@ -44,7 +49,8 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
           <h3><?= e($pt) ?></h3>
           <p><?= e($px) ?></p>
           <?php if ($pm): ?><p class="part__meta"><?= icon('clock') ?><?= e($pm) ?></p><?php endif; ?>
-          <?php if ($bookable): ?><a class="alink" href="<?= url('termine/' . $c['slug']) ?>?art=<?= rawurlencode($pt) ?>">Termine <?= e($pt) ?> <?= icon('arrow') ?></a><?php endif; ?>
+          <?php if (isset($srcBy[$pt])): ?><a class="alink" href="<?= course_url($srcBy[$pt]) ?>"><?= e($srcBy[$pt]['title']) ?> <?= icon('arrow') ?></a>
+          <?php elseif ($bookable): ?><a class="alink" href="<?= url('termine/' . $c['slug']) ?>?art=<?= rawurlencode($pt) ?>">Termine <?= e($pt) ?> <?= icon('arrow') ?></a><?php endif; ?>
         </div>
         <?php endforeach; ?>
       </div>
@@ -52,6 +58,9 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <?php if ($learn = lines($c['learn'])): ?>
       <h2><?= e(($c['learn_title'] ?? '') ?: ($cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du')) ?></h2>
       <ul class="checks checks--2 checks--plain"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
+      <?php endif; ?>
+      <?php if (($bg = doc_url('bg-formular')) && preg_match('/BG|Berufsgenossenschaft/u', $c['facts'] . ' ' . $c['teaser'])): ?>
+      <p class="docs-line"><?= icon('info') ?> <span>Abrechnung über die Berufsgenossenschaft: <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular (PDF)</a></span></p>
       <?php endif; ?>
       <?php if ($rest): ?>
       <div class="note"><?= icon('info') ?><div><?php foreach ($rest as $n => [$k, $v]): ?><?= $n ? '<br>' : '' ?><b><?= e($k) ?>:</b> <?= e($v) ?><?php endforeach; ?></div></div>
@@ -62,7 +71,12 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <?php if ($bookable && $dates): ?>
       <div class="sidebox__head"><h3>Nächste freie Termine</h3><p>Direkt online anmelden</p></div>
       <ul class="dates"><?= render_dates($dates, ['limit' => 4]) ?></ul>
+      <?php if ($pn = place_notice(array_slice($dates, 0, 4))): ?><div class="sidebox__body sidebox__body--notice"><?= $pn ?></div><?php endif; ?>
+      <?php if ($sources): ?>
+      <div class="sidebox__foot sidebox__foot--multi"><?php foreach ($sources as [$sl, $sc]): ?><a class="alink" href="<?= url('termine/' . $sc['slug']) ?>">Alle Termine <?= e($sl) ?> <?= icon('arrow') ?></a><?php endforeach; ?></div>
+      <?php else: ?>
       <div class="sidebox__foot"><a class="alink" href="<?= url('termine/' . $c['slug']) ?>">Alle <?= count($dates) ?> Termine <?= icon('arrow') ?></a></div>
+      <?php endif; ?>
       <?php elseif ($bookable): ?>
       <div class="sidebox__head"><h3>Termine</h3><p>Aktuell keine freien Plätze</p></div>
       <div class="sidebox__body"><p>Neue Termine kommen laufend dazu. Für Gruppen und Betriebe finden wir auch einen eigenen Termin.</p>

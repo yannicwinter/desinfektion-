@@ -76,6 +76,7 @@ function illus_course(array $c): string
     $svg = fn(string $inner) => '<svg class="card__art-icon" viewBox="0 0 120 120" aria-hidden="true">' . $inner . '</svg>';
     $r = '#E60005';
     $map = [
+        'erste-hilfe-fortbildung' => ['soft', illus_kit('card__art-kit')],
         'erste-hilfe-im-betrieb' => ['soft', illus_kit('card__art-kit')],
         'erste-hilfe-am-kind' => ['rose', $svg('<circle cx="44" cy="26" r="15" fill="' . $r . '"/><path d="M18 112V74c0-17 12-30 26-30s26 13 26 30v38z" fill="' . $r . '"/><circle cx="86" cy="58" r="11" fill="' . $r . '" opacity=".75"/><path d="M68 112V94c0-12 8-21 18-21s18 9 18 21v18z" fill="' . $r . '" opacity=".75"/>')],
         'kinder-helfen-kindern' => ['rose', $svg('<circle cx="34" cy="40" r="12" fill="' . $r . '"/><path d="M14 104V80c0-13 9-22 20-22s20 9 20 22v24z" fill="' . $r . '"/><circle cx="86" cy="40" r="12" fill="' . $r . '" opacity=".75"/><path d="M66 104V80c0-13 9-22 20-22s20 9 20 22v24z" fill="' . $r . '" opacity=".75"/><path fill="#fff" d="M54 70h12v-12h8v12h12v8H74v12h-8V78H54z" transform="translate(-10 -6) scale(1)"/>')],

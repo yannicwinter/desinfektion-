@@ -1,5 +1,5 @@
 <?php
-/** Kontakt-/Anfrageformular: Verarbeitung (Spam-Schutz, Versand per mail()) und Ausgabe. */
+/** Kontakt-/Anfrageformular: Verarbeitung (Spam-Schutz, Versand über inc/mail.php: Microsoft Graph oder mail()) und Ausgabe. */
 declare(strict_types=1);
 
 function form_topics(): array
@@ -73,16 +73,7 @@ function form_handle(string $returnPath): array
         . "Nachricht:\n{$in['nachricht']}\n";
 
     $to = site('form_recipient') ?: site('email');
-    $host = preg_replace('/^www\./', '', parse_url(site('url'), PHP_URL_HOST) ?: ($_SERVER['HTTP_HOST'] ?? 'localhost'));
-    $headers = [
-        'From: ' . mb_encode_mimeheader(site('name')) . ' <noreply@' . $host . '>',
-        'Reply-To: ' . $in['email'],
-        'Content-Type: text/plain; charset=UTF-8',
-        'Content-Transfer-Encoding: 8bit',
-        'MIME-Version: 1.0',
-    ];
-    $subject = mb_encode_mimeheader('Website-Anfrage: ' . $topic . ' – ' . $in['name']);
-    $sent = @mail($to, $subject, $body, implode("\r\n", $headers));
+    $sent = send_mail($to, 'Website-Anfrage: ' . $topic . ' – ' . $in['name'], $body, $in['email']) === '';
     @file_put_contents($ipFile, (string) ($count + 1));
     if (!$sent) {
         return [['Die Nachricht konnte leider nicht versendet werden. Bitte direkt an ' . site('email') . ' schreiben.'], $in];

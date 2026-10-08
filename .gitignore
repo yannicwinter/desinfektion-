@@ -9,3 +9,4 @@ data/content.json.tmp
 data/secret.key
 data/instagram.json
 dist/
+data/mail.json

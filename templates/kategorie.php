@@ -1,7 +1,7 @@
 <?php
 /** Bereichsseite /erste-hilfe bzw. /brandschutz: Foto-Kopf, Terminsuche, Wegweiser, Einleitung, alle Kurse als Karten, „Gut zu wissen“. */
 $P = fn($k) => page($category, $k);
-$list = courses($category);
+$list = listed_courses($category);
 $groups = [];
 foreach ($list as $c) {
     $groups[$c['group'] ?: 'Kurse'][] = $c;

@@ -20,8 +20,10 @@
         "hiorg_booking": "fenster",
         "whatsapp": "",
         "topbar": "DRK-Kreisverband Verden e.V. · Anerkannte Ausbildungsstelle der Berufsgenossenschaften",
-        "ki_bilder": "hero, erste-hilfe, kurs-erste-hilfe-ausbildung, kurs-erste-hilfe-im-betrieb, kurs-kinder-helfen-kindern, kurs-forstehjelp-schulen, kurs-fresh-up-arztpraxen, kurs-aed-reanimationstraining, kurs-erste-hilfe-am-hund, kurs-erste-hilfe-am-welpen, kurs-brandschutzhelfer, kurs-feuerloeschertraining, kurs-evakuierungsuebung, kurs-brandschutzordnung-rettungsplaene, kurs-brandschutzbeauftragter, kurs-erste-hilfe-am-kind",
-        "instagram_links": ""
+        "ki_bilder": "hero, erste-hilfe, kurs-erste-hilfe-ausbildung, kurs-erste-hilfe-im-betrieb, kurs-erste-hilfe-fortbildung, kurs-kinder-helfen-kindern, kurs-forstehjelp-schulen, kurs-fresh-up-arztpraxen, kurs-aed-reanimationstraining, kurs-erste-hilfe-am-hund, kurs-erste-hilfe-am-welpen, kurs-brandschutzhelfer, kurs-feuerloeschertraining, kurs-evakuierungsuebung, kurs-brandschutzordnung-rettungsplaene, kurs-brandschutzbeauftragter, kurs-erste-hilfe-am-kind",
+        "instagram_links": "",
+        "hinweis_ort": "Achim",
+        "hinweis_text": "Am Standort in der Bahnhofstraße kann es wegen Baumaßnahmen zu Beeinträchtigungen kommen. Bitte den aktuellen Umleitungsempfehlungen folgen – eine Zufahrt zum DRK-Gebäude soll dauerhaft gegeben sein."
     },
     "pages": {
         "home": {
@@ -53,7 +55,7 @@
             "angebot_as": "Alles aus einer Hand: Übernahme von Brandschutz- und Arbeitssicherheitsverpflichtungen.",
             "termine_title": "Nächste freie Termine",
             "termine_lead": "Platz sichern und direkt online anmelden.",
-            "beliebt": "Führerschein | termine/erste-hilfe-ausbildung\nErsthelfer im Betrieb | termine/erste-hilfe-im-betrieb\nErste Hilfe am Kind | termine/erste-hilfe-am-kind\nBrandschutzhelfer | termine/brandschutzhelfer\nAm Wochenende | termine?wann=we",
+            "beliebt": "Führerschein | termine/erste-hilfe-ausbildung\nErsthelfer im Betrieb | erste-hilfe/erste-hilfe-im-betrieb\nErste Hilfe am Kind | termine/erste-hilfe-am-kind\nBrandschutzhelfer | termine/brandschutzhelfer\nAm Wochenende | termine?wann=we",
             "trust": "BG-anerkannte Ausbildungsstelle\nFür alle Führerscheinklassen\nOnline buchen in 2 Minuten\nKurse in Verden, Achim und im Betrieb",
             "angebot_eyebrow": "Unser Angebot",
             "angebot_lead": "",
@@ -71,7 +73,7 @@
             "lead": "Für Führerschein, Beruf und Familie – praxisnah, verständlich und ohne Prüfung.",
             "outro_title": "Welcher Kurs passt zu mir?",
             "outro_text": "Ruf uns an – wir beraten dich gern.",
-            "vergleich": "Kurs | Führerschein | Selbstzahler | Abrechnung über BG\nErste-Hilfe-Ausbildung | ja | ja | nein\nErste Hilfe im Betrieb | nein | nein | ja\nErste Hilfe am Kind | nein | ja | nur Kita & Schule",
+            "vergleich": "Kurs | Führerschein | Selbstzahler | Abrechnung über BG\nErste Hilfe Ausbildung (BG-Lehrgang) | ja | ja | ja\nErste Hilfe Fortbildung (BG-Lehrgang) | nein | ja | ja\nErste Hilfe am Kind | nein | ja | ja",
             "wege_eyebrow": "Wegweiser",
             "wege_title": "Wofür brauchst du den Kurs?",
             "wege_lead": "Wähle aus – wir zeigen dir die passenden Kurse.",
@@ -180,52 +182,75 @@
             "seo_title": "Datenschutz | DRK Arbeitssicherheit Mittelweser",
             "seo_description": "Datenschutzerklärung der Website DRK Arbeitssicherheit Mittelweser – ohne Tracking und ohne Cookies.",
             "title": "Datenschutz",
-            "body": "**1. Verantwortlicher**\nDeutsches Rotes Kreuz Kreisverband Verden e.V.\nLindhooper Straße 20/22, 27283 Verden (Aller)\nTelefon: 04231 9245-0 · E-Mail: [kontakt@drk-sicherheit.de](mailto:kontakt@drk-sicherheit.de)\nVertretungsberechtigt: siehe [Impressum](/impressum)\n\n**2. Datenschutzbeauftragter**\nJoel Schimmelpfennig, DRK-Kreisverband Verden e.V., Lindhooper Straße 20/22, 27283 Verden (Aller)\nE-Mail: [datenschutz@rotkreuz-verden.de](mailto:datenschutz@rotkreuz-verden.de) · Telefon: 04231 9245-0\n\n**3. Grundsätze**\nPersonenbezogene Daten werden auf dieser Website nur verarbeitet, soweit das für den Betrieb der Website, die Beantwortung von Anfragen oder die Kursanmeldung erforderlich ist. Rechtsgrundlagen sind die Datenschutz-Grundverordnung (DSGVO), insbesondere Art. 6 Abs. 1 lit. b (Vertrag und vorvertragliche Maßnahmen), lit. c (rechtliche Pflichten) und lit. f (berechtigtes Interesse), sowie das Bundesdatenschutzgesetz (BDSG) und § 25 TDDDG.\n\nDie Website setzt **keine Tracking- oder Analyse-Werkzeuge**, keine Werbe- oder Social-Media-Plugins und **keine Cookies** für Besucherinnen und Besucher ein. Schriften, Bilder und Skripte werden ausschließlich vom eigenen Server geladen.\n\n**4. Hosting und Server-Logdateien**\nDie Website wird bei [PLATZHALTER: Name und Anschrift des Hosting-Anbieters] betrieben. Mit dem Anbieter besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.\n\nBeim Aufruf der Website verarbeitet der Server automatisch technisch notwendige Daten: IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, übertragene Datenmenge, Browser und Betriebssystem sowie die zuvor besuchte Seite (Referrer). Diese Daten dienen der Auslieferung der Website, der Fehleranalyse und der Abwehr von Angriffen (Art. 6 Abs. 1 lit. f DSGVO). Sie werden nicht mit anderen Daten zusammengeführt und nach [PLATZHALTER: Speicherdauer der Logdateien beim Hoster, z. B. 7 Tagen] gelöscht.\n\nDie Verbindung ist per TLS (HTTPS) verschlüsselt.\n\n**5. Cookies**\nFür Besucherinnen und Besucher werden keine Cookies gesetzt. Lediglich im geschützten Verwaltungsbereich (/admin) wird nach der Anmeldung ein technisch notwendiges Sitzungs-Cookie verwendet, das beim Schließen des Browsers gelöscht wird (§ 25 Abs. 2 TDDDG).\n\n**6. Kontaktformular, E-Mail und Telefon**\nBei einer Anfrage über das Kontaktformular werden die eingegebenen Angaben (Name, E-Mail-Adresse, optional Unternehmen, Telefon, Thema, Teilnehmerzahl und Nachricht) per E-Mail an den DRK-Kreisverband Verden e.V. übermittelt und zur Bearbeitung der Anfrage verwendet. Das gilt entsprechend für Anfragen per E-Mail, Telefon oder WhatsApp. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, bei sonstigen Anfragen Art. 6 Abs. 1 lit. f DSGVO.\n\nDie Angaben werden gelöscht, sobald die Anfrage abschließend bearbeitet ist, sofern keine gesetzlichen Aufbewahrungspflichten (z. B. handels- und steuerrechtlich bei Aufträgen) bestehen.\n\nZum Schutz vor Missbrauch wird je Anfrage ein nicht umkehrbarer Hashwert der IP-Adresse zusammen mit der Uhrzeit gespeichert, um mehr als fünf Anfragen pro Stunde zu verhindern. Dieser Wert wird nach spätestens zwei Stunden gelöscht (Art. 6 Abs. 1 lit. f DSGVO).\n\n**7. Kurstermine und Online-Anmeldung (HiOrg-Server)**\nDie Kurstermine werden von unserem Server bei HiOrg-Server, dem Kursverwaltungssystem des DRK-Kreisverbands, abgerufen und auf dieser Website angezeigt. Dabei werden keine Daten von Besucherinnen und Besuchern übertragen.\n\nDie Anmeldung zu einem Kurs erfolgt über das Anmeldeformular von HiOrg-Server (HiOrg Server GmbH), das auf dieser Website eingebettet ist. Erst beim Öffnen des Anmeldeformulars (Klick auf „Buchen“ bzw. Auswahl eines Termins im Kursfinder) wird eine Verbindung zu HiOrg-Server aufgebaut; dabei werden u. a. die IP-Adresse und Browserdaten an HiOrg-Server übertragen. Die im Formular eingegebenen Daten werden von HiOrg-Server im Auftrag des DRK-Kreisverbands Verden e.V. zur Durchführung des Kurses verarbeitet (Art. 6 Abs. 1 lit. b DSGVO). Näheres steht in den Datenschutzhinweisen im Anmeldeformular.\n\nBei Bezahlung per PayPal werden die Zahlungsdaten an die PayPal (Europe) S.à r.l. et Cie, S.C.A., 22-24 Boulevard Royal, L-2449 Luxemburg, übermittelt. Es gelten zusätzlich die Datenschutzhinweise von PayPal.\n\nBei Teilnahme über den Arbeitgeber werden die für die Abrechnung erforderlichen Angaben an den Arbeitgeber bzw. den zuständigen Unfallversicherungsträger (Berufsgenossenschaft, Unfallkasse) übermittelt.\n\n**8. Kursfinder**\nDer Kursfinder („Kurs finden“) läuft vollständig auf unserem Server, ohne externen KI-Dienst. Eingegebene Fragen werden nur zur Beantwortung verarbeitet und weder gespeichert noch ausgewertet. Nach dem Schließen oder Neuladen der Seite ist der Verlauf gelöscht.\n\n**9. Instagram-Beiträge**\nAuf der Startseite werden aktuelle Beiträge unseres Instagram-Kanals gezeigt. Diese werden von unserem Server über die offizielle Instagram-Schnittstelle abgerufen und die Bilder auf unserem Server gespeichert. Beim Besuch der Website wird daher keine Verbindung zu Instagram aufgebaut.\n\nErst beim Klick auf einen Beitrag oder den Instagram-Link wird die Website von Instagram (Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, Irland) geöffnet. Dort gelten die Datenschutzhinweise von Meta.\n\n**10. Links zu anderen Anbietern**\nDie Website enthält Links zu externen Angeboten, z. B. OpenStreetMap (Anfahrt), WhatsApp und Instagram. Daten werden an diese Anbieter erst übertragen, wenn ein solcher Link angeklickt wird.\n\n**11. Rechte der betroffenen Personen**\nBetroffene Personen haben das Recht auf\n- Auskunft über die gespeicherten Daten (Art. 15 DSGVO)\n- Berichtigung unrichtiger Daten (Art. 16 DSGVO)\n- Löschung (Art. 17 DSGVO) und Einschränkung der Verarbeitung (Art. 18 DSGVO)\n- Datenübertragbarkeit (Art. 20 DSGVO)\n- Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21 DSGVO)\n- Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)\n\nAnfragen dazu bitte an den Datenschutzbeauftragten (siehe Punkt 2).\n\nAußerdem besteht das Recht auf Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO), z. B. bei der Landesbeauftragten für den Datenschutz Niedersachsen, Prinzenstraße 5, 30159 Hannover, [www.lfd.niedersachsen.de](https://www.lfd.niedersachsen.de).\n\n**12. Pflicht zur Bereitstellung**\nDie Angabe personenbezogener Daten ist weder gesetzlich noch vertraglich vorgeschrieben. Ohne die Pflichtangaben im Kontakt- bzw. Anmeldeformular kann eine Anfrage jedoch nicht bearbeitet bzw. eine Anmeldung nicht durchgeführt werden. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht statt.\n\nStand: Oktober 2026"
+            "body": "**1. Verantwortlicher**\nDeutsches Rotes Kreuz Kreisverband Verden e.V.\nLindhooper Straße 20/22, 27283 Verden (Aller)\nTelefon: 04231 9245-0 · E-Mail: [kontakt@drk-sicherheit.de](mailto:kontakt@drk-sicherheit.de)\nVertretungsberechtigt: siehe [Impressum](/impressum)\n\n**2. Datenschutzbeauftragter**\nJoel Schimmelpfennig, DRK-Kreisverband Verden e.V., Lindhooper Straße 20/22, 27283 Verden (Aller)\nE-Mail: [datenschutz@rotkreuz-verden.de](mailto:datenschutz@rotkreuz-verden.de) · Telefon: 04231 9245-0\n\n**3. Grundsätze**\nPersonenbezogene Daten werden auf dieser Website nur verarbeitet, soweit das für den Betrieb der Website, die Beantwortung von Anfragen oder die Kursanmeldung erforderlich ist. Rechtsgrundlagen sind die Datenschutz-Grundverordnung (DSGVO), insbesondere Art. 6 Abs. 1 lit. b (Vertrag und vorvertragliche Maßnahmen), lit. c (rechtliche Pflichten) und lit. f (berechtigtes Interesse), sowie das Bundesdatenschutzgesetz (BDSG) und § 25 TDDDG.\n\nDie Website setzt **keine Tracking- oder Analyse-Werkzeuge**, keine Werbe- oder Social-Media-Plugins und **keine Cookies** für Besucherinnen und Besucher ein. Schriften, Bilder und Skripte werden ausschließlich vom eigenen Server geladen.\n\n**4. Hosting und Server-Logdateien**\nDie Website wird bei [PLATZHALTER: Name und Anschrift des Hosting-Anbieters] betrieben. Mit dem Anbieter besteht ein Vertrag zur Auftragsverarbeitung nach Art. 28 DSGVO.\n\nBeim Aufruf der Website verarbeitet der Server automatisch technisch notwendige Daten: IP-Adresse, Datum und Uhrzeit, aufgerufene Seite, übertragene Datenmenge, Browser und Betriebssystem sowie die zuvor besuchte Seite (Referrer). Diese Daten dienen der Auslieferung der Website, der Fehleranalyse und der Abwehr von Angriffen (Art. 6 Abs. 1 lit. f DSGVO). Sie werden nicht mit anderen Daten zusammengeführt und nach [PLATZHALTER: Speicherdauer der Logdateien beim Hoster, z. B. 7 Tagen] gelöscht.\n\nDie Verbindung ist per TLS (HTTPS) verschlüsselt.\n\n**5. Cookies**\nFür Besucherinnen und Besucher werden keine Cookies gesetzt. Lediglich im geschützten Verwaltungsbereich (/admin) wird nach der Anmeldung ein technisch notwendiges Sitzungs-Cookie verwendet, das beim Schließen des Browsers gelöscht wird (§ 25 Abs. 2 TDDDG).\n\n**6. Kontaktformular, E-Mail und Telefon**\nBei einer Anfrage über das Kontaktformular werden die eingegebenen Angaben (Name, E-Mail-Adresse, optional Unternehmen, Telefon, Thema, Teilnehmerzahl und Nachricht) per E-Mail an den DRK-Kreisverband Verden e.V. übermittelt und zur Bearbeitung der Anfrage verwendet. Das gilt entsprechend für Anfragen per E-Mail, Telefon oder WhatsApp. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO, bei sonstigen Anfragen Art. 6 Abs. 1 lit. f DSGVO.\n\nFür den E-Mail-Versand nutzt der DRK-Kreisverband Verden e.V. Microsoft 365 (Microsoft Ireland Operations Ltd., One Microsoft Place, South County Business Park, Leopardstown, Dublin 18, Irland) als Auftragsverarbeiter (Art. 28 DSGVO). Die Daten werden in Rechenzentren in der EU verarbeitet; eine Übermittlung an die Microsoft Corporation in den USA ist nicht ausgeschlossen. Sie erfolgt auf Grundlage des Angemessenheitsbeschlusses der EU-Kommission (EU-US Data Privacy Framework) und der EU-Standardvertragsklauseln.\n\nDie Angaben werden gelöscht, sobald die Anfrage abschließend bearbeitet ist, sofern keine gesetzlichen Aufbewahrungspflichten (z. B. handels- und steuerrechtlich bei Aufträgen) bestehen.\n\nZum Schutz vor Missbrauch wird je Anfrage ein nicht umkehrbarer Hashwert der IP-Adresse zusammen mit der Uhrzeit gespeichert, um mehr als fünf Anfragen pro Stunde zu verhindern. Dieser Wert wird nach spätestens zwei Stunden gelöscht (Art. 6 Abs. 1 lit. f DSGVO).\n\n**7. Kurstermine und Online-Anmeldung (HiOrg-Server)**\nDie Kurstermine werden von unserem Server bei HiOrg-Server, dem Kursverwaltungssystem des DRK-Kreisverbands, abgerufen und auf dieser Website angezeigt. Dabei werden keine Daten von Besucherinnen und Besuchern übertragen.\n\nDie Anmeldung zu einem Kurs erfolgt über das Anmeldeformular von HiOrg-Server (HiOrg Server GmbH), das auf dieser Website eingebettet ist. Erst beim Öffnen des Anmeldeformulars (Klick auf „Buchen“ bzw. Auswahl eines Termins im Kursfinder) wird eine Verbindung zu HiOrg-Server aufgebaut; dabei werden u. a. die IP-Adresse und Browserdaten an HiOrg-Server übertragen. Die im Formular eingegebenen Daten werden von HiOrg-Server im Auftrag des DRK-Kreisverbands Verden e.V. zur Durchführung des Kurses verarbeitet (Art. 6 Abs. 1 lit. b DSGVO). Näheres steht in den Datenschutzhinweisen im Anmeldeformular.\n\nBei Bezahlung per PayPal werden die Zahlungsdaten an die PayPal (Europe) S.à r.l. et Cie, S.C.A., 22-24 Boulevard Royal, L-2449 Luxemburg, übermittelt. Es gelten zusätzlich die Datenschutzhinweise von PayPal.\n\nBei Teilnahme über den Arbeitgeber werden die für die Abrechnung erforderlichen Angaben an den Arbeitgeber bzw. den zuständigen Unfallversicherungsträger (Berufsgenossenschaft, Unfallkasse) übermittelt.\n\n**8. Kursfinder**\nDer Kursfinder („Kurs finden“) läuft vollständig auf unserem Server, ohne externen KI-Dienst. Eingegebene Fragen werden nur zur Beantwortung verarbeitet und weder gespeichert noch ausgewertet. Nach dem Schließen oder Neuladen der Seite ist der Verlauf gelöscht.\n\n**9. Instagram-Beiträge**\nAuf der Startseite werden aktuelle Beiträge unseres Instagram-Kanals gezeigt. Diese werden von unserem Server über die offizielle Instagram-Schnittstelle abgerufen und die Bilder auf unserem Server gespeichert. Beim Besuch der Website wird daher keine Verbindung zu Instagram aufgebaut.\n\nErst beim Klick auf einen Beitrag oder den Instagram-Link wird die Website von Instagram (Meta Platforms Ireland Ltd., Merrion Road, Dublin 4, Irland) geöffnet. Dort gelten die Datenschutzhinweise von Meta.\n\n**10. Links zu anderen Anbietern**\nDie Website enthält Links zu externen Angeboten, z. B. OpenStreetMap (Anfahrt), WhatsApp und Instagram. Daten werden an diese Anbieter erst übertragen, wenn ein solcher Link angeklickt wird.\n\n**11. Rechte der betroffenen Personen**\nBetroffene Personen haben das Recht auf\n- Auskunft über die gespeicherten Daten (Art. 15 DSGVO)\n- Berichtigung unrichtiger Daten (Art. 16 DSGVO)\n- Löschung (Art. 17 DSGVO) und Einschränkung der Verarbeitung (Art. 18 DSGVO)\n- Datenübertragbarkeit (Art. 20 DSGVO)\n- Widerspruch gegen Verarbeitungen auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO (Art. 21 DSGVO)\n- Widerruf einer erteilten Einwilligung mit Wirkung für die Zukunft (Art. 7 Abs. 3 DSGVO)\n\nAnfragen dazu bitte an den Datenschutzbeauftragten (siehe Punkt 2).\n\nAußerdem besteht das Recht auf Beschwerde bei einer Aufsichtsbehörde (Art. 77 DSGVO), z. B. bei der Landesbeauftragten für den Datenschutz Niedersachsen, Prinzenstraße 5, 30159 Hannover, [www.lfd.niedersachsen.de](https://www.lfd.niedersachsen.de).\n\n**12. Pflicht zur Bereitstellung**\nDie Angabe personenbezogener Daten ist weder gesetzlich noch vertraglich vorgeschrieben. Ohne die Pflichtangaben im Kontakt- bzw. Anmeldeformular kann eine Anfrage jedoch nicht bearbeitet bzw. eine Anmeldung nicht durchgeführt werden. Eine automatisierte Entscheidungsfindung einschließlich Profiling findet nicht statt.\n\nStand: Oktober 2026"
         }
     },
     "courses": [
         {
             "slug": "erste-hilfe-ausbildung",
             "category": "erste-hilfe",
-            "group": "Führerschein & Privat",
-            "title": "Erste-Hilfe-Ausbildung",
-            "teaser": "Für Führerschein, Trainerlizenz, Juleica und Studium.",
-            "text": "Notfälle im Straßenverkehr, zu Hause oder durch Herz-Kreislauf-Erkrankungen zeigen, wie wichtig schnelles und richtiges Handeln ist. In 9 Unterrichtseinheiten lernst du die wichtigsten Grundlagen – vor allem für die Situationen, in denen jede Sekunde zählt.\n\nDer Kurs gilt für den Führerschein aller Klassen, für Übungsleiterschein, Juleica und Studium.\n\nViel Praxis, realistische Fallbeispiele, keine Prüfung. Du brauchst den Kurs als Ersthelfer für deinen Arbeitgeber? Dafür gibt es „Erste Hilfe im Betrieb“ – meist zahlt dann die Berufsgenossenschaft.",
+            "group": "Führerschein & Beruf",
+            "title": "Erste Hilfe Ausbildung (BG-Lehrgang)",
+            "teaser": "Für Führerschein, Trainerlizenz, Juleica und Studium – und als Ersthelfer im Betrieb.",
+            "text": "Notfälle im Straßenverkehr, zu Hause, im Betrieb oder durch Herz-Kreislauf-Erkrankungen zeigen, wie wichtig schnelles und richtiges Handeln ist. In 9 Unterrichtseinheiten lernst du die wichtigsten Grundlagen – vor allem für die Situationen, in denen jede Sekunde zählt.\n\nDer Kurs gilt für den Führerschein aller Klassen, für Übungsleiterschein, Juleica und Studium – und als Ausbildung zum betrieblichen Ersthelfer (BG-Lehrgang). Wer über den Arbeitgeber teilnimmt, wählt das bei der Anmeldung aus; die Kosten übernimmt dann meist die Berufsgenossenschaft.\n\nViel Praxis, realistische Fallbeispiele, keine Prüfung. Für größere Gruppen gibt es auf Wunsch eigene Termine – werktags und direkt vor Ort.",
             "learn": "Notruf & Eigenschutz\nBewusstlosigkeit & stabile Seitenlage\nHerz-Lungen-Wiederbelebung & AED\nWunden & starke Blutungen\nHerzinfarkt, Schlaganfall, Schock",
-            "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nPreis: 60 € (Selbstzahler)\nTeilnahme: ab 14 Jahren",
+            "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nPreis: 60 € (Selbstzahler)\nBetriebe: Abrechnung über BG möglich\nTeilnahme: ab 14 Jahren",
             "price": "60 €",
             "hiorg_id": "3871",
             "cta": "termine",
             "featured": "1",
             "active": "1",
-            "keywords": "führerschein, fahrschule, fahrerlaubnis, grundkurs, lebensrettende sofortmaßnahmen, trainerlizenz, juleica, studium",
-            "contact": "Jan Wille"
+            "keywords": "führerschein, fahrschule, fahrerlaubnis, grundkurs, lebensrettende sofortmaßnahmen, trainerlizenz, juleica, studium, ersthelfer, bg-lehrgang, betrieb",
+            "contact": "Jan Wille",
+            "listed": "1"
+        },
+        {
+            "slug": "erste-hilfe-fortbildung",
+            "category": "erste-hilfe",
+            "group": "Führerschein & Beruf",
+            "title": "Erste Hilfe Fortbildung (BG-Lehrgang)",
+            "teaser": "Auffrischung für betriebliche Ersthelfer – und für alle, die ihr Wissen auffrischen möchten.",
+            "text": "Die Fortbildung ist für dich, wenn deine letzte Erste-Hilfe-Ausbildung oder -Fortbildung höchstens zwei Jahre zurückliegt. Gemeinsam wiederholen und vertiefen wir die wichtigsten lebensrettenden Maßnahmen – in Theorie und vielen praktischen Übungen.\n\nFür betriebliche Ersthelfer ist sie Pflicht: innerhalb von 24 Monaten (BG) bzw. 36 Monaten (GUV). Wird die Frist überschritten, ist wieder die komplette Ausbildung nötig. Wer über den Arbeitgeber teilnimmt, wählt das bei der Anmeldung aus; die Kosten übernimmt dann meist die Berufsgenossenschaft.\n\nAllen anderen empfiehlt das DRK, spätestens alle zwei Jahre aufzufrischen. Bring gern eigene Erfahrungen mit – wir gehen auf Themen ein, die in deinem Alltag oder Beruf wichtig sind.",
+            "learn": "Wiederbelebung & AED\nTypische Notfälle am Arbeitsplatz und im Alltag\nPraktische Fallbeispiele\nEigene Erfahrungen & Fragen",
+            "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nPreis: 60 € (Selbstzahler)\nBetriebe: Abrechnung über BG möglich\nFrist: 24 Monate BG · 36 Monate GUV",
+            "price": "60 €",
+            "hiorg_id": "3872",
+            "cta": "termine",
+            "featured": "",
+            "active": "1",
+            "listed": "1",
+            "keywords": "auffrischung, auffrischen, wiederholung, refresh, fortbildung, verlängern, ersthelfer, betrieb, bg",
+            "contact": "Jan Wille",
+            "learn_title": "",
+            "parts": ""
         },
         {
             "slug": "erste-hilfe-im-betrieb",
             "category": "erste-hilfe",
             "group": "Beruf & Betrieb",
             "title": "Erste Hilfe im Betrieb",
-            "teaser": "Ersthelfer-Ausbildung und Fortbildung für Betriebe – die Kosten übernimmt meist die Berufsgenossenschaft.",
+            "teaser": "Ausbildung und Fortbildung für betriebliche Ersthelfer – die Kosten übernimmt meist die Berufsgenossenschaft.",
             "text": "Gerade weil es in Betrieben immer wieder zu Notfällen kommt, sollten möglichst viele Beschäftigte als betriebliche Ersthelfer ausgebildet sein. Jeder Betrieb ist dazu verpflichtet (§ 10 ArbSchG, DGUV Vorschrift 1). Dafür gibt es zwei Lehrgänge: die Ausbildung für neue Ersthelfer und die Fortbildung, mit der Ersthelfer ihr Wissen alle zwei Jahre auffrischen.\n\nDie Kosten übernimmt in den meisten Fällen die Berufsgenossenschaft bzw. Unfallkasse. Bitte vorab klären, ob und in welchem Umfang die Kosten übernommen werden, und uns die Kostenübernahme im Original zusenden. Wir schulen nach den Vorgaben der Unfallversicherungsträger und sind von ihnen geprüft.\n\nBeide Lehrgänge gibt es als offene Termine bei uns – oder als Inhouse-Schulung direkt im Betrieb, Termin und Uhrzeit nach Absprache.",
             "learn": "Notruf & Eigenschutz\nBewusstlosigkeit & stabile Seitenlage\nHerz-Lungen-Wiederbelebung & AED\nWunden & starke Blutungen\nHerzinfarkt, Schlaganfall, Schock\nTypische Notfälle am Arbeitsplatz",
             "facts": "Ausbildung: 9 UE · für neue Ersthelfer\nFortbildung: 9 UE · alle 2 Jahre (GUV: 3)\nKosten: meist über die BG\nInhouse: direkt im Betrieb möglich",
             "price": "",
-            "hiorg_id": "3871:Ausbildung, 3872:Fortbildung",
+            "hiorg_id": "",
             "cta": "termine",
             "featured": "",
             "active": "1",
             "keywords": "ersthelfer, betrieb, firma, arbeitgeber, bg, berufsgenossenschaft, unfallkasse, guv, bg-lehrgang, fortbildung, auffrischung, wiederholung",
             "contact": "Jan Wille",
             "learn_title": "Inhalte von Aus- und Fortbildung",
-            "parts": "Ausbildung | Für Beschäftigte, die neu Ersthelfer werden – oder deren letzte Aus- bzw. Fortbildung länger als 2 Jahre zurückliegt. Ganz ohne Vorkenntnisse: alle wichtigen Maßnahmen von Notruf bis Wiederbelebung, mit viel Praxis. | 9 UE · 08:30–16:30 Uhr\nFortbildung | Für betriebliche Ersthelfer, deren letzte Aus- oder Fortbildung höchstens 2 Jahre zurückliegt (GUV: 3 Jahre). Wiederholen und vertiefen, mit typischen Notfällen aus dem Arbeitsalltag und eigenen Erfahrungen. | 9 UE · 08:30–16:30 Uhr"
+            "parts": "Ausbildung | Für Beschäftigte, die neu Ersthelfer werden – oder deren letzte Aus- bzw. Fortbildung länger als 2 Jahre zurückliegt. Ganz ohne Vorkenntnisse: alle wichtigen Maßnahmen von Notruf bis Wiederbelebung, mit viel Praxis. | 9 UE · 08:30–16:30 Uhr\nFortbildung | Für betriebliche Ersthelfer, deren letzte Aus- oder Fortbildung höchstens 2 Jahre zurückliegt (GUV: 3 Jahre). Wiederholen und vertiefen, mit typischen Notfällen aus dem Arbeitsalltag und eigenen Erfahrungen. | 9 UE · 08:30–16:30 Uhr",
+            "listed": "",
+            "dates_from": "Ausbildung:erste-hilfe-ausbildung, Fortbildung:erste-hilfe-fortbildung"
         },
         {
             "slug": "erste-hilfe-am-kind",
             "category": "erste-hilfe",
             "group": "Familie & Kinder",
             "title": "Erste Hilfe am Kind",
-            "teaser": "Für Eltern, Großeltern, Babysitter und Erzieher.",
+            "teaser": "Für Eltern, Großeltern, Babysitter, Erzieher und Beschäftigte in Kita und Schule.",
             "text": "Kinder sind neugierig und entdecken jeden Tag die Welt – da passieren schnell kleine und manchmal auch ernste Unfälle. In 9 Unterrichtseinheiten lernst du Schritt für Schritt, was ein Kind im Notfall braucht und welche Maßnahmen in welcher Reihenfolge wichtig sind.\n\nEs geht um lebensbedrohliche Situationen wie Atemnot, Bewusstseinsstörung oder Kreislaufstillstand – und um die vielen kleinen Unfälle im Alltag: Stürze, Verbrennungen, Vergiftungen, Fieberkrämpfe.\n\nAußerdem zeigen wir dir typische Gefahrenquellen im Haushalt und auf dem Spielplatz – damit es gar nicht erst zum Notfall kommt.",
             "learn": "Wiederbelebung bei Säugling & Kind\nAtemnot & Verschlucken\nFieberkrampf, Vergiftung, Verbrennung\nUnfälle vorbeugen",
             "facts": "Dauer: 9 UE · 08:30–16:30 Uhr\nPreis: 60 € (Selbstzahler)\nKitas & Schulen: Abrechnung über UV-Träger möglich",
@@ -235,7 +260,8 @@
             "featured": "1",
             "active": "1",
             "keywords": "baby, säugling, kleinkind, eltern, mutter, vater, kita, erzieher, tagesmutter, babysitter, oma, opa, enkel, notfälle bei kindern",
-            "contact": "Jan Wille"
+            "contact": "Jan Wille",
+            "listed": "1"
         },
         {
             "slug": "erste-hilfe-party",
@@ -253,7 +279,8 @@
             "active": "1",
             "keywords": "party, zuhause, privat, freunde, feier, junggesellen, hausbesuch",
             "contact": "Jan Wille",
-            "learn_title": "Mögliche Themen"
+            "learn_title": "Mögliche Themen",
+            "listed": "1"
         },
         {
             "slug": "kinder-helfen-kindern",
@@ -270,7 +297,8 @@
             "featured": "",
             "active": "1",
             "keywords": "kinder helfen kindern, grundschule, vorschule, kindergarten, rettungswagen, urkunde, comic",
-            "contact": "Sigrid Renz"
+            "contact": "Sigrid Renz",
+            "listed": "1"
         },
         {
             "slug": "forstehjelp-schulen",
@@ -287,7 +315,8 @@
             "featured": "",
             "active": "1",
             "keywords": "førstehjelp, forstehjelp, schule, schulklasse, schüler, norwegen, projekttag, bronze, silber, gold, platin",
-            "contact": "Jan Wille"
+            "contact": "Jan Wille",
+            "listed": "1"
         },
         {
             "slug": "fresh-up-arztpraxen",
@@ -304,7 +333,8 @@
             "featured": "",
             "active": "1",
             "keywords": "arztpraxis, praxis, arzt, ärztin, praxisteam, mfa, zahnarzt, fresh up",
-            "contact": "Jan Wille"
+            "contact": "Jan Wille",
+            "listed": "1"
         },
         {
             "slug": "aed-reanimationstraining",
@@ -321,7 +351,8 @@
             "featured": "",
             "active": "1",
             "keywords": "aed, defi, defibrillator, reanimation, wiederbelebung, herzdruckmassage, herzstillstand",
-            "contact": "Jan Wille"
+            "contact": "Jan Wille",
+            "listed": "1"
         },
         {
             "slug": "erste-hilfe-am-hund",
@@ -338,7 +369,8 @@
             "featured": "",
             "active": "1",
             "keywords": "hund, hunde, hundekurs, tier, vierbeiner, pfote, dummy-hund",
-            "contact": "Christopher von Speckelsen"
+            "contact": "Christopher von Speckelsen",
+            "listed": "1"
         },
         {
             "slug": "erste-hilfe-am-welpen",
@@ -355,7 +387,8 @@
             "featured": "",
             "active": "1",
             "keywords": "welpe, welpen, junghund, welpenkurs",
-            "contact": "Christopher von Speckelsen"
+            "contact": "Christopher von Speckelsen",
+            "listed": "1"
         },
         {
             "slug": "brandschutzhelfer",
@@ -372,7 +405,8 @@
             "featured": "1",
             "active": "1",
             "keywords": "brandschutzhelfer, evakuierungshelfer, brandschutz, brandschutzschulung, asr a2.2",
-            "contact": "Matthias True"
+            "contact": "Matthias True",
+            "listed": "1"
         },
         {
             "slug": "feuerloeschertraining",
@@ -389,7 +423,8 @@
             "featured": "",
             "active": "1",
             "keywords": "feuerlöscher, feuerlöschertraining, löschtraining, löschübung",
-            "contact": "Matthias True"
+            "contact": "Matthias True",
+            "listed": "1"
         },
         {
             "slug": "evakuierungsuebung",
@@ -406,7 +441,8 @@
             "featured": "",
             "active": "",
             "keywords": "evakuierung, räumungsübung, räumung, alarmübung, übung",
-            "contact": "Matthias True"
+            "contact": "Matthias True",
+            "listed": "1"
         },
         {
             "slug": "brandschutzordnung-rettungsplaene",
@@ -423,7 +459,8 @@
             "featured": "",
             "active": "1",
             "keywords": "brandschutzordnung, fluchtplan, rettungsplan, flucht- und rettungsplan, gefährdungsbeurteilung, dokumente",
-            "contact": "Matthias True"
+            "contact": "Matthias True",
+            "listed": "1"
         },
         {
             "slug": "brandschutzbeauftragter",
@@ -440,7 +477,8 @@
             "featured": "",
             "active": "1",
             "keywords": "brandschutzbeauftragter, brandschutzpflichten, externer brandschutzbeauftragter",
-            "contact": "Matthias True"
+            "contact": "Matthias True",
+            "listed": "1"
         }
     ],
     "faq": [
@@ -661,5 +699,11 @@
             "phone": "04231 / 9245-0",
             "photo": "assets/img/team/christopher-von-speckelsen.jpg"
         }
-    ]
+    ],
+    "wartung": {
+        "aktiv": "",
+        "titel": "",
+        "text": "",
+        "bis": ""
+    }
 }

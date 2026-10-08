@@ -179,6 +179,70 @@ function course(string $slug): ?array
 }
 
 /** Kurse mit HiOrg-Terminliste. */
+/** Dokumente (PDF), im Admin unter „Dokumente“ hochladbar; ohne Upload greift ein mitgeliefertes Standarddokument. */
+function doc_slots(): array
+{
+    return [
+        'achim' => ['Hinweis Baumaßnahmen Achim (Skizzen der Bauabschnitte)', 'assets/docs/achim-bauabschnitte.pdf'],
+        'agb' => ['Allgemeine Geschäftsbedingungen (AGB)', ''],
+        'bg-formular' => ['Abrechnungsformular Berufsgenossenschaft (Blanko)', ''],
+    ];
+}
+
+function doc_url(string $slot): string
+{
+    $f = UPLOAD_DIR . '/docs/' . $slot . '.pdf';
+    if (is_file($f)) {
+        return url('uploads/docs/' . $slot . '.pdf') . '?v=' . filemtime($f);
+    }
+    $def = doc_slots()[$slot][1] ?? '';
+    return $def !== '' && is_file(ROOT . '/' . $def) ? url($def) . '?v=' . filemtime(ROOT . '/' . $def) : '';
+}
+
+/** Hinweis für Termine an einem Ort mit Einschränkungen (Admin → Allgemein: „Hinweis Ort“ + „Hinweis-Text“). */
+function place_notice(array $items = [], bool $always = false): string
+{
+    $town = trim(site('hinweis_ort'));
+    $text = trim(site('hinweis_text'));
+    if ($town === '' || $text === '') {
+        return '';
+    }
+    if (!$always) {
+        $hit = false;
+        foreach ($items as $it) {
+            if (mb_stripos(($it['details'] ?? '') . ' ' . hiorg_town($it['details'] ?? ''), $town) !== false) {
+                $hit = true;
+                break;
+            }
+        }
+        if (!$hit) {
+            return '';
+        }
+    }
+    $pdf = doc_url('achim');
+    return '<div class="pnotice" role="note">' . icon('info') . '<div><b>Hinweis für Kurse in ' . e($town) . ':</b> ' . e($text)
+        . ($pdf ? ' <a href="' . e($pdf) . '" target="_blank" rel="noopener">Skizzen der Bauabschnitte (PDF)</a>' : '') . '</div></div>';
+}
+
+/** Kurse, die in Kurslisten erscheinen (Infoseiten wie „Erste Hilfe im Betrieb“ haben listed = ''). */
+function listed_courses(?string $category = null): array
+{
+    return array_values(array_filter(courses($category), fn($c) => ($c['listed'] ?? '1') !== ''));
+}
+
+/** Infoseite mit Terminen anderer Kurse: „Ausbildung:erste-hilfe-ausbildung, Fortbildung:…“ → [[Bezeichnung, Kurs], …]. */
+function dates_sources(array $c): array
+{
+    $out = [];
+    foreach (array_filter(array_map('trim', explode(',', (string) ($c['dates_from'] ?? '')))) as $part) {
+        [$label, $slug] = array_pad(array_map('trim', explode(':', $part, 2)), 2, '');
+        if ($src = course($slug)) {
+            $out[] = [$label, $src];
+        }
+    }
+    return $out;
+}
+
 function bookable_courses(): array
 {
     return array_values(array_filter(courses(), fn($c) => trim((string) ($c['hiorg_id'] ?? '')) !== ''));
@@ -291,6 +355,27 @@ function start_session(): void
     session_name('drk_sid');
     session_set_cookie_params(['lifetime' => 0, 'path' => base_path() . '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Lax']);
     session_start();
+}
+
+/** Wartungsmodus (content.json → wartung): aktiv, titel, text, bis. */
+function maintenance(): array
+{
+    return (array) (content()['wartung'] ?? []) + ['aktiv' => '', 'titel' => '', 'text' => '', 'bis' => ''];
+}
+
+function maintenance_active(): bool
+{
+    return !empty(maintenance()['aktiv']);
+}
+
+/** Angemeldeter Admin? Sitzung nur öffnen, wenn das Cookie schon da ist – Besucher bekommen keins. */
+function is_admin_visitor(): bool
+{
+    if (empty($_COOKIE['drk_sid'])) {
+        return false;
+    }
+    start_session();
+    return !empty($_SESSION['admin']) && ($_SESSION['admin_seen'] ?? 0) >= time() - 7200;
 }
 
 function csrf_token(): string

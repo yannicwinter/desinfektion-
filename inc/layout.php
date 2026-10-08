@@ -58,6 +58,7 @@ function layout_start(array $meta): void
 <?php endforeach; ?>
 </head>
 <body class="page-<?= e($active ?: 'home') ?>">
+<?php if (maintenance_active()): ?><div class="mbar" role="status">Wartungsmodus aktiv – Besucher sehen die Wartungsseite. <a href="<?= url('admin/wartung') ?>">Ausschalten</a></div><?php endif; ?>
 <a class="skip" href="#inhalt">Zum Inhalt springen</a>
 <div class="topbar">
   <div class="wrap topbar__in">
@@ -131,7 +132,7 @@ function layout_end(): void
     </div>
     <div class="footer__bottom">
       <span>© <?= date('Y') ?> <?= e(site('org')) ?></span>
-      <nav aria-label="Rechtliches"><a href="<?= url('impressum') ?>">Impressum</a><a href="<?= url('datenschutz') ?>">Datenschutz</a></nav>
+      <nav aria-label="Rechtliches"><?php if ($agb = doc_url('agb')): ?><a href="<?= e($agb) ?>" target="_blank" rel="noopener">AGB</a><?php endif; ?><?php if ($bg = doc_url('bg-formular')): ?><a href="<?= e($bg) ?>" target="_blank" rel="noopener">BG-Abrechnungsformular</a><?php endif; ?><a href="<?= url('impressum') ?>">Impressum</a><a href="<?= url('datenschutz') ?>">Datenschutz</a></nav>
     </div>
   </div>
 </footer>
@@ -289,6 +290,18 @@ function shead(string $eyebrow, string $title, string $text = '', string $link =
 function free_dates(array $c): array
 {
     static $memo = [];
+    if ($src = dates_sources($c)) {
+        // Infoseite: Termine der verknüpften Kurse, markiert mit der Bezeichnung (Ausbildung/Fortbildung)
+        $all = [];
+        foreach ($src as [$label, $sc]) {
+            foreach (free_dates($sc) as $it) {
+                $it['variant'] = $label;
+                $all[] = $it;
+            }
+        }
+        usort($all, fn($a, $b) => $a['ts'] <=> $b['ts']);
+        return $all;
+    }
     $id = trim((string) ($c['hiorg_id'] ?? ''));
     if ($id === '') {
         return [];

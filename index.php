@@ -11,6 +11,7 @@ require __DIR__ . '/inc/layout.php';
 require __DIR__ . '/inc/instagram.php';
 require __DIR__ . '/inc/illus.php';
 require __DIR__ . '/inc/kursfinder.php';
+require __DIR__ . '/inc/mail.php';
 
 $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
 $path = rawurldecode(substr($path, strlen(base_path())));
@@ -21,13 +22,20 @@ $route = $parts[0] ?? '';
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
+// Wartungsmodus: Besucher sehen eine Hinweisseite (503), angemeldete Admins die normale Seite;
+// ?vorschau=wartung zeigt angemeldeten Admins die Wartungsseite
+$preview = ($_GET['vorschau'] ?? '') === 'wartung';
+if ($route !== 'admin' && (maintenance_active() || $preview) && (is_admin_visitor() ? $preview : maintenance_active())) {
+    require __DIR__ . '/templates/wartung.php';
+    exit;
+}
+
 // Alte Adressen des Vorgänger-Entwurfs / alter Seite dauerhaft umleiten
 $legacy = [
     'index' => '/',
     'kurs-erste-hilfe' => 'erste-hilfe/erste-hilfe-ausbildung',
     'kurs-ersthelfer-betrieb' => 'erste-hilfe/erste-hilfe-im-betrieb',
-    'erste-hilfe/erste-hilfe-fortbildung' => 'erste-hilfe/erste-hilfe-im-betrieb',
-    'termine/erste-hilfe-fortbildung' => 'termine/erste-hilfe-im-betrieb',
+    'termine/erste-hilfe-im-betrieb' => 'erste-hilfe/erste-hilfe-im-betrieb',
     'kurs-erste-hilfe-kind' => 'erste-hilfe/erste-hilfe-am-kind',
     'kurs-brandschutzhelfer' => 'brandschutz/brandschutzhelfer',
     'unternehmen' => 'arbeitssicherheit',

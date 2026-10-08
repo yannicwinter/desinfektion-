@@ -68,7 +68,7 @@ function kursfinder_config(): array
 
     // Suchbegriffe für die Freitext-Eingabe (Wortanfänge, klein geschrieben)
     $keywords = [
-        'erste-hilfe-im-betrieb' => ['fortbildung', 'auffrisch', 'wiederhol', 'refresh', 'verlänger', 'betrieb', 'firma', 'ersthelfer', 'berufsgenossenschaft', 'unfallkasse'],
+        'erste-hilfe-fortbildung' => ['fortbildung', 'auffrisch', 'wiederhol', 'refresh', 'verlänger'],
         'erste-hilfe-am-welpen' => ['welpe'],
         'erste-hilfe-am-hund' => ['hund', 'tier'],
         'erste-hilfe-am-kind' => ['kind', 'baby', 'säugling', 'eltern', 'mama', 'papa', 'kita', 'erzieh', 'tagesmutter', 'babysitt', 'enkel', 'oma', 'opa'],
@@ -79,7 +79,7 @@ function kursfinder_config(): array
     $keywords = array_filter($keywords, fn($k) => $k === '_betrieb' || $has($k), ARRAY_FILTER_USE_KEY);
 
     $requests = [];
-    foreach (courses() as $c) {
+    foreach (listed_courses() as $c) {
         if (empty($c['hiorg_id'])) {
             $requests[] = ['title' => $c['title'], 'teaser' => $c['teaser'], 'url' => course_url($c)];
         }
@@ -193,7 +193,7 @@ function kf_index(): array
         return $idx;
     }
     $docs = [];
-    foreach (courses() as $c) {
+    foreach (listed_courses() as $c) {
         $w = [];
         $add = function (string $text, float $weight) use (&$w) {
             foreach (kf_tokens($text) as $tok) {

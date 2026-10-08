@@ -65,7 +65,7 @@ const FIELD_LABELS = [
     'ausbildung_title' => ['Überschrift Ausbildung', ''],
     'dienst_title' => ['Überschrift Dienstleistung', ''],
     'kosten' => ['Hinweis Kosten', 'Eine Zeile pro Hinweis: „Thema: Text“'],
-    'insta_title' => ['Instagram – Überschrift', 'Die Beiträge erscheinen, sobald unter „Allgemein“ der Behold-Feed-Link eingetragen ist – bis dahin Platzhalter.'],
+    'insta_title' => ['Instagram – Überschrift', 'Die Beiträge erscheinen, sobald unter „Allgemein“ der Instagram-Schlüssel eingetragen ist – bis dahin Platzhalter.'],
     'body' => ['Seiteninhalt', 'Leerzeile = neuer Absatz · **fett** · [Linktext](https://…) · Zeilen mit „- “ = Liste'],
 ];
 
@@ -76,6 +76,8 @@ const SITE_LABELS = [
     'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'topbar' => 'Text in der dunklen Leiste ganz oben',
     'instagram' => 'Instagram-Link',
+    'hinweis_ort' => 'Hinweis bei Terminen: Ort (z. B. Achim) – leer = kein Hinweis',
+    'hinweis_text' => 'Hinweis bei Terminen: Text (z. B. Baumaßnahmen); die Skizzen kommen unter „Dokumente“',
     'instagram_links' => 'Instagram ohne Schlüssel: Links zu den Beiträgen der Bilder „Instagram 1–6“ (unter „Bilder“), einer pro Zeile',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
     'default_og_image' => 'Vorschaubild für Social Media (volle URL, optional)',
@@ -111,7 +113,7 @@ function admin_dispatch(string $section): void
 
     $map = [
         '' => 'admin_home', 'allgemein' => 'admin_general', 'seiten' => 'admin_pages', 'kurse' => 'admin_courses',
-        'kurs' => 'admin_course', 'faq' => 'admin_faq', 'kontakte' => 'admin_contacts', 'bilder' => 'admin_images',
+        'kurs' => 'admin_course', 'faq' => 'admin_faq', 'kontakte' => 'admin_contacts', 'bilder' => 'admin_images', 'dokumente' => 'admin_docs', 'wartung' => 'admin_maintenance', 'email' => 'admin_mail',
         'termine' => 'admin_dates', 'passwort' => 'admin_password',
     ];
     if (!isset($map[$section])) {
@@ -154,7 +156,7 @@ function admin_start(string $title, string $active = ''): void
     <a class="logo" href="<?= url('admin') ?>"><?= cross_svg('logo__cross') ?><span class="logo__text"><strong>Admin</strong><span><?= e(site('name')) ?></span></span></a>
     <?php if (!empty($_SESSION['admin'])): ?>
     <nav class="admin__nav">
-      <?php foreach (['allgemein' => 'Allgemein', 'seiten' => 'Seitentexte', 'kurse' => 'Kurse', 'faq' => 'FAQ', 'kontakte' => 'Personen', 'bilder' => 'Bilder', 'termine' => 'Termine', 'passwort' => 'Passwort'] as $k => $l): ?>
+      <?php foreach (['allgemein' => 'Allgemein', 'seiten' => 'Seitentexte', 'kurse' => 'Kurse', 'faq' => 'FAQ', 'kontakte' => 'Personen', 'bilder' => 'Bilder', 'dokumente' => 'Dokumente', 'termine' => 'Termine', 'email' => 'E-Mail', 'wartung' => 'Wartung', 'passwort' => 'Passwort'] as $k => $l): ?>
       <a href="<?= url('admin/' . $k) ?>"<?= $active === $k ? ' aria-current="page"' : '' ?>><?= $l ?></a>
       <?php endforeach; ?>
       <a href="<?= url('/') ?>" target="_blank">Website ↗</a>
@@ -261,9 +263,15 @@ function admin_home(): void
         ['faq', 'FAQ', 'Häufige Fragen und Antworten.'],
         ['kontakte', 'Ansprechpersonen', 'Personen auf der Kontaktseite.'],
         ['bilder', 'Bilder', 'Fotos hochladen oder austauschen.'],
+        ['dokumente', 'Dokumente', 'AGB, BG-Abrechnungsformular, Baustellen-Info (PDF).'],
         ['termine', 'Termine prüfen', 'HiOrg-Abruf testen, Zwischenspeicher leeren.'],
         ['allgemein', 'Allgemein', 'Telefon, E-Mail, Adresse, Formular-Empfänger.'],
+        ['email', 'E-Mail-Versand', 'Kontaktformular über Microsoft 365 (Graph) versenden.'],
+        ['wartung', 'Wartungsmodus', 'Website vorübergehend durch eine Hinweisseite ersetzen.'],
     ];
+    if (maintenance_active()) {
+        echo '<div class="notice notice--err">Der Wartungsmodus ist eingeschaltet – Besucher sehen nur die Wartungsseite. <a href="' . url('admin/wartung') . '">Ändern</a></div>';
+    }
     echo '<div class="cards cards--3">';
     foreach ($tiles as [$k, $t, $d]) {
         echo '<a class="card" href="' . url('admin/' . $k) . '"><h2 class="h5">' . e($t) . '</h2><p>' . e($d) . '</p><div class="card__foot"><span></span><span class="card__cta">Öffnen ' . icon('arrow') . '</span></div></a>';
@@ -578,6 +586,130 @@ function admin_images(): void
         echo '</div>';
     }
     echo '</div>';
+    admin_end();
+}
+
+function admin_docs(): void
+{
+    $slots = doc_slots();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $slot = (string) ($_POST['slot'] ?? '');
+        if (!isset($slots[$slot])) {
+            redirect('admin/dokumente');
+        }
+        $dir = UPLOAD_DIR . '/docs';
+        if (!is_dir($dir)) {
+            @mkdir($dir, 0755, true);
+        }
+        $target = $dir . '/' . $slot . '.pdf';
+        if (isset($_POST['delete'])) {
+            @unlink($target);
+            flash('Dokument entfernt.');
+            redirect('admin/dokumente');
+        }
+        $f = $_FILES['doc'] ?? null;
+        if (!$f || $f['error'] !== UPLOAD_ERR_OK) {
+            flash('Keine Datei empfangen (max. ' . ini_get('upload_max_filesize') . ').', 'err');
+            redirect('admin/dokumente');
+        }
+        $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']);
+        if ($mime !== 'application/pdf' || $f['size'] > 15 * 1024 * 1024) {
+            flash('Bitte eine PDF-Datei bis 15 MB hochladen.', 'err');
+            redirect('admin/dokumente');
+        }
+        move_uploaded_file($f['tmp_name'], $target) ? flash('Dokument gespeichert.') : flash('Speichern fehlgeschlagen – Schreibrechte für uploads/ prüfen.', 'err');
+        redirect('admin/dokumente');
+    }
+    admin_start('Dokumente', 'dokumente');
+    echo '<p class="muted">PDF-Dateien, die auf der Website verlinkt werden. AGB und BG-Formular erscheinen erst, wenn eine Datei hochgeladen ist (Fußzeile, Terminseiten, Anmeldung, Für Unternehmen).</p><div class="cards cards--2">';
+    foreach ($slots as $slot => [$label, $def]) {
+        $own = is_file(UPLOAD_DIR . '/docs/' . $slot . '.pdf');
+        $link = doc_url($slot);
+        echo '<div class="panel stack"><h2 class="h5">' . e($label) . '</h2>';
+        echo '<p class="muted small">' . ($own ? 'Eigene Datei' : ($link ? 'Mitgelieferte Datei' : 'Noch keine Datei – wird nicht angezeigt')) . ($link ? ' · <a href="' . e($link) . '" target="_blank" rel="noopener">ansehen</a>' : '') . '</p>';
+        echo '<form method="post" enctype="multipart/form-data" class="btn-row">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><input type="file" name="doc" accept="application/pdf" required><button class="btn btn--red btn--sm">Hochladen</button></form>';
+        if ($own) {
+            echo '<form method="post">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><button class="btn btn--ghost btn--sm" name="delete" value="1">Datei entfernen</button></form>';
+        }
+        echo '</div>';
+    }
+    echo '</div>';
+    admin_end();
+}
+
+function admin_maintenance(): void
+{
+    $c = content();
+    $w = maintenance();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $c['wartung'] = [
+            'aktiv' => empty($_POST['aktiv']) ? '' : '1',
+            'titel' => trim((string) ($_POST['titel'] ?? '')),
+            'text' => trim(str_replace("\r", '', (string) ($_POST['text'] ?? ''))),
+            'bis' => preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/', (string) ($_POST['bis'] ?? '')) ? (string) $_POST['bis'] : '',
+        ];
+        save_content($c) ? flash($c['wartung']['aktiv'] ? 'Wartungsmodus eingeschaltet.' : 'Wartungsmodus aus – die Website ist wieder für alle sichtbar.') : flash('Speichern fehlgeschlagen – Schreibrechte für data/ prüfen.', 'err');
+        redirect('admin/wartung');
+    }
+    admin_start('Wartungsmodus', 'wartung');
+    echo '<form class="panel form stack" method="post">' . csrf_field();
+    echo '<p class="notice' . ($w['aktiv'] ? ' notice--err">Eingeschaltet: Besucher sehen nur die Wartungsseite (Antwort 503, Google wertet das als vorübergehend).' : '">Ausgeschaltet: Die Website ist normal erreichbar.') . '</p>';
+    echo '<label class="check"><input type="checkbox" name="aktiv" value="1"' . ($w['aktiv'] ? ' checked' : '') . '><span><b>Wartungsmodus einschalten</b></span></label>';
+    echo '<p class="muted small">Als angemeldeter Admin sieht man die Website weiter normal (mit gelbem Hinweis oben) und kann alles prüfen. Admin-Bereich, Bilder und Dokumente bleiben erreichbar.</p>';
+    echo field_input('titel', 'Überschrift', $w['titel'], 'Leer = „Wir sind gleich wieder da“');
+    echo field_input('text', 'Text', $w['text'], 'Leer = Standardtext mit Hinweis auf Telefon und E-Mail. Leerzeile = neuer Absatz.', true);
+    echo '<label class="field"><span>Voraussichtlich wieder da (optional)</span><input type="datetime-local" name="bis" value="' . e($w['bis']) . '"><small>Wird auf der Wartungsseite angezeigt. Der Modus endet nicht automatisch.</small></label>';
+    echo '<div class="btn-row"><button class="btn btn--red">Speichern</button><a class="btn btn--ghost" href="' . url('/') . '?vorschau=wartung" target="_blank">Wartungsseite ansehen ↗</a></div></form>';
+    admin_end();
+}
+
+function admin_mail(): void
+{
+    $m = mail_config();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!empty($_POST['test'])) {
+            $to = site('form_recipient') ?: site('email');
+            $err = send_mail($to, 'Testnachricht der Website', "Diese Testnachricht wurde im Admin unter „E-Mail“ ausgelöst.\n\nVersand über: " . (mail_uses_graph() ? 'Microsoft Graph (' . $m['sender'] . ')' : 'mail() des Servers') . "\nZeit: " . date('d.m.Y H:i'));
+            $err ? flash('Versand fehlgeschlagen: ' . $err, 'err') : flash('Testnachricht an ' . $to . ' verschickt.');
+            redirect('admin/email');
+        }
+        if (!empty($_POST['remove'])) {
+            mail_save_config([]);
+            flash('Microsoft-365-Verbindung entfernt – das Formular nutzt jetzt mail() des Servers.');
+            redirect('admin/email');
+        }
+        $new = [
+            'tenant' => trim((string) ($_POST['tenant'] ?? '')),
+            'client_id' => trim((string) ($_POST['client_id'] ?? '')),
+            'secret' => trim((string) ($_POST['secret'] ?? '')) ?: (string) ($m['secret'] ?? ''),
+            'sender' => trim((string) ($_POST['sender'] ?? '')),
+        ];
+        if ($new['sender'] !== '' && !filter_var($new['sender'], FILTER_VALIDATE_EMAIL)) {
+            flash('Bitte eine gültige Absender-Adresse angeben.', 'err');
+            redirect('admin/email');
+        }
+        mail_save_config($new) ? flash('Gespeichert. Jetzt am besten eine Testnachricht senden.') : flash('Speichern fehlgeschlagen – Schreibrechte für data/ prüfen.', 'err');
+        redirect('admin/email');
+    }
+    admin_start('E-Mail-Versand', 'email');
+    echo '<form class="panel form stack" method="post">' . csrf_field();
+    echo '<p class="notice">' . (mail_uses_graph() ? 'Das Kontaktformular sendet über <b>Microsoft 365 (Graph)</b> als ' . e((string) $m['sender']) . '.' : 'Das Kontaktformular sendet über <b>mail() des Servers</b>. Für Microsoft 365 unten die Daten der App-Registrierung eintragen.') . ' Empfänger: ' . e(site('form_recipient') ?: site('email')) . ' (unter „Allgemein“).</p>';
+    echo '<div class="form__grid">';
+    echo field_input('tenant', 'Verzeichnis-ID (Tenant ID)', (string) ($m['tenant'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
+    echo field_input('client_id', 'Anwendungs-ID (Client ID)', (string) ($m['client_id'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
+    echo '<label class="field"><span>' . (!empty($m['secret']) ? 'Geheimer Clientschlüssel (gespeichert – nur zum Ändern ausfüllen)' : 'Geheimer Clientschlüssel (Wert, nicht die ID)') . '</span><input name="secret" type="password" autocomplete="off" value=""><small>Wird in data/mail.json gespeichert und nie angezeigt. Ablaufdatum des Schlüssels notieren!</small></label>';
+    echo field_input('sender', 'Absender-Postfach', (string) ($m['sender'] ?? ''), 'z. B. noreply@drk-verden.de oder ein freigegebenes Postfach');
+    echo '</div><div class="btn-row"><button class="btn btn--red">Speichern</button><button class="btn btn--ghost" name="test" value="1">Testnachricht senden</button>';
+    if (!empty($m)) {
+        echo '<button class="btn btn--ghost" name="remove" value="1" onclick="return confirm(\'Verbindung wirklich entfernen?\')">Verbindung entfernen</button>';
+    }
+    echo '</div></form>';
+    echo '<div class="panel stack" style="margin-top:20px"><h2 class="h5">Einrichtung in Microsoft 365 (einmalig, durch die IT)</h2><ol class="small">'
+        . '<li>Entra Admin Center → App-Registrierungen → Neue Registrierung (Name z. B. „Website Kontaktformular“, nur dieses Verzeichnis).</li>'
+        . '<li>API-Berechtigungen → Microsoft Graph → <b>Anwendungsberechtigungen</b> → <b>Mail.Send</b> → Administratorzustimmung erteilen.</li>'
+        . '<li>Zertifikate &amp; Geheimnisse → Neuer geheimer Clientschlüssel → den <b>Wert</b> hier eintragen.</li>'
+        . '<li>Empfohlen: Zugriff auf das Absender-Postfach beschränken (Exchange Online PowerShell: <code>New-ApplicationAccessPolicy -AppId &lt;Client ID&gt; -PolicyScopeGroupId &lt;Gruppe mit Postfach&gt; -AccessRight RestrictAccess</code>, bzw. RBAC für Anwendungen).</li>'
+        . '</ol></div>';
     admin_end();
 }
 

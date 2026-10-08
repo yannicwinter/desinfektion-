@@ -109,8 +109,8 @@
     say('Wofür brauchst du den Kurs?');
     var list = [];
     if (cfg.titles['erste-hilfe-ausbildung']) list.push({ label: 'Führerschein', go: function () { pick('erste-hilfe-ausbildung', 'Für den Führerschein brauchst du die komplette Ausbildung.'); } });
-    if (cfg.titles['erste-hilfe-im-betrieb']) list.push({ label: 'Für den Job (Ersthelfer)', go: askLast });
-    if (cfg.titles['erste-hilfe-ausbildung']) list.push({ label: 'Trainer, Verein, Studium', go: function () { pick('erste-hilfe-ausbildung', 'Gilt auch für Trainerlizenz, Juleica und Studium.'); } });
+    list.push({ label: 'Für den Job (Ersthelfer)', go: function () { askLast('job'); } });
+    list.push({ label: 'Trainer, Verein, Studium', go: function () { askLast('verein'); } });
     if (cfg.titles['erste-hilfe-am-kind']) list.push({ label: 'Für Kinder', go: function () { pick('erste-hilfe-am-kind'); } });
     if (cfg.titles['erste-hilfe-am-hund']) list.push({ label: 'Für meinen Hund', go: askHund });
     if (cfg.titles['brandschutzhelfer']) list.push({ label: 'Brandschutzhelfer', go: function () { pick('brandschutzhelfer', 'Die Kosten trägt der Arbeitgeber.'); } });
@@ -120,13 +120,13 @@
     choices(list);
   }
 
-  // Ersthelfer im Betrieb: Ausbildung oder Fortbildung? Entscheidet, wie lange der letzte Kurs her ist.
-  function askLast() {
-    var bg = ' Die Kosten übernimmt meist die Berufsgenossenschaft – bitte vorher klären.';
+  // Ausbildung oder Fortbildung? Entscheidet, wie lange der letzte Kurs her ist.
+  function askLast(ctx) {
+    var bg = ctx === 'job' ? ' Bei der Anmeldung „Arbeitgeber / BG“ wählen – die Kosten übernimmt meist die Berufsgenossenschaft.' : '';
     say('Wann war dein letzter Erste-Hilfe-Kurs?');
     choices([
-      { label: 'Noch nie / länger als 2 Jahre', go: function () { pick('erste-hilfe-im-betrieb', 'Du brauchst die komplette Ausbildung.' + bg, 'Ausbildung'); } },
-      { label: 'In den letzten 2 Jahren', go: function () { pick('erste-hilfe-im-betrieb', 'Die Auffrischung reicht.' + bg, 'Fortbildung'); } }
+      { label: 'Noch nie / länger als 2 Jahre', go: function () { pick('erste-hilfe-ausbildung', 'Du brauchst die komplette Ausbildung.' + bg); } },
+      { label: 'In den letzten 2 Jahren', go: function () { pick('erste-hilfe-fortbildung', 'Die Fortbildung reicht.' + bg); } }
     ]);
   }
 
@@ -406,11 +406,9 @@
     }
     var fuehrerschein = /führerschein|fuehrerschein|fahrschule|fahrerlaubnis/.test(t);
     var zweck = has(t, cfg.keywords._betrieb);
-    // Ersthelfer im Betrieb: erst klären, wie lange der letzte Kurs her ist
-    var job = /betrieb|firma|arbeit|job|chef|ersthelfer|bg|berufsgenossen|unternehmen|unfallkasse/.test(t);
-    if (cfg.titles['erste-hilfe-im-betrieb'] && !fuehrerschein && (a.slug === 'erste-hilfe-im-betrieb' || (a.slug === 'erste-hilfe-ausbildung' && zweck && job))) {
-      if (/fortbild|auffrisch|wiederhol|refresh|verläng/.test(t)) { pick('erste-hilfe-im-betrieb', '', 'Fortbildung'); return; }
-      askLast();
+    // Ausbildung für Job/Trainer/Verein: erst klären, wie lange der letzte Kurs her ist
+    if (a.slug === 'erste-hilfe-ausbildung' && zweck && !fuehrerschein && !/fortbild|auffrisch/.test(t)) {
+      askLast(/betrieb|firma|arbeit|job|chef|ersthelfer|bg|berufsgenossen|unternehmen/.test(t) ? 'job' : 'verein');
       return;
     }
     pick(a.slug, fuehrerschein && a.slug === 'erste-hilfe-ausbildung' ? 'Für den Führerschein brauchst du die komplette Ausbildung.' : '');

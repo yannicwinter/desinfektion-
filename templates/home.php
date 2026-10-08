@@ -1,6 +1,6 @@
 <?php
 $P = fn($k) => page('home', $k);
-$featured = array_values(array_filter(courses(), fn($c) => !empty($c['featured'])));
+$featured = array_values(array_filter(listed_courses(), fn($c) => !empty($c['featured'])));
 $faq = array_values(array_filter(content()['faq'] ?? [], fn($f) => !empty($f['start'])));
 if (!$faq) {
     $faq = array_slice(content()['faq'] ?? [], 0, 5);
