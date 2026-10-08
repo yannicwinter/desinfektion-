@@ -65,7 +65,6 @@ include __DIR__ . '/partials/suche.php';
       <?php foreach ($items as $c): ?><?= course_card($c) ?><?php endforeach; ?>
     </div>
     <?php endforeach; ?>
-    <?php if (!$isFire): ?><?= compare_table($P('vergleich'), $P('vergleich_hinweis')) ?><?php endif; ?>
   </div>
 </section>
 
