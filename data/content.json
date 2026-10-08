@@ -23,7 +23,8 @@
         "ki_bilder": "hero, erste-hilfe, kurs-erste-hilfe-ausbildung, kurs-erste-hilfe-im-betrieb, kurs-erste-hilfe-fortbildung, kurs-kinder-helfen-kindern, kurs-forstehjelp-schulen, kurs-fresh-up-arztpraxen, kurs-aed-reanimationstraining, kurs-erste-hilfe-am-hund, kurs-erste-hilfe-am-welpen, kurs-brandschutzhelfer, kurs-feuerloeschertraining, kurs-evakuierungsuebung, kurs-brandschutzordnung-rettungsplaene, kurs-brandschutzbeauftragter, kurs-erste-hilfe-am-kind",
         "instagram_links": "",
         "hinweis_ort": "Achim",
-        "hinweis_text": "Am Standort in der Bahnhofstraße kann es wegen Baumaßnahmen zu Beeinträchtigungen kommen. Bitte den aktuellen Umleitungsempfehlungen folgen – eine Zufahrt zum DRK-Gebäude soll dauerhaft gegeben sein."
+        "hinweis_text": "Am Standort in der Bahnhofstraße kann es wegen Baumaßnahmen zu Beeinträchtigungen kommen. Bitte den aktuellen Umleitungsempfehlungen folgen – eine Zufahrt zum DRK-Gebäude soll dauerhaft gegeben sein.",
+        "bg_ausnahme": "**Nicht für Mitgliedsbetriebe von DGUV, BGW und BGN:** Hier ist vorher eine Kostenübernahme der BG nötig. Die Bestätigung bitte vorab im Original an uns senden."
     },
     "pages": {
         "home": {
@@ -73,7 +74,7 @@
             "lead": "Für Führerschein, Beruf und Familie – praxisnah, verständlich und ohne Prüfung.",
             "outro_title": "Welcher Kurs passt zu mir?",
             "outro_text": "Ruf uns an – wir beraten dich gern.",
-            "vergleich": "Kurs | Führerschein | Selbstzahler | Abrechnung über BG\nErste Hilfe Ausbildung (BG-Lehrgang) | ja | ja | ja\nErste Hilfe Fortbildung (BG-Lehrgang) | nein | ja | ja\nErste Hilfe am Kind | nein | ja | ja",
+            "vergleich": "Frage | Erste Hilfe Ausbildung | Erste Hilfe Fortbildung | Erste Hilfe am Kind\nFür den Führerschein geeignet? | ja | nein | nein\nSelbstzahler zulässig? | ja | ja | ja\nAbrechnung über Berufsgenossenschaft? | ja | ja | ja*",
             "wege_eyebrow": "Wegweiser",
             "wege_title": "Wofür brauchst du den Kurs?",
             "wege_lead": "Wähle aus – wir zeigen dir die passenden Kurse.",
@@ -91,7 +92,8 @@
             "intro_list": "Führerschein – alle Klassen\nBetriebliche Ersthelfer\nTrainer, Übungsleiter und Juleica\nStudium und Ausbildung\nEltern, Großeltern und Betreuende\nHundehalter",
             "wissen_title": "Gut zu wissen",
             "wissen_lead": "Ablauf, Kosten und Fristen auf einen Blick.",
-            "wissen": "Dauer | Je nach Kurs unterschiedlich – die genaue Dauer steht beim jeweiligen Kurs. | clock\nKosten | Als Selbstzahler zahlst du bei der Online-Anmeldung. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft. | euro\nFristen | Betriebliche Ersthelfer frischen alle 2 Jahre auf (GUV: 3 Jahre) – danach ist wieder die komplette Ausbildung nötig. | shield\nBescheinigung | Offizielle Teilnahmebescheinigung – anerkannt für Führerschein, Arbeitgeber, Trainerlizenz, Verein und Studium. | award"
+            "wissen": "Dauer | Je nach Kurs unterschiedlich – die genaue Dauer steht beim jeweiligen Kurs. | clock\nKosten | Als Selbstzahler zahlst du bei der Online-Anmeldung. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft. | euro\nFristen | Betriebliche Ersthelfer frischen alle 2 Jahre auf (GUV: 3 Jahre) – danach ist wieder die komplette Ausbildung nötig. | shield\nBescheinigung | Offizielle Teilnahmebescheinigung – anerkannt für Führerschein, Arbeitgeber, Trainerlizenz, Verein und Studium. | award",
+            "vergleich_hinweis": "Nur für Bildungs- und Betreuungseinrichtungen (z. B. Kita, Schule). Ruf uns dazu gern an."
         },
         "brandschutz": {
             "seo_title": "Brandschutzhelfer-Ausbildung & Brandschutz | DRK Verden",
@@ -491,7 +493,7 @@
         {
             "group": "Erste-Hilfe-Kurse",
             "q": "Ab welchem Alter kann ich teilnehmen?",
-            "a": "Für den Führerschein ab 14 Jahren.",
+            "a": "Für den Führerschein ab 14 Jahren. Bei Erste Hilfe am Kind gibt es keine Altersgrenze – sinnvoll ist der Kurs etwa ab 14.",
             "start": ""
         },
         {
@@ -522,6 +524,12 @@
             "group": "Erste-Hilfe-Kurse",
             "q": "Brauche ich Vorkenntnisse?",
             "a": "Nein. Alles wird praxisnah erklärt, und wir führen dich durch alle Übungen.",
+            "start": ""
+        },
+        {
+            "group": "Erste-Hilfe-Kurse",
+            "q": "Gibt es spezielle Erste-Hilfe-Kurse?",
+            "a": "Ja, zum Beispiel [Erste Hilfe am Kind](/erste-hilfe/erste-hilfe-am-kind), [Erste Hilfe am Hund](/erste-hilfe/erste-hilfe-am-hund), [Kinder helfen Kindern](/erste-hilfe/kinder-helfen-kindern), das [Fresh Up für Arztpraxen](/erste-hilfe/fresh-up-arztpraxen) und das [AED-Training](/erste-hilfe/aed-reanimationstraining).",
             "start": ""
         },
         {
@@ -568,6 +576,12 @@
         },
         {
             "group": "Buchung",
+            "q": "Sind die Plätze begrenzt?",
+            "a": "Ja, die Teilnehmerzahl ist begrenzt. Melde dich darum rechtzeitig an.",
+            "start": ""
+        },
+        {
+            "group": "Buchung",
             "q": "Ist der Kurs barrierefrei? Gibt es Kurse auf Englisch?",
             "a": "Sag uns vorher Bescheid – wir finden eine Lösung. Firmenkurse sind auf Anfrage auch auf Englisch möglich.",
             "start": ""
@@ -575,7 +589,7 @@
         {
             "group": "Buchung",
             "q": "Was kostet ein Kurs?",
-            "a": "Erste-Hilfe-Ausbildung und Erste Hilfe am Kind kosten aktuell 60 €, Erste Hilfe am Hund und am Welpen 50 €, Brandschutz- und Evakuierungshelfer 125 € pro Person. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft die Kosten. Den genauen Preis siehst du bei jedem Termin.",
+            "a": "Erste Hilfe Ausbildung, Erste Hilfe Fortbildung und Erste Hilfe am Kind kosten 60 €, Erste Hilfe am Hund und am Welpen 50 €, Brandschutz- und Evakuierungshelfer 125 € pro Person. Für betriebliche Ersthelfer übernimmt meist die Berufsgenossenschaft die Kosten. Den genauen Preis siehst du bei jedem Termin.",
             "start": ""
         },
         {
@@ -645,10 +659,34 @@
             "start": ""
         },
         {
+            "group": "Brandschutzhelfer",
+            "q": "Wie lange dauert die Schulung?",
+            "a": "Die Schulung läuft von 09:00 bis 13:00 Uhr oder von 13:00 bis 18:00 Uhr – mit Pausen und Zeit für Fragen. Für Firmenkurse ist auch eine andere Uhrzeit möglich.",
+            "start": ""
+        },
+        {
+            "group": "Brandschutzhelfer",
+            "q": "Geht die Schulung auch bei uns im Betrieb?",
+            "a": "Ja. Nötig sind ein Raum ab 40–50 m² mit Stühlen und Platz für Übungen, eine Außenfläche für das Löschtraining und ein kostenloser Parkplatz für die Kursleitung. Beamer oder TV sind hilfreich, aber kein Muss.",
+            "start": ""
+        },
+        {
+            "group": "Brandschutzhelfer",
+            "q": "Kann die Schulung wiederholt werden?",
+            "a": "Ja, jederzeit. Viele Betriebe frischen ihre Teams regelmäßig auf.",
+            "start": ""
+        },
+        {
             "group": "Für Unternehmen",
             "q": "Wer bezahlt die Ersthelfer-Ausbildung?",
-            "a": "In den meisten Fällen die Berufsgenossenschaft. Die Kostenübernahme bitte vorab klären und uns die Bestätigung im Original zusenden.",
+            "a": "In den meisten Fällen die Berufsgenossenschaft oder Unfallkasse. Dazu das Abrechnungsformular vom Betrieb ausfüllen lassen und zum Kurs mitbringen. Ausnahme: Bei DGUV, BGW und BGN ist vorher eine Kostenübernahme der BG nötig – die Bestätigung bitte vorab im Original an uns senden.",
             "start": "1"
+        },
+        {
+            "group": "Für Unternehmen",
+            "q": "Wie funktioniert die Abrechnung über die BG?",
+            "a": "Der Betrieb füllt das Abrechnungsformular der DGUV aus (mit Mitgliedsnummer, Stempel und Unterschrift). Die Teilnehmenden bringen es im Original zum Kurs mit, und bei der Online-Anmeldung wählen sie „Arbeitgeber / UVT / BG“. Das Formular gibt es auf der Seite [Erste Hilfe im Betrieb](/erste-hilfe/erste-hilfe-im-betrieb).",
+            "start": ""
         },
         {
             "group": "Für Unternehmen",

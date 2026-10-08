@@ -185,7 +185,7 @@ function doc_slots(): array
     return [
         'achim' => ['Hinweis Baumaßnahmen Achim (Skizzen der Bauabschnitte)', 'assets/docs/achim-bauabschnitte.pdf'],
         'agb' => ['Allgemeine Geschäftsbedingungen (AGB)', ''],
-        'bg-formular' => ['Abrechnungsformular Berufsgenossenschaft (Blanko)', ''],
+        'bg-formular' => ['Abrechnungsformular Berufsgenossenschaft (Blanko)', 'https://www.dguv.de/medien/fb-erstehilfe/de/documents/abrechnungsformular.pdf'],
     ];
 }
 
@@ -196,6 +196,9 @@ function doc_url(string $slot): string
         return url('uploads/docs/' . $slot . '.pdf') . '?v=' . filemtime($f);
     }
     $def = doc_slots()[$slot][1] ?? '';
+    if (str_starts_with($def, 'https://')) {
+        return $def; // Standard: Original-Dokument beim Herausgeber (z. B. DGUV)
+    }
     return $def !== '' && is_file(ROOT . '/' . $def) ? url($def) . '?v=' . filemtime(ROOT . '/' . $def) : '';
 }
 
@@ -222,6 +225,12 @@ function place_notice(array $items = [], bool $always = false): string
     $pdf = doc_url('achim');
     return '<div class="pnotice" role="note">' . icon('info') . '<div><b>Hinweis für Kurse in ' . e($town) . ':</b> ' . e($text)
         . ($pdf ? ' <a href="' . e($pdf) . '" target="_blank" rel="noopener">Skizzen der Bauabschnitte (PDF)</a>' : '') . '</div></div>';
+}
+
+/** BG-Lehrgang (Abrechnung über die Berufsgenossenschaft möglich)? */
+function course_bg(array $c): bool
+{
+    return (bool) preg_match('/\bBG\b|Berufsgenossenschaft/u', ($c['facts'] ?? '') . ' ' . ($c['teaser'] ?? '') . ' ' . ($c['title'] ?? ''));
 }
 
 /** Kurse, die in Kurslisten erscheinen (Infoseiten wie „Erste Hilfe im Betrieb“ haben listed = ''). */
@@ -363,9 +372,15 @@ function maintenance(): array
     return (array) (content()['wartung'] ?? []) + ['aktiv' => '', 'titel' => '', 'text' => '', 'bis' => ''];
 }
 
+/** Ein: Schalter im Admin oder Datei „wartung-an.txt“ im Hauptordner (z. B. beim Umzug per Dateimanager). */
 function maintenance_active(): bool
 {
-    return !empty(maintenance()['aktiv']);
+    return !empty(maintenance()['aktiv']) || maintenance_by_file();
+}
+
+function maintenance_by_file(): bool
+{
+    return is_file(ROOT . '/wartung-an.txt');
 }
 
 /** Angemeldeter Admin? Sitzung nur öffnen, wenn das Cookie schon da ist – Besucher bekommen keins. */
@@ -426,6 +441,8 @@ function icon(string $name, string $class = 'i'): string
         'pin' => '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/>',
         'clock' => '<circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>',
         'check' => '<path d="M20 6 9 17l-5-5"/>',
+        'x' => '<path d="M18 6 6 18M6 6l12 12"/>',
+        'download' => '<path d="M12 3v12m-5-5 5 5 5-5M4 19h16"/>',
         'grid' => '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
         'home' => '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
         'shield' => '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>',

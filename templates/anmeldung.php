@@ -38,10 +38,10 @@ layout_start([
           <ul class="signup__facts">
             <?php if ($it['details']): ?><li><?= icon('pin') ?><span><?= e($it['details']) ?></span></li><?php endif; ?>
             <?php if ($it['free']): ?><li><?= icon('users') ?><span><?= e($it['free']) ?></span></li><?php endif; ?>
-            <?php if ($it['price']): ?><li><?= icon('check') ?><span><?= e($it['price']) ?> · Betriebe: Abrechnung über BG möglich</span></li><?php endif; ?>
+            <?php if ($it['price']): ?><li><?= icon('check') ?><span><?= e($it['price']) ?><?= course_bg($current) ? ' · Betriebe: Abrechnung über BG möglich' : '' ?></span></li><?php endif; ?>
           </ul>
           <?= place_notice([$it]) ?>
-          <?php if (($bg = doc_url('bg-formular')) && ($current['category'] ?? '') === 'erste-hilfe'): ?><p class="small docs-line"><?= icon('info') ?> <span>Über den Arbeitgeber? <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular BG (PDF)</a></span></p><?php endif; ?>
+          <?php if (($bg = doc_url('bg-formular')) && course_bg($current)): ?><p class="small docs-line"><?= icon('info') ?> <span>Über den Arbeitgeber? <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular (PDF)</a> ausgefüllt zum Kurs mitbringen.<?php if ($ex = site('bg_ausnahme')): ?> <?= inline($ex) ?><?php endif; ?></span></p><?php endif; ?>
           <a class="alink small" href="<?= url('termine/' . $current['slug']) ?>">Anderen Termin wählen <?= icon('arrow') ?></a>
         </div>
         <div class="box box--soft signup__help">

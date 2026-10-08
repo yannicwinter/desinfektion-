@@ -67,12 +67,7 @@ include __DIR__ . '/partials/suche.php';
       <?php foreach ($items as $c): ?><?= course_card($c) ?><?php endforeach; ?>
     </div>
     <?php endforeach; ?>
-    <?php if (!$isFire && ($cmp = compare_table($P('vergleich'), true))): ?>
-    <details class="cmp reveal">
-      <summary><?= icon('info') ?> Welcher Kurs passt zu mir? Führerschein · Selbstzahler · BG<?= icon('plus', 'i acc__chev') ?></summary>
-      <?= $cmp ?>
-    </details>
-    <?php endif; ?>
+    <?php if (!$isFire): ?><?= compare_table($P('vergleich'), $P('vergleich_hinweis')) ?><?php endif; ?>
   </div>
 </section>
 

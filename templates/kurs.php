@@ -59,11 +59,16 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <h2><?= e(($c['learn_title'] ?? '') ?: ($cat === 'brandschutz' ? 'Inhalte' : 'Das lernst du')) ?></h2>
       <ul class="checks checks--2 checks--plain"><?php foreach ($learn as $l): ?><li><?= icon('check') ?><?= e($l) ?></li><?php endforeach; ?></ul>
       <?php endif; ?>
-      <?php if (($bg = doc_url('bg-formular')) && preg_match('/BG|Berufsgenossenschaft/u', $c['facts'] . ' ' . $c['teaser'])): ?>
-      <p class="docs-line"><?= icon('info') ?> <span>Abrechnung über die Berufsgenossenschaft: <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular (PDF)</a></span></p>
-      <?php endif; ?>
+      <?php if (course_bg($c)): ?><?= bg_box() ?><?php endif; ?>
       <?php if ($rest): ?>
       <div class="note"><?= icon('info') ?><div><?php foreach ($rest as $n => [$k, $v]): ?><?= $n ? '<br>' : '' ?><b><?= e($k) ?>:</b> <?= e($v) ?><?php endforeach; ?></div></div>
+      <?php endif; ?>
+      <?php
+      // Vergleich „Welcher Kurs passt zu mir?“ auf den verglichenen Kursen und der Betriebsseite
+      $cmpData = page('erste-hilfe', 'vergleich');
+      $cmpSlugs = array_map(fn($t) => slugify(trim($t)), array_slice(explode('|', lines($cmpData)[0] ?? ''), 1));
+      if (in_array($c['slug'], $cmpSlugs, true) || array_intersect(array_map(fn($s) => $s[1]['slug'], $sources), $cmpSlugs)): ?>
+      <?= compare_table($cmpData, page('erste-hilfe', 'vergleich_hinweis')) ?>
       <?php endif; ?>
     </div>
 

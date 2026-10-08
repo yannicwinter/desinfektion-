@@ -1,0 +1,9 @@
+# Eigenständige Wartungsseite (z. B. während des Umzugs der Website).
+# Alle Adressen zeigen die Wartungsseite mit Status 503 („vorübergehend nicht erreichbar“ – gut für Google).
+Options -Indexes
+DirectoryIndex index.php
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^ index.php [L]
+</IfModule>

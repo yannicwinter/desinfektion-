@@ -453,33 +453,66 @@ function faq_list(array $items): string
 }
 
 /** Tabelle „Welcher Kurs passt?“ (Zeilen: „Kurs | Spalte | …“, erste Zeile = Überschriften). */
-function compare_table(string $data, bool $compact = false): string
+function compare_table(string $data, string $note = '', string $title = 'Welcher Kurs passt zu mir?'): string
 {
-    $rows = lines($data);
+    $rows = array_map(fn($l) => array_map('trim', explode('|', $l)), lines($data));
     if (count($rows) < 2) {
         return '';
     }
-    $h = '<div class="compare' . ($compact ? ' compare--compact' : ' reveal') . '"><h2 class="' . ($compact ? 'h5' : 'group-title') . '">Welcher Kurs passt?</h2><div class="compare__scroll"><table><thead><tr>';
-    foreach (array_map('trim', explode('|', $rows[0])) as $th) {
+    $head = array_slice(array_shift($rows), 1);
+    $n = count($head);
+    $h = '<div class="vgl reveal"><h3 class="vgl__title">' . e($title) . '</h3><div class="vgl__grid" role="table" style="--n:' . $n . '">'
+        . '<div class="vgl__row vgl__row--head" role="row"><span class="vgl__q" role="columnheader"><span class="sr-only">Frage</span></span>';
+    foreach ($head as $th) {
+        $c = course(slugify($th));
         $label = e($th);
-        if ($compact) { // schmale Spalte: kürzen und Trennstellen setzen
-            $label = strtr($label, ['Abrechnung über BG' => 'über BG', 'Führerschein' => 'Führer&shy;schein', 'Selbstzahler' => 'Selbst&shy;zahler']);
-        }
-        $h .= '<th scope="col">' . $label . '</th>';
+        $h .= '<span class="vgl__th" role="columnheader">' . ($c ? '<a href="' . course_url($c) . '">' . $label . '</a>' : $label) . '</span>';
     }
-    $h .= '</tr></thead><tbody>';
-    foreach (array_slice($rows, 1) as $line) {
-        $cells = array_map('trim', explode('|', $line));
-        $h .= '<tr><th scope="row">' . e(array_shift($cells)) . '</th>';
-        foreach ($cells as $cell) {
-            $k = mb_strtolower($cell);
-            $h .= '<td class="' . ($k === 'ja' ? 'yes' : ($k === 'nein' ? 'no' : 'part')) . '">'
-                . ($k === 'ja' ? icon('check') . '<span class="sr-only">ja</span>' : ($k === 'nein' ? '<span aria-hidden="true">–</span><span class="sr-only">nein</span>' : e($cell)))
-                . '</td>';
+    $h .= '</div>';
+    foreach ($rows as $cells) {
+        $h .= '<div class="vgl__row" role="row"><span class="vgl__q" role="rowheader">' . e(array_shift($cells)) . '</span>';
+        foreach (array_pad(array_slice($cells, 0, $n), $n, '') as $i => $cell) {
+            $star = str_ends_with($cell, '*');
+            $k = mb_strtolower(rtrim($cell, '* '));
+            $col = '<span class="vgl__col" aria-hidden="true">' . e($head[$i]) . '</span>';
+            if ($k === 'ja' || $k === 'nein') {
+                $h .= '<span class="vgl__c vgl__c--' . ($k === 'ja' ? 'yes' : 'no') . '" role="cell">' . $col . '<i>' . icon($k === 'ja' ? 'check' : 'x') . '</i>'
+                    . '<span class="sr-only">' . $k . ($star ? ' (siehe Hinweis)' : '') . '</span>' . ($star ? '<sup aria-hidden="true">★</sup>' : '') . '</span>';
+            } else {
+                $h .= '<span class="vgl__c" role="cell">' . $col . e($cell) . '</span>';
+            }
         }
-        $h .= '</tr>';
+        $h .= '</div>';
     }
-    return $h . '</tbody></table></div></div>';
+    $h .= '</div>';
+    if ($note !== '') {
+        $h .= '<p class="vgl__note"><span aria-hidden="true">★</span> ' . inline(ltrim($note, '*★ ')) . '</p>';
+    }
+    return $h . '</div>';
+}
+
+/** Abrechnung über die Berufsgenossenschaft: 3 Schritte + Ausnahmen (site.bg_ausnahme), Formular über doc_url('bg-formular'). */
+function bg_box(string $class = ''): string
+{
+    $pdf = doc_url('bg-formular');
+    if ($pdf === '') {
+        return '';
+    }
+    $steps = [
+        ['Formular herunterladen', '<a href="' . e($pdf) . '" target="_blank" rel="noopener">Blanko-Abrechnungsformular (PDF)</a> der DGUV'],
+        ['Vom Betrieb ausfüllen lassen', 'Mit Unternehmen, Mitgliedsnummer der BG oder Unfallkasse, Stempel und Unterschrift.'],
+        ['Zum Kurs mitbringen', 'Das Original am Kurstag abgeben. Bei der Online-Anmeldung „Arbeitgeber / UVT / BG“ wählen.'],
+    ];
+    $h = '<div class="bgbox ' . e($class) . '"><div class="bgbox__head"><span class="bgbox__ic">' . icon('euro') . '</span><div><h3>Abrechnung über die Berufsgenossenschaft</h3>'
+        . '<p>Für betriebliche Ersthelfer übernimmt meist die BG oder Unfallkasse die Kosten – mit dem Abrechnungsformular ganz einfach.</p></div></div><ol class="bgbox__steps">';
+    foreach ($steps as $n => [$t, $x]) {
+        $h .= '<li><span class="bgbox__n">' . ($n + 1) . '</span><div><b>' . e($t) . '</b><span>' . $x . '</span></div></li>';
+    }
+    $h .= '</ol>';
+    if ($ex = trim(site('bg_ausnahme'))) {
+        $h .= '<div class="bgbox__warn" role="note">' . icon('info') . '<span>' . inline($ex) . '</span></div>';
+    }
+    return $h . '<a class="btn btn--red btn--sm bgbox__btn" href="' . e($pdf) . '" target="_blank" rel="noopener">' . icon('download') . ' Abrechnungsformular (PDF)</a></div>';
 }
 
 /** Foto eines Bildplatzes als <img> (Upload oder Standardfoto), sonst leer. */

@@ -85,7 +85,7 @@ if ($slug !== '') {
     </form>
     <?= place_notice($items) ?>
     <?php if ($slug === '' || ($current['category'] ?? '') === 'erste-hilfe'): ?>
-    <p class="muted small dates-hint"><?= icon('info') ?> <span><b>Anmeldung über den Arbeitgeber:</b> Bitte bei der Anmeldung „Arbeitgeber / UVT / BG“ wählen und alle Angaben zur Berufsgenossenschaft machen (z. B. Name der BG und Unternehmensnummer).<?php if ($bg = doc_url('bg-formular')): ?> <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular BG (PDF)</a><?php endif; ?></span></p>
+    <p class="muted small dates-hint"><?= icon('info') ?> <span><b>Anmeldung über den Arbeitgeber:</b> Bitte bei der Anmeldung „Arbeitgeber / UVT / BG“ wählen und alle Angaben zur Berufsgenossenschaft machen (z. B. Name der BG und Unternehmensnummer).<?php if ($bg = doc_url('bg-formular')): ?> Dazu das <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Abrechnungsformular (PDF)</a> ausgefüllt zum Kurs mitbringen.<?php endif; ?><?php if ($ex = site('bg_ausnahme')): ?> <?= inline($ex) ?><?php endif; ?></span></p>
     <?php endif; ?>
     <ul class="dates" data-date-list>
       <?= render_dates($items, ['show_course' => $slug === '', 'show_price' => true, 'months' => true]) ?>

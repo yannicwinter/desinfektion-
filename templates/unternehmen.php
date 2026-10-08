@@ -65,8 +65,9 @@ page_head('', $P('title'), $P('lead'), [['Für Unternehmen', 'arbeitssicherheit'
     <div class="grid4"><?= implode('', $cards) ?></div>
     <?php if ($kosten = pairs($P('kosten'))): ?>
     <ul class="kosten reveal"><?php foreach ($kosten as [$k, $v]): ?><li><?= icon('info') ?><span><strong><?= e($k) ?>:</strong> <?= e($v) ?></span></li><?php endforeach; ?>
-      <?php if ($bg = doc_url('bg-formular')): ?><li><?= icon('info') ?><span><strong>Abrechnung BG:</strong> <a href="<?= e($bg) ?>" target="_blank" rel="noopener">Blanko-Abrechnungsformular (PDF)</a></span></li><?php endif; ?></ul>
+</ul>
     <?php endif; ?>
+    <?= bg_box('reveal') ?>
   </div>
 </section>
 

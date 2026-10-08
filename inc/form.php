@@ -72,8 +72,18 @@ function form_handle(string $returnPath): array
         . "Teilnehmende: {$in['teilnehmer']}\n\n"
         . "Nachricht:\n{$in['nachricht']}\n";
 
-    $to = site('form_recipient') ?: site('email');
-    $sent = send_mail($to, 'Website-Anfrage: ' . $topic . ' – ' . $in['name'], $body, $in['email']) === '';
+    $rows = ['Thema' => $topic, 'Unternehmen' => $in['firma'], 'Name' => $in['name'], 'E-Mail' => $in['email'], 'Telefon' => $in['telefon'], 'Teilnehmende' => $in['teilnehmer']];
+    $html = '<div style="font-family:Arial,Helvetica,sans-serif;font-size:15px;color:#14161B;max-width:640px">'
+        . '<div style="border-top:4px solid #E60005;padding:16px 0 8px"><b style="font-size:18px">Neue Anfrage über die Website</b></div><table cellpadding="6" style="border-collapse:collapse;width:100%">';
+    foreach ($rows as $k => $v) {
+        if ($v !== '') {
+            $val = $k === 'E-Mail' ? '<a href="mailto:' . e($v) . '">' . e($v) . '</a>' : ($k === 'Telefon' ? '<a href="tel:' . e(preg_replace('/[^0-9+]/', '', $v)) . '">' . e($v) . '</a>' : e($v));
+            $html .= '<tr><td style="color:#6B7080;width:130px;border-bottom:1px solid #E3E5E9">' . $k . '</td><td style="border-bottom:1px solid #E3E5E9">' . $val . '</td></tr>';
+        }
+    }
+    $html .= '</table><p style="margin:18px 0 6px;color:#6B7080">Nachricht</p><div style="white-space:pre-wrap;background:#F5F6F8;padding:12px;border-radius:6px">' . e($in['nachricht'] ?: '–') . '</div>'
+        . '<p style="font-size:13px;color:#6B7080;margin-top:18px">„Antworten“ schreibt direkt an ' . e($in['email']) . '.</p></div>';
+    $sent = send_mail(mail_target(), 'Website-Anfrage: ' . $topic . ' – ' . $in['name'], $body, $in['email'], $html) === '';
     @file_put_contents($ipFile, (string) ($count + 1));
     if (!$sent) {
         return [['Die Nachricht konnte leider nicht versendet werden. Bitte direkt an ' . site('email') . ' schreiben.'], $in];

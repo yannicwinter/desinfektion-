@@ -59,7 +59,8 @@ const FIELD_LABELS = [
     'inhouse_needs' => ['Inhouse – Voraussetzungen', 'Ein Punkt pro Zeile.'],
     'form_title' => ['Formular – Überschrift', ''], 'form_text' => ['Formular – Text', ''],
     'hint' => ['Hinweis unter der Terminliste', ''], 'orte' => ['Kursorte', 'Ein Ort pro Zeile.'],
-    'vergleich' => ['Vergleichstabelle „Welcher Kurs passt?“', 'Erste Zeile = Überschriften. Spalten mit | trennen. „ja“/„nein“ werden als Symbol angezeigt.'],
+    'vergleich' => ['Vergleich „Welcher Kurs passt zu mir?“', 'Erste Zeile: „Frage | Kurs 1 | Kurs 2 | …“ (Kursnamen werden verlinkt). Danach je Zeile eine Frage mit „ja“/„nein“ (Haken/Kreuz), „ja*“ = mit Stern-Hinweis.'],
+    'vergleich_hinweis' => ['Vergleich – Hinweis zum Stern (★)', ''],
     'asi_benefits' => ['Fachkraft – Nutzen', 'Ein Punkt pro Zeile.'],
     'asi_offer' => ['Fachkraft – Angebot', 'Ein Punkt pro Zeile.'],
     'ausbildung_title' => ['Überschrift Ausbildung', ''],
@@ -73,10 +74,11 @@ const SITE_LABELS = [
     'name' => 'Name der Website', 'org' => 'Träger', 'url' => 'Adresse der Website (für Google, ohne / am Ende)',
     'phone' => 'Telefon (Anzeige)', 'phone_link' => 'Telefon (zum Wählen, z. B. +49423192450)', 'email' => 'E-Mail (Anzeige)',
     'email_erste_hilfe' => 'E-Mail für Fragen zur Anmeldung (Erste Hilfe)', 'email_brandschutz' => 'E-Mail für Fragen zur Anmeldung (Brandschutz, Arbeitssicherheit)',
-    'form_recipient' => 'Empfänger des Kontaktformulars', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
+    'form_recipient' => 'Empfänger des Kontaktformulars (nur ohne Microsoft 365 – sonst geht alles an das Graph-Postfach)', 'street' => 'Straße', 'zip' => 'PLZ', 'city' => 'Ort', 'region' => 'Bundesland',
     'topbar' => 'Text in der dunklen Leiste ganz oben',
     'instagram' => 'Instagram-Link',
     'hinweis_ort' => 'Hinweis bei Terminen: Ort (z. B. Achim) – leer = kein Hinweis',
+    'bg_ausnahme' => 'BG-Abrechnung: Ausnahmen (erscheint im Kasten „Abrechnung über die Berufsgenossenschaft“, **fett** möglich)',
     'hinweis_text' => 'Hinweis bei Terminen: Text (z. B. Baumaßnahmen); die Skizzen kommen unter „Dokumente“',
     'instagram_links' => 'Instagram ohne Schlüssel: Links zu den Beiträgen der Bilder „Instagram 1–6“ (unter „Bilder“), einer pro Zeile',
     'hiorg_booking' => 'Anmeldung: leer = direkt auf unserer Seite eingebettet, „tab“ = HiOrg in neuem Tab',
@@ -626,7 +628,7 @@ function admin_docs(): void
         $own = is_file(UPLOAD_DIR . '/docs/' . $slot . '.pdf');
         $link = doc_url($slot);
         echo '<div class="panel stack"><h2 class="h5">' . e($label) . '</h2>';
-        echo '<p class="muted small">' . ($own ? 'Eigene Datei' : ($link ? 'Mitgelieferte Datei' : 'Noch keine Datei – wird nicht angezeigt')) . ($link ? ' · <a href="' . e($link) . '" target="_blank" rel="noopener">ansehen</a>' : '') . '</p>';
+        echo '<p class="muted small">' . ($own ? 'Eigene Datei' : ($link ? (str_starts_with($link, 'https://') ? 'Link zum Original (' . e((string) parse_url($link, PHP_URL_HOST)) . ')' : 'Mitgelieferte Datei') : 'Noch keine Datei – wird nicht angezeigt')) . ($link ? ' · <a href="' . e($link) . '" target="_blank" rel="noopener">ansehen</a>' : '') . '</p>';
         echo '<form method="post" enctype="multipart/form-data" class="btn-row">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><input type="file" name="doc" accept="application/pdf" required><button class="btn btn--red btn--sm">Hochladen</button></form>';
         if ($own) {
             echo '<form method="post">' . csrf_field() . '<input type="hidden" name="slot" value="' . e($slot) . '"><button class="btn btn--ghost btn--sm" name="delete" value="1">Datei entfernen</button></form>';
@@ -654,8 +656,11 @@ function admin_maintenance(): void
     admin_start('Wartungsmodus', 'wartung');
     echo '<form class="panel form stack" method="post">' . csrf_field();
     echo '<p class="notice' . ($w['aktiv'] ? ' notice--err">Eingeschaltet: Besucher sehen nur die Wartungsseite (Antwort 503, Google wertet das als vorübergehend).' : '">Ausgeschaltet: Die Website ist normal erreichbar.') . '</p>';
+    if (maintenance_by_file()) {
+        echo '<p class="notice notice--err">Eingeschaltet über die Datei <code>wartung-an.txt</code> im Hauptordner – zum Ausschalten die Datei im Dateimanager löschen.</p>';
+    }
     echo '<label class="check"><input type="checkbox" name="aktiv" value="1"' . ($w['aktiv'] ? ' checked' : '') . '><span><b>Wartungsmodus einschalten</b></span></label>';
-    echo '<p class="muted small">Als angemeldeter Admin sieht man die Website weiter normal (mit gelbem Hinweis oben) und kann alles prüfen. Admin-Bereich, Bilder und Dokumente bleiben erreichbar.</p>';
+    echo '<p class="muted small">Ohne Admin (z. B. beim Umzug): im Dateimanager eine leere Datei <code>wartung-an.txt</code> in den Hauptordner der Website legen – löschen schaltet wieder aus. Als angemeldeter Admin sieht man die Website weiter normal (mit gelbem Hinweis oben) und kann alles prüfen. Admin-Bereich, Bilder und Dokumente bleiben erreichbar.</p>';
     echo field_input('titel', 'Überschrift', $w['titel'], 'Leer = „Wir sind gleich wieder da“');
     echo field_input('text', 'Text', $w['text'], 'Leer = Standardtext mit Hinweis auf Telefon und E-Mail. Leerzeile = neuer Absatz.', true);
     echo '<label class="field"><span>Voraussichtlich wieder da (optional)</span><input type="datetime-local" name="bis" value="' . e($w['bis']) . '"><small>Wird auf der Wartungsseite angezeigt. Der Modus endet nicht automatisch.</small></label>';
@@ -666,11 +671,15 @@ function admin_maintenance(): void
 function admin_mail(): void
 {
     $m = mail_config();
+    $fromConfig = ($m['source'] ?? '') === 'config';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['test'])) {
-            $to = site('form_recipient') ?: site('email');
-            $err = send_mail($to, 'Testnachricht der Website', "Diese Testnachricht wurde im Admin unter „E-Mail“ ausgelöst.\n\nVersand über: " . (mail_uses_graph() ? 'Microsoft Graph (' . $m['sender'] . ')' : 'mail() des Servers') . "\nZeit: " . date('d.m.Y H:i'));
+            $to = mail_target();
+            $err = send_mail($to, 'Testnachricht der Website', "Diese Testnachricht wurde im Admin unter „E-Mail“ ausgelöst.\n\nVersand über: " . (mail_uses_graph() ? 'Microsoft 365 (Graph) als ' . $m['sender'] : 'mail() des Servers') . "\nZeit: " . date('d.m.Y H:i'));
             $err ? flash('Versand fehlgeschlagen: ' . $err, 'err') : flash('Testnachricht an ' . $to . ' verschickt.');
+            redirect('admin/email');
+        }
+        if ($fromConfig) {
             redirect('admin/email');
         }
         if (!empty($_POST['remove'])) {
@@ -693,22 +702,27 @@ function admin_mail(): void
     }
     admin_start('E-Mail-Versand', 'email');
     echo '<form class="panel form stack" method="post">' . csrf_field();
-    echo '<p class="notice">' . (mail_uses_graph() ? 'Das Kontaktformular sendet über <b>Microsoft 365 (Graph)</b> als ' . e((string) $m['sender']) . '.' : 'Das Kontaktformular sendet über <b>mail() des Servers</b>. Für Microsoft 365 unten die Daten der App-Registrierung eintragen.') . ' Empfänger: ' . e(site('form_recipient') ?: site('email')) . ' (unter „Allgemein“).</p>';
-    echo '<div class="form__grid">';
-    echo field_input('tenant', 'Verzeichnis-ID (Tenant ID)', (string) ($m['tenant'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
-    echo field_input('client_id', 'Anwendungs-ID (Client ID)', (string) ($m['client_id'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
-    echo '<label class="field"><span>' . (!empty($m['secret']) ? 'Geheimer Clientschlüssel (gespeichert – nur zum Ändern ausfüllen)' : 'Geheimer Clientschlüssel (Wert, nicht die ID)') . '</span><input name="secret" type="password" autocomplete="off" value=""><small>Wird in data/mail.json gespeichert und nie angezeigt. Ablaufdatum des Schlüssels notieren!</small></label>';
-    echo field_input('sender', 'Absender-Postfach', (string) ($m['sender'] ?? ''), 'z. B. noreply@drk-verden.de oder ein freigegebenes Postfach');
-    echo '</div><div class="btn-row"><button class="btn btn--red">Speichern</button><button class="btn btn--ghost" name="test" value="1">Testnachricht senden</button>';
-    if (!empty($m)) {
+    echo '<p class="notice">' . (mail_uses_graph()
+        ? 'Das Kontaktformular sendet über <b>Microsoft 365 (Graph)</b> von <b>' . e((string) $m['sender']) . '</b> an dasselbe Postfach. „Antworten“ geht direkt an die anfragende Person.' . ($fromConfig ? '<br>Eingerichtet über <code>data/config.php</code> – Änderungen bitte dort.' : '')
+        : 'Das Kontaktformular sendet über <b>mail() des Servers</b> an ' . e(mail_target()) . ' (unter „Allgemein“). Für Microsoft 365 die Datei <code>data/config-beispiel.php</code> in <code>config.php</code> umbenennen und die vier Werte eintragen – oder unten eintragen.') . '</p>';
+    if (!$fromConfig) {
+        echo '<div class="form__grid">';
+        echo field_input('tenant', 'Verzeichnis-ID (GRAPH_TENANT_ID)', (string) ($m['tenant'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
+        echo field_input('client_id', 'Anwendungs-ID (GRAPH_CLIENT_ID)', (string) ($m['client_id'] ?? ''), 'Entra ID → App-Registrierung → Übersicht');
+        echo '<label class="field"><span>' . (!empty($m['secret']) ? 'Geheimer Clientschlüssel (gespeichert – nur zum Ändern ausfüllen)' : 'Geheimer Clientschlüssel (GRAPH_CLIENT_SECRET, der Wert)') . '</span><input name="secret" type="password" autocomplete="off" value=""><small>Wird in data/mail.json gespeichert und nie angezeigt.</small></label>';
+        echo field_input('sender', 'Postfach (GRAPH_SENDER) – Absender und Empfänger', (string) ($m['sender'] ?? ''), 'z. B. kontakt@drk-sicherheit.de');
+        echo '</div>';
+    }
+    echo '<div class="btn-row">' . (!$fromConfig ? '<button class="btn btn--red">Speichern</button>' : '') . '<button class="btn btn--ghost" name="test" value="1">Testnachricht senden</button>';
+    if (!$fromConfig && !empty($m)) {
         echo '<button class="btn btn--ghost" name="remove" value="1" onclick="return confirm(\'Verbindung wirklich entfernen?\')">Verbindung entfernen</button>';
     }
     echo '</div></form>';
-    echo '<div class="panel stack" style="margin-top:20px"><h2 class="h5">Einrichtung in Microsoft 365 (einmalig, durch die IT)</h2><ol class="small">'
-        . '<li>Entra Admin Center → App-Registrierungen → Neue Registrierung (Name z. B. „Website Kontaktformular“, nur dieses Verzeichnis).</li>'
+    echo '<div class="panel stack" style="margin-top:20px"><h2 class="h5">Einrichtung in Microsoft 365 (einmalig)</h2><ol class="small">'
+        . '<li>Entra Admin Center → App-Registrierungen → Neue Registrierung (z. B. „Website Kontaktformular“).</li>'
         . '<li>API-Berechtigungen → Microsoft Graph → <b>Anwendungsberechtigungen</b> → <b>Mail.Send</b> → Administratorzustimmung erteilen.</li>'
-        . '<li>Zertifikate &amp; Geheimnisse → Neuer geheimer Clientschlüssel → den <b>Wert</b> hier eintragen.</li>'
-        . '<li>Empfohlen: Zugriff auf das Absender-Postfach beschränken (Exchange Online PowerShell: <code>New-ApplicationAccessPolicy -AppId &lt;Client ID&gt; -PolicyScopeGroupId &lt;Gruppe mit Postfach&gt; -AccessRight RestrictAccess</code>, bzw. RBAC für Anwendungen).</li>'
+        . '<li>Zertifikate &amp; Geheimnisse → Neuer geheimer Clientschlüssel → den <b>Wert</b> verwenden (Ablaufdatum notieren).</li>'
+        . '<li>Es kann dieselbe App wie im anderen Portal genutzt werden – die vier Werte sind dann identisch.</li>'
         . '</ol></div>';
     admin_end();
 }

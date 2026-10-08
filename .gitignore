@@ -10,3 +10,5 @@ data/secret.key
 data/instagram.json
 dist/
 data/mail.json
+data/config.php
+data/mail-token.json

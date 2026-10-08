@@ -2,16 +2,37 @@
 /**
  * E-Mail-Versand für das Kontaktformular.
  * 1. Microsoft Graph (Microsoft 365 / Exchange Online): App-Registrierung mit Anwendungsberechtigung
- *    „Mail.Send“, Versand über POST /users/{absender}/sendMail. Zugangsdaten in data/mail.json
- *    (gesperrt, wird im Admin unter „E-Mail“ eingetragen, Geheimnis wird nie angezeigt).
- * 2. Sonst PHP mail() des Servers.
+ *    „Mail.Send“, Versand über POST /users/{absender}/sendMail. Die Anfrage geht an dasselbe Postfach
+ *    (Absender = Empfänger), Antworten gehen per Reply-To an die anfragende Person.
+ *    Zugangsdaten in data/config.php (GRAPH_TENANT_ID, GRAPH_CLIENT_ID, GRAPH_CLIENT_SECRET, GRAPH_SENDER;
+ *    Vorlage data/config-beispiel.php) oder im Admin unter „E-Mail“ (data/mail.json). config.php hat Vorrang.
+ * 2. Sonst PHP mail() des Servers an den Formular-Empfänger.
  */
 declare(strict_types=1);
 
 const MAIL_FILE = DATA_DIR . '/mail.json';
+const MAIL_TOKEN_FILE = DATA_DIR . '/mail-token.json';
+
+if (is_file(DATA_DIR . '/config.php')) {
+    require_once DATA_DIR . '/config.php';
+}
+
+/** Zugangsdaten aus config.php? (Platzhalter zählen nicht) */
+function mail_from_config(): bool
+{
+    foreach (['GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'] as $k) {
+        if (!defined($k) || trim((string) constant($k)) === '' || str_contains((string) constant($k), 'PLATZHALTER')) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function mail_config(): array
 {
+    if (mail_from_config()) {
+        return ['tenant' => trim((string) GRAPH_TENANT_ID), 'client_id' => trim((string) GRAPH_CLIENT_ID), 'secret' => trim((string) GRAPH_CLIENT_SECRET), 'sender' => trim((string) GRAPH_SENDER), 'source' => 'config'];
+    }
     return is_file(MAIL_FILE) ? (json_decode((string) file_get_contents(MAIL_FILE), true) ?: []) : [];
 }
 
@@ -34,15 +55,21 @@ function mail_recipients(string $to): array
     return array_values(array_filter(array_map('trim', preg_split('/[,;]/', $to) ?: []), fn($a) => (bool) filter_var($a, FILTER_VALIDATE_EMAIL)));
 }
 
-/** Versendet eine Text-Mail. Liefert '' bei Erfolg, sonst eine Fehlerbeschreibung (für Admin/Protokoll). */
-function send_mail(string $to, string $subject, string $body, string $replyTo = ''): string
+/** Empfänger der Formular-Mails: bei Graph das Absender-Postfach selbst, sonst „Empfänger des Kontaktformulars“. */
+function mail_target(): string
+{
+    return mail_uses_graph() ? (string) mail_config()['sender'] : (site('form_recipient') ?: site('email'));
+}
+
+/** Versendet eine Mail (Text, optional zusätzlich HTML). Liefert '' bei Erfolg, sonst eine Fehlerbeschreibung. */
+function send_mail(string $to, string $subject, string $body, string $replyTo = '', string $html = ''): string
 {
     $rcpt = mail_recipients($to);
     if (!$rcpt) {
         return 'Kein gültiger Empfänger eingetragen.';
     }
     if (mail_uses_graph()) {
-        $err = graph_send($rcpt, $subject, $body, $replyTo);
+        $err = graph_send($rcpt, $subject, $html !== '' ? $html : $body, $replyTo, $html !== '');
         if ($err !== '') {
             @error_log('Graph-Mailversand fehlgeschlagen: ' . $err);
         }
@@ -65,8 +92,11 @@ function send_mail(string $to, string $subject, string $body, string $replyTo = 
 function graph_token(bool $fresh = false): array
 {
     $c = mail_config();
-    if (!$fresh && !empty($c['token']) && ($c['token_exp'] ?? 0) > time() + 120) {
-        return [(string) $c['token'], ''];
+    $t = is_file(MAIL_TOKEN_FILE) ? (json_decode((string) file_get_contents(MAIL_TOKEN_FILE), true) ?: []) : [];
+    // Token gehört zu genau diesen Zugangsdaten (nach Änderung neu anmelden)
+    $key = hash('sha256', $c['tenant'] . '|' . $c['client_id'] . '|' . $c['secret']);
+    if (!$fresh && ($t['key'] ?? '') === $key && !empty($t['token']) && ($t['exp'] ?? 0) > time() + 120) {
+        return [(string) $t['token'], ''];
     }
     $r = mail_http('https://login.microsoftonline.com/' . rawurlencode((string) $c['tenant']) . '/oauth2/v2.0/token', http_build_query([
         'client_id' => $c['client_id'],
@@ -79,13 +109,12 @@ function graph_token(bool $fresh = false): array
         $msg = (string) ($j['error_description'] ?? $j['error'] ?? ($r['error'] ?: 'HTTP ' . $r['code']));
         return ['', 'Anmeldung bei Microsoft fehlgeschlagen: ' . strtok($msg, "\r\n")];
     }
-    $c['token'] = (string) $j['access_token'];
-    $c['token_exp'] = time() + (int) ($j['expires_in'] ?? 3600);
-    mail_save_config($c);
-    return [$c['token'], ''];
+    file_put_contents(MAIL_TOKEN_FILE, json_encode(['key' => $key, 'token' => (string) $j['access_token'], 'exp' => time() + (int) ($j['expires_in'] ?? 3600)]), LOCK_EX);
+    @chmod(MAIL_TOKEN_FILE, 0600);
+    return [(string) $j['access_token'], ''];
 }
 
-function graph_send(array $rcpt, string $subject, string $body, string $replyTo = ''): string
+function graph_send(array $rcpt, string $subject, string $body, string $replyTo = '', bool $isHtml = false): string
 {
     [$token, $err] = graph_token();
     if ($token === '') {
@@ -93,14 +122,14 @@ function graph_send(array $rcpt, string $subject, string $body, string $replyTo 
     }
     $msg = [
         'subject' => $subject,
-        'body' => ['contentType' => 'Text', 'content' => $body],
+        'body' => ['contentType' => $isHtml ? 'HTML' : 'Text', 'content' => $body],
         'toRecipients' => array_map(fn($a) => ['emailAddress' => ['address' => $a]], $rcpt),
     ];
     if ($replyTo !== '' && filter_var($replyTo, FILTER_VALIDATE_EMAIL)) {
         $msg['replyTo'] = [['emailAddress' => ['address' => $replyTo]]];
     }
     $url = 'https://graph.microsoft.com/v1.0/users/' . rawurlencode((string) mail_config()['sender']) . '/sendMail';
-    $payload = json_encode(['message' => $msg, 'saveToSentItems' => true], JSON_UNESCAPED_UNICODE);
+    $payload = json_encode(['message' => $msg, 'saveToSentItems' => false], JSON_UNESCAPED_UNICODE);
     $r = mail_http($url, (string) $payload, ['Authorization: Bearer ' . $token, 'Content-Type: application/json']);
     if ($r['code'] === 401) {
         // Token zurückgezogen/abgelaufen → einmal neu anmelden
