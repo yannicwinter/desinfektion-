@@ -11,6 +11,11 @@ const CACHE_DIR = ROOT . '/cache';
 const UPLOAD_DIR = ROOT . '/uploads';
 const CONTENT_FILE = DATA_DIR . '/content.json';
 
+// Eigene Einstellungen (Wartungsschalter, Mailversand) – Vorlage data/config-beispiel.php, wird bei Updates nie überschrieben
+if (is_file(DATA_DIR . '/config.php')) {
+    require_once DATA_DIR . '/config.php';
+}
+
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Berlin');
 
@@ -372,7 +377,7 @@ function maintenance(): array
     return (array) (content()['wartung'] ?? []) + ['aktiv' => '', 'titel' => '', 'text' => '', 'bis' => ''];
 }
 
-/** Ein: Schalter im Admin oder Datei „wartung-an.txt“ im Hauptordner (z. B. beim Umzug per Dateimanager). */
+/** Ein: Schalter im Admin, WARTUNG = true in data/config.php oder Datei „wartung-an.txt“ im Hauptordner. */
 function maintenance_active(): bool
 {
     return !empty(maintenance()['aktiv']) || maintenance_by_file();
@@ -380,7 +385,7 @@ function maintenance_active(): bool
 
 function maintenance_by_file(): bool
 {
-    return is_file(ROOT . '/wartung-an.txt');
+    return (defined('WARTUNG') && WARTUNG === true) || is_file(ROOT . '/wartung-an.txt');
 }
 
 /** Angemeldeter Admin? Sitzung nur öffnen, wenn das Cookie schon da ist – Besucher bekommen keins. */

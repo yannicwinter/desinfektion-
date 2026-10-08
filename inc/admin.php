@@ -657,7 +657,7 @@ function admin_maintenance(): void
     echo '<form class="panel form stack" method="post">' . csrf_field();
     echo '<p class="notice' . ($w['aktiv'] ? ' notice--err">Eingeschaltet: Besucher sehen nur die Wartungsseite (Antwort 503, Google wertet das als vorübergehend).' : '">Ausgeschaltet: Die Website ist normal erreichbar.') . '</p>';
     if (maintenance_by_file()) {
-        echo '<p class="notice notice--err">Eingeschaltet über die Datei <code>wartung-an.txt</code> im Hauptordner – zum Ausschalten die Datei im Dateimanager löschen.</p>';
+        echo '<p class="notice notice--err">Eingeschaltet über ' . (defined('WARTUNG') && WARTUNG === true ? '<code>WARTUNG = true</code> in <code>data/config.php</code> – zum Ausschalten dort <code>false</code> eintragen.' : 'die Datei <code>wartung-an.txt</code> im Hauptordner – zum Ausschalten die Datei im Dateimanager löschen.') . '</p>';
     }
     echo '<label class="check"><input type="checkbox" name="aktiv" value="1"' . ($w['aktiv'] ? ' checked' : '') . '><span><b>Wartungsmodus einschalten</b></span></label>';
     echo '<p class="muted small">Ohne Admin (z. B. beim Umzug): im Dateimanager eine leere Datei <code>wartung-an.txt</code> in den Hauptordner der Website legen – löschen schaltet wieder aus. Als angemeldeter Admin sieht man die Website weiter normal (mit gelbem Hinweis oben) und kann alles prüfen. Admin-Bereich, Bilder und Dokumente bleiben erreichbar.</p>';
