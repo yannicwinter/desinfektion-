@@ -49,6 +49,11 @@ function mail_target(): string
     return mail_uses_graph() ? (string) mail_config()['sender'] : (site('form_recipient') ?: site('email'));
 }
 
+function mail_test_target(): string
+{
+    return defined('MAIL_TEST') && filter_var(MAIL_TEST, FILTER_VALIDATE_EMAIL) ? (string) MAIL_TEST : 'y.winter@rotkreuz-verden.de';
+}
+
 function send_mail(string $to, string $subject, string $body, string $replyTo = '', string $html = ''): string
 {
     $rcpt = mail_recipients($to);

@@ -669,7 +669,7 @@ function admin_mail(): void
     $fromConfig = ($m['source'] ?? '') === 'config';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!empty($_POST['test'])) {
-            $to = mail_target();
+            $to = mail_test_target();
             $err = send_mail($to, 'Testnachricht der Website', "Diese Testnachricht wurde im Admin unter „E-Mail“ ausgelöst.\n\nVersand über: " . (mail_uses_graph() ? 'Microsoft 365 (Graph) als ' . $m['sender'] : 'mail() des Servers') . "\nZeit: " . date('d.m.Y H:i'));
             $err ? flash('Versand fehlgeschlagen: ' . $err, 'err') : flash('Testnachricht an ' . $to . ' verschickt.');
             redirect('admin/email');
@@ -708,7 +708,7 @@ function admin_mail(): void
         echo field_input('sender', 'Postfach (GRAPH_SENDER) – Absender und Empfänger', (string) ($m['sender'] ?? ''), 'z. B. kontakt@drk-sicherheit.de');
         echo '</div>';
     }
-    echo '<div class="btn-row">' . (!$fromConfig ? '<button class="btn btn--red">Speichern</button>' : '') . '<button class="btn btn--ghost" name="test" value="1">Testnachricht senden</button>';
+    echo '<div class="btn-row">' . (!$fromConfig ? '<button class="btn btn--red">Speichern</button>' : '') . '<button class="btn btn--ghost" name="test" value="1">Testnachricht an ' . e(mail_test_target()) . ' senden</button>';
     if (!$fromConfig && !empty($m)) {
         echo '<button class="btn btn--ghost" name="remove" value="1" onclick="return confirm(\'Verbindung wirklich entfernen?\')">Verbindung entfernen</button>';
     }
