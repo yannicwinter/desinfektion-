@@ -1,5 +1,4 @@
 <?php
-/** Kursseite /erste-hilfe/{kurs} bzw. /brandschutz/{kurs}: Infoleiste, Inhalte, nächste Termine. */
 $c = $current;
 $cat = $c['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe';
 $catTitle = page($cat, 'title');
@@ -64,7 +63,6 @@ page_head('', $c['title'], $c['teaser'], [[$catTitle, $cat], [$c['title'], cours
       <div class="note"><?= icon('info') ?><div><?php foreach ($rest as $n => [$k, $v]): ?><?= $n ? '<br>' : '' ?><b><?= e($k) ?>:</b> <?= e($v) ?><?php endforeach; ?></div></div>
       <?php endif; ?>
       <?php
-      // Vergleich „Welcher Kurs passt zu mir?“ auf den verglichenen Kursen und der Betriebsseite
       $cmpData = page('erste-hilfe', 'vergleich');
       $cmpSlugs = array_map(fn($t) => slugify(trim($t)), array_slice(explode('|', lines($cmpData)[0] ?? ''), 1));
       if (in_array($c['slug'], $cmpSlugs, true) || array_intersect(array_map(fn($s) => $s[1]['slug'], $sources), $cmpSlugs)): ?>

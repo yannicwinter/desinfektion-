@@ -1,5 +1,4 @@
 <?php
-/** Bereichsseite /erste-hilfe bzw. /brandschutz: Foto-Kopf, Terminsuche, Wegweiser, Einleitung, alle Kurse als Karten, „Gut zu wissen“. */
 $P = fn($k) => page($category, $k);
 $list = listed_courses($category);
 $groups = [];
@@ -19,7 +18,6 @@ layout_start([
     'breadcrumb' => [[$P('title'), $category]],
     'schema' => array_map(fn($c) => course_schema($c), $list),
 ]);
-// Brandschutz nutzt das Foto der Startseite
 page_head('', $P('title'), $P('lead'), [[$P('title'), $category]], '', $isFire ? 'hero' : $category, true);
 $searchCategory = $category;
 include __DIR__ . '/partials/suche.php';

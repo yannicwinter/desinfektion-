@@ -1,12 +1,6 @@
 <?php
-/**
- * Kursfinder: geführter Assistent (ohne KI-Dienst), der per Rückfragen den passenden Kurs
- * ermittelt und die nächsten freien HiOrg-Termine mit Link zur Anmeldung zeigt.
- * Läuft komplett auf dem eigenen Server – keine Daten an Dritte.
- */
 declare(strict_types=1);
 
-/** JSON für /api/kursfinder?kurs={slug}: freie Termine eines Kurses. */
 function kursfinder_api(string $slug): void
 {
     header('Content-Type: application/json; charset=utf-8');
@@ -56,7 +50,6 @@ function kursfinder_api(string $slug): void
     ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
-/** Konfiguration für das Frontend: Kurse, Suchbegriffe, Anfrage-Angebote. */
 function kursfinder_config(): array
 {
     $bySlug = [];
@@ -66,7 +59,6 @@ function kursfinder_config(): array
     $has = fn(string $s) => isset($bySlug[$s]);
     $title = fn(string $s) => $bySlug[$s]['title'] ?? $s;
 
-    // Suchbegriffe für die Freitext-Eingabe (Wortanfänge, klein geschrieben)
     $keywords = [
         'erste-hilfe-fortbildung' => ['fortbildung', 'auffrisch', 'wiederhol', 'refresh', 'verlänger'],
         'erste-hilfe-am-welpen' => ['welpe'],
@@ -103,7 +95,6 @@ function kursfinder_config(): array
     ];
 }
 
-/** Alle Kursorte (Städte) aus den aktuellen Terminen, z. B. Verden, Achim. */
 function kursfinder_orte(): array
 {
     $orte = [];
@@ -119,7 +110,6 @@ function kursfinder_orte(): array
     return $orte;
 }
 
-/** Markup: Startknopf + Chat-Fenster (wird in layout_end eingebunden). */
 function kursfinder_markup(): string
 {
     $cfg = json_encode(kursfinder_config(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS);
@@ -146,19 +136,12 @@ function kursfinder_markup(): string
     return (string) ob_get_clean();
 }
 
-// ---------------------------------------------------------------------------
-// Wissenssuche („kleine KI“): beantwortet Freitext aus den eigenen Inhalten.
-// Durchsucht Kurse (Titel, Suchbegriffe, Texte, Eckdaten) und FAQ, gewichtet
-// seltene Wörter stärker (TF-IDF) und erkennt ganze Kursnamen als Phrase.
-// ---------------------------------------------------------------------------
-
 const KF_STOP = ['ich', 'du', 'wir', 'mein', 'meine', 'meinen', 'meinem', 'dein', 'euer', 'unser', 'unsere', 'möchte', 'moechte', 'will', 'würde',
     'gerne', 'gern', 'bitte', 'einen', 'eine', 'einem', 'einer', 'ein', 'der', 'die', 'das', 'den', 'dem', 'des', 'und', 'oder', 'für', 'fuer', 'mit',
     'von', 'zu', 'zum', 'zur', 'im', 'in', 'am', 'an', 'auf', 'bei', 'ist', 'sind', 'bin', 'es', 'gibt', 'habe', 'hab', 'hat', 'kann', 'man',
     'wie', 'was', 'wo', 'wann', 'wer', 'welche', 'welcher', 'welches', 'buchen', 'anmelden', 'machen', 'suche', 'brauche', 'nächste', 'naechste',
     'nächsten', 'termin', 'termine', 'kurs', 'kurse', 'kursen', 'lehrgang', 'hallo', 'hi', 'noch', 'mal', 'auch', 'so', 'da', 'denn', 'dass', 'nicht'];
 
-/** Wörter normalisieren und grob auf den Wortstamm kürzen. */
 function kf_tokens(string $text): array
 {
     $t = mb_strtolower($text);
@@ -185,7 +168,6 @@ function kf_stem(string $w): string
     return $w;
 }
 
-/** Suchindex aus Kursen und FAQ (Wort → Gewicht je Dokument). */
 function kf_index(): array
 {
     static $idx = null;
@@ -236,7 +218,6 @@ function kf_score(array $doc, array $q, string $qJoined, array $idx): float
     foreach (array_unique($q) as $tok) {
         $hit = $doc['w'][$tok] ?? 0;
         if (!$hit) {
-            // Teilwort-Treffer (z. B. „hundekurs“ ↔ „hund“), schwächer gewichtet
             foreach ($doc['w'] as $dt => $dw) {
                 $dt = (string) $dt;
                 if (mb_strlen($dt) >= 4 && mb_strlen($tok) >= 4 && (str_starts_with($tok, $dt) || str_starts_with($dt, $tok))) {
@@ -256,17 +237,15 @@ function kf_score(array $doc, array $q, string $qJoined, array $idx): float
     return $s;
 }
 
-/** Antwort auf eine Freitext-Frage: bester Kurs, beste FAQ, erkannte Absicht. */
 function kursfinder_answer(string $question): array
 {
-    // Wortgleiche FAQ-Frage (z. B. aus der Schnellauswahl) direkt beantworten
     $norm = fn($x) => trim(preg_replace('/[^\p{L}\p{N}]+/u', ' ', mb_strtolower($x)));
     foreach (content()['faq'] ?? [] as $f) {
         if ($norm($f['q']) === $norm($question)) {
             return ['type' => 'faq', 'faq' => ['q' => $f['q'], 'a' => trim(strip_tags(rich($f['a'])))], 'fixed' => $question];
         }
     }
-    $question = kf_correct($question); // Tippfehler großzügig korrigieren
+    $question = kf_correct($question);
     $q = kf_tokens($question);
     $raw = mb_strtolower($question);
     if (!$q) {
@@ -284,7 +263,6 @@ function kursfinder_answer(string $question): array
     [$cd, $cs] = $best['course'];
     [$fd, $fs] = $best['faq'];
 
-    // Absicht: Preis, Dauer oder Ort zu einem Kurs?
     $intent = '';
     if (preg_match('/kost|preis|euro|€|teuer|bezahl|gebühr/u', $raw)) {
         $intent = 'preis';
@@ -318,7 +296,6 @@ function kursfinder_answer(string $question): array
             'score' => round($cs, 1),
         ];
     }
-    // Allgemeine Frage (z. B. „Gibt es eine Prüfung?“) → FAQ-Antwort, wenn sie klar besser passt
     if ($fd && $fs >= 5 && ($out['type'] === 'none' || ($isQuestion && !$out['fact'] && $fs > ($cs * 0.8)))) {
         $out['faq'] = ['q' => $fd['f']['q'], 'a' => trim(strip_tags(rich($fd['f']['a'])))];
         if ($out['type'] === 'none') {
@@ -329,18 +306,11 @@ function kursfinder_answer(string $question): array
     return $out;
 }
 
-// ---------------------------------------------------------------------------
-// Rechtschreib-Toleranz: jedes Wort der Frage wird mit dem Wortschatz der Website
-// verglichen (Kurse, Suchbegriffe, FAQ, Orte, Wochentage). Großzügig: je länger das
-// Wort, desto mehr Tippfehler sind erlaubt (Levenshtein-Abstand).
-// ---------------------------------------------------------------------------
-
 function kf_ascii(string $w): string
 {
     return strtr($w, ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', 'ø' => 'o', 'é' => 'e']);
 }
 
-/** Wortschatz: Wort (klein) → Häufigkeit. */
 function kf_vocab(): array
 {
     static $v = null;
@@ -366,7 +336,6 @@ function kf_vocab(): array
     return $v;
 }
 
-/** Korrigiert Tippfehler in der Frage, z. B. „wan is der nächte kurs in vrden“ → „wann is der nächste kurs in verden“. */
 function kf_correct(string $question): string
 {
     $vocab = kf_vocab();
@@ -391,14 +360,12 @@ function kf_correct(string $question): string
                 continue;
             }
             $d = levenshtein($a, $wa);
-            // Gleicher Anfangsbuchstabe zählt als etwas besser
             $score = $d * 10 - ($wa[0] === $a[0] ? 3 : 0) - min(3, $vocab[$w]);
             if ($d <= $max && $score < $bestD) {
                 $bestD = $score;
                 $best = $w;
             }
         }
-        // Zusammengesetzte Wörter wie „hundekurs“, „ersthelferkurs“: bekannten Wortanfang übernehmen
         if ($best === null) {
             foreach ($asciiVocab as $w => $wa) {
                 if (strlen($wa) >= 4 && str_starts_with($a, $wa) && ($best === null || strlen($wa) > strlen(kf_ascii($best)))) {

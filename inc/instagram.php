@@ -1,27 +1,16 @@
 <?php
-/**
- * Instagram-Feed ohne Fremddienst:
- * 1. Offizielle Instagram-Schnittstelle (Instagram API mit Instagram-Login). Der Zugangsschlüssel (Token)
- *    liegt in data/instagram.json (gesperrt), wird im Admin unter „Allgemein“ eingetragen und alle
- *    7 Tage automatisch verlängert (gilt sonst 60 Tage). Abruf serverseitig alle 3 Std., Bilder lokal
- *    in uploads/instagram/ – Besucher laden nichts von Instagram (keine Cookies, DSGVO).
- * 2. Rückfall: im Admin hochgeladene Bilder „Instagram 1–6“ + Links (site.instagram_links).
- * 3. Sonst Platzhalter-Kacheln (templates/home.php).
- */
 declare(strict_types=1);
 
-const IG_DIR = UPLOAD_DIR . '/instagram'; // öffentlich erreichbar (Bilder); feed.json ist per .htaccess gesperrt
+const IG_DIR = UPLOAD_DIR . '/instagram';
 const IG_TOKEN_FILE = DATA_DIR . '/instagram.json';
 const IG_API = 'https://graph.instagram.com';
 
-/** @return array<int, array{img:string, link:string, caption:string, date:string}> */
 function instagram_posts(int $limit = 6): array
 {
     $posts = instagram_api_posts();
     return array_slice($posts ?: instagram_manual_posts(), 0, $limit);
 }
 
-/** Gespeicherter Token-Stand: token, refreshed (Zeitpunkt), expires, error, fetched. */
 function instagram_state(): array
 {
     return is_file(IG_TOKEN_FILE) ? (json_decode((string) file_get_contents(IG_TOKEN_FILE), true) ?: []) : [];
@@ -33,7 +22,6 @@ function instagram_save_state(array $s): void
     @chmod(IG_TOKEN_FILE, 0600);
 }
 
-/** Neuen Token aus dem Admin übernehmen und sofort testen. Liefert Fehlertext oder ''. */
 function instagram_set_token(string $token): string
 {
     $token = trim($token);
@@ -51,7 +39,6 @@ function instagram_set_token(string $token): string
     return '';
 }
 
-/** Token verlängern, wenn er älter als 7 Tage ist (Instagram erlaubt das ab 24 Std. Alter). */
 function instagram_token(): string
 {
     $s = instagram_state();
@@ -68,14 +55,12 @@ function instagram_token(): string
         } else {
             $s['error'] = 'Verlängerung fehlgeschlagen: ' . ($r['error']['message'] ?? 'keine Antwort');
         }
-        // bei Fehler morgen erneut versuchen, sonst in 7 Tagen
         $s['refreshed'] = $s['error'] ? time() - 6 * 86400 : time();
         instagram_save_state($s);
     }
     return $token;
 }
 
-/** Beiträge über die offizielle Schnittstelle (3 Std. Cache, bei Fehlern alter Stand). */
 function instagram_api_posts(): array
 {
     if (!is_file(IG_TOKEN_FILE)) {
@@ -98,7 +83,7 @@ function instagram_api_posts(): array
     if (!isset($json['data'])) {
         $s['error'] = 'Abruf fehlgeschlagen: ' . ($json['error']['message'] ?? 'keine Antwort von Instagram');
         instagram_save_state($s);
-        @touch($cacheFile); // alten Stand behalten, in 3 Std. erneut versuchen
+        @touch($cacheFile);
         return $cached;
     }
 
@@ -133,7 +118,6 @@ function instagram_api_posts(): array
     return $posts;
 }
 
-/** Rückfall: Bilder „Instagram 1–6“ aus dem Admin, Links zeilenweise in site.instagram_links. */
 function instagram_manual_posts(): array
 {
     $links = lines(site('instagram_links'));
@@ -158,7 +142,6 @@ function instagram_get(string $url): string
     return $r;
 }
 
-/** Bild laden, quadratisch zuschneiden (600 px) und als JPG speichern. */
 function instagram_store_image(string $src, string $file): bool
 {
     $raw = instagram_get($src);

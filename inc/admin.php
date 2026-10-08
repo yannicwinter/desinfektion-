@@ -1,8 +1,4 @@
 <?php
-/**
- * Admin-Bereich unter /admin – Texte, Kurse, FAQ, Ansprechpersonen, Bilder, Termine-Diagnose.
- * Zugangsdaten liegen gehasht in data/admin.json (wird beim ersten Aufruf angelegt).
- */
 declare(strict_types=1);
 
 const ADMIN_FILE = DATA_DIR . '/admin.json';
@@ -485,7 +481,6 @@ function admin_course(): void
     admin_end();
 }
 
-/** Wiederholbare Zeilen (FAQ, Personen). */
 function admin_rows(string $key, string $title, string $section, array $fields): void
 {
     $c = content();

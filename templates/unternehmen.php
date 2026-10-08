@@ -1,10 +1,8 @@
 <?php
-/** /arbeitssicherheit – Für Unternehmen: Pflichten, Leistungen, Fachkraft, Schulung im Betrieb, Anfrage. */
 require_once __DIR__ . '/../inc/form.php';
 [$err, $old] = form_handle('arbeitssicherheit');
 $P = fn($k) => page('unternehmen', $k);
 
-// Leistungen aus den Kursdaten (Titel/Teaser im Admin gepflegt)
 $cards = [];
 foreach (['erste-hilfe-im-betrieb' => '', 'aed-reanimationstraining' => '', 'fresh-up-arztpraxen' => 'Fresh Up für Arztpraxen', 'brandschutzhelfer' => '', 'feuerloeschertraining' => '', 'brandschutzordnung-rettungsplaene' => ''] as $slug => $label) {
     if ($c = course($slug)) {

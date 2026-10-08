@@ -1,4 +1,3 @@
-/* Terminsuche: zählt freie Termine live (Kurs · Ort · Wann) und leitet auf die gefilterte Terminliste. */
 (function () {
   'use strict';
   var root = document.querySelector('[data-search]');
@@ -20,7 +19,6 @@
   function render() {
     var n = count(state.kurs, state.ort, state.wann);
     root.querySelectorAll('[data-count-label]').forEach(function (el) { el.textContent = label(n); });
-    // Anzahl je Auswahl im Menü (z. B. „Verden (7)“)
     var kursSel = form.querySelector('[data-f=kurs]');
     Array.prototype.forEach.call(kursSel.options, function (opt) {
       if (!opt.dataset.label) opt.dataset.label = opt.textContent;

@@ -1,4 +1,3 @@
-# Hochgeladene Bilder: keine Skripte ausführen
 Options -Indexes -ExecCGI
 <FilesMatch "\.(php\d?|phtml|phar|pl|py|cgi|sh)$">
   <IfModule mod_authz_core.c>

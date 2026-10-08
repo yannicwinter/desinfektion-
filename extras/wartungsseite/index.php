@@ -1,5 +1,4 @@
 <?php
-// Wartungsseite ohne Website-Dateien. Texte hier direkt anpassen.
 http_response_code(503);
 header('Retry-After: 3600');
 header('Cache-Control: no-store');

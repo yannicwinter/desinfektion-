@@ -1,23 +1,19 @@
-/* DRK Arbeitssicherheit – kleine Helfer, kein Framework */
 (function () {
   'use strict';
   var doc = document.documentElement;
   doc.classList.add('js');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // Header-Schatten beim Scrollen
   var onScroll = function () { doc.classList.toggle('is-scrolled', window.scrollY > 8); };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
-  // Aktiven Menüpunkt auf kleinen Bildschirmen sichtbar scrollen
   var cur = document.querySelector('.nav a[aria-current="page"]');
   if (cur && cur.scrollIntoView && window.innerWidth < 1000) {
     var list = cur.closest('.nav__list');
     if (list && list.scrollWidth > list.clientWidth) list.scrollLeft = cur.offsetLeft - 16;
   }
 
-  // Einblenden beim Scrollen
   var items = document.querySelectorAll('.reveal');
   if ('IntersectionObserver' in window && !reduce) {
     var io = new IntersectionObserver(function (entries) {
@@ -30,7 +26,6 @@
     items.forEach(function (el) { el.classList.add('is-in'); });
   }
 
-  // Akkordeon: weich auf- und zuklappen, Termine beim Öffnen nachladen
   var loadDates = function (item) {
     var box = item.querySelector('[data-dates]');
     if (!box || box.dataset.loaded) return;
@@ -67,7 +62,6 @@
     });
   });
 
-  // Direktlink auf einen Kurs (#slug) öffnet das passende Akkordeon
   var openHash = function () {
     if (!location.hash) return;
     var el = document.getElementById(decodeURIComponent(location.hash.slice(1)));
@@ -80,7 +74,6 @@
   openHash();
   window.addEventListener('hashchange', openHash);
 
-  // Kursauswahl Startseite → /termine/{kurs}
   var finder = document.querySelector('[data-finder]');
   if (finder) {
     finder.addEventListener('submit', function (e) {
@@ -89,7 +82,6 @@
     });
   }
 
-  // Terminfilter (Ort, Monat, Wochentag)
   var filter = document.querySelector('[data-date-filter]');
   if (filter) {
     var rows = document.querySelectorAll('[data-date-list] .date');
@@ -109,7 +101,6 @@
         r.hidden = !ok;
         if (ok) n++;
       });
-      // Monatsüberschriften ohne sichtbare Termine ausblenden, freie Termine zählen
       document.querySelectorAll('[data-date-list] .dates__month').forEach(function (m) {
         var el = m.nextElementSibling, any = false;
         while (el && !el.classList.contains('dates__month')) { if (!el.hidden) any = true; el = el.nextElementSibling; }
@@ -121,12 +112,11 @@
       if (empty) empty.hidden = n > 0;
     };
     filter.addEventListener('change', apply);
-    apply(); // Vorauswahl aus der Startseiten-Suche (?ort=…&wann=…) sofort anwenden
+    apply();
     var reset = document.querySelector('[data-date-reset]');
     if (reset) reset.addEventListener('click', function (e) { e.preventDefault(); filter.reset(); apply(); });
   }
 
-  // Admin: Zeichenzähler für Google-Titel/-Beschreibung, Löschbestätigung
   document.querySelectorAll('[data-count]').forEach(function (el) {
     var max = +el.getAttribute('data-count');
     var out = document.createElement('small');
@@ -143,7 +133,6 @@
     b.addEventListener('click', function (e) { if (!confirm(b.getAttribute('data-confirm'))) e.preventDefault(); });
   });
 
-  // Mobil: „Mehr“-Menü der Tab-Leiste
   var more = document.getElementById('mehr');
   var moreBtn = document.querySelector('[data-more-open]');
   if (more && moreBtn) {
@@ -167,8 +156,6 @@
   }
 })();
 
-/* Gestaltete Auswahlmenüs statt der Standard-Menüs des Browsers (select[data-nice]).
-   Das echte <select> bleibt für Formular, Tastatur-Fallback und bestehende Skripte erhalten. */
 (function () {
   'use strict';
   var chev = '<svg class="nsel__chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
@@ -264,7 +251,6 @@
     });
     sel.addEventListener('change', sync);
     if (sel.form) sel.form.addEventListener('reset', function () { setTimeout(sync); });
-    // Ganze Feldfläche (z. B. in der Suchleiste) öffnet das Menü
     var field = sel.closest('.sbar__f');
     if (field) field.addEventListener('click', function (e) { if (!wrap.contains(e.target)) { e.stopPropagation(); open(); } });
     var api = { close: close, sync: sync };
@@ -279,7 +265,6 @@
   window.niceSelectSync = function () { all.forEach(function (x) { x.sync(); }); };
 })();
 
-// Handy im Chrome-Modus „Desktop-Website“: Layout ist ~980 px breit, alles winzig. Tab-Leiste & Co. auf Handygröße zoomen.
 (function () {
   var fit = function () {
     var touch = window.matchMedia && window.matchMedia('(pointer: coarse)').matches;

@@ -1,9 +1,4 @@
 <?php
-/**
- * Terminsuche (Startseite, Erste Hilfe, Brandschutz): Kurs · Ort · Wann.
- * Die freien Termine werden als kleines JSON mitgeliefert, damit die Anzahl live mitzählt.
- * Optional vor dem Einbinden: $searchCategory = 'erste-hilfe' | 'brandschutz' (nur diese Kurse).
- */
 $searchCourses = bookable_courses();
 if (!empty($searchCategory)) {
     $searchCourses = array_values(array_filter($searchCourses, fn($c) => $c['category'] === $searchCategory));

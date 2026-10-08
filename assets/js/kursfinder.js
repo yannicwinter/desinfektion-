@@ -1,6 +1,3 @@
-/* Kursfinder: geführter Assistent – fragt nach dem Zweck (und wann der letzte Kurs war),
-   filtert nach Ort/Tag und zeigt die nächsten freien Termine mit direktem Link zur Anmeldung.
-   Antworten erscheinen nacheinander mit „tippt …“ und Wort für Wort wie in einem Chat. */
 (function () {
   'use strict';
   var box = document.getElementById('kursfinder');
@@ -14,9 +11,8 @@
   var state = {};
   var cache = {};
   var queue = Promise.resolve();
-  var gen = 0; // erhöht sich bei „Neu starten“ → alte Warteschlange verwerfen
+  var gen = 0;
 
-  // ---------- Bausteine ----------
   function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -31,7 +27,6 @@
     return queue;
   }
 
-  // Bot-Nachricht: erst „tippt …“, dann Text Wort für Wort (bzw. Karten sanft eingeblendet)
   function say(content) {
     return then(function () {
       var dots = el('div', 'kf__msg kf__msg--bot kf__typing');
@@ -94,7 +89,6 @@
     }).then(function (d) { cache[slug] = d; return d; });
   }
 
-  // ---------- Gesprächsablauf ----------
   function start() {
     closeFrame();
     gen++;
@@ -120,7 +114,6 @@
     choices(list);
   }
 
-  // Ausbildung oder Fortbildung? Entscheidet, wie lange der letzte Kurs her ist.
   function askLast(ctx) {
     var bg = ctx === 'job' ? ' Bei der Anmeldung „Arbeitgeber / BG“ wählen – die Kosten übernimmt meist die Berufsgenossenschaft.' : '';
     say('Wann war dein letzter Erste-Hilfe-Kurs?');
@@ -161,11 +154,10 @@
 
   function pick(slug, note, variant) {
     state.slug = slug;
-    var loading = load(slug); // Termine schon laden, während „getippt“ wird
+    var loading = load(slug);
     say('Dann passt: ' + title(slug) + (variant ? ' – ' + variant : '') + '.' + (note ? ' ' + note : ''));
     then(function () {
       return loading.then(function (d) {
-        // Kurs mit mehreren HiOrg-Listen (z. B. Ausbildung/Fortbildung): nur die passende zeigen
         if (variant) d = Object.assign({}, d, { dates: d.dates.filter(function (x) { return !x.variant || x.variant === variant; }) });
         state.data = d;
         if (state.text) applyOrt(state.text);
@@ -247,7 +239,6 @@
     ]);
   }
 
-  // Anmeldung direkt im Kursfinder (HiOrg-Formular eingebettet); „Zurück“ führt zu den Terminen
   function openFrame(x, kurs) {
     closeFrame();
     var wrap = el('div', 'kf__frame');
@@ -278,7 +269,6 @@
     box.classList.remove('kf--frame');
   }
 
-  // 2) Für Betriebe: Thema, Teilnehmerzahl, Ort → vorausgefüllte Anfrage
   function firm() {
     state.firm = {};
     say('Gern! Wir schulen Teams bei uns oder direkt im Betrieb. Worum geht es?');
@@ -313,7 +303,6 @@
     ]);
   }
 
-  // 4) Häufige Fragen als Schnellauswahl
   function quick() {
     say('Was möchtest du wissen? Du kannst deine Frage auch unten eintippen.');
     var list = cfg.quick.map(function (q) { return { label: q, go: function () { freeText(q, true); } }; });
@@ -330,7 +319,6 @@
     ]);
   }
 
-  // ---------- Freitext ----------
   var days = { montag: 1, dienstag: 2, mittwoch: 3, donnerstag: 4, freitag: 5, samstag: 6, sonntag: 7 };
   function has(t, list) { return list.some(function (k) { return t.indexOf(k) !== -1; }); }
   function applyOrt(t) {
@@ -338,7 +326,6 @@
     state.data.dates.forEach(function (x) { if (x.ort && t.indexOf(x.ort.toLowerCase()) !== -1) state.ort = x.ort; });
   }
 
-  // Ort und Wochentag/Wochenende aus dem Text merken (z. B. „nächster Kurs in Verden am Samstag“)
   function detect(t) {
     if (/wochenend/.test(t)) state.day = 'we';
     else if (/unter der woche|werktag|wochentag/.test(t)) state.day = 'wk';
@@ -354,7 +341,6 @@
     state.text = t;
     detect(t);
 
-    // Wissenssuche auf dem Server: durchsucht Kurse und FAQ der Website
     var asked = fetch(cfg.api + '?frage=' + encodeURIComponent(text)).then(function (r) { return r.json(); });
     then(function () {
       return asked.then(answer).catch(function () {
@@ -365,7 +351,6 @@
   }
 
   function answer(a) {
-    // Mit dem korrigierten Text (Tippfehler bereinigt) Ort und Tag erneut erkennen
     if (a.fixed) {
       state.text = ' ' + a.fixed + ' ';
       detect(state.text);
@@ -373,7 +358,6 @@
     var t = state.text;
     if (a.faq) say(a.faq.a);
     if (a.type === 'none') {
-      // Terminfrage ohne Kursart („Wann ist der nächste Kurs in Verden?“) → nachfragen, wofür
       if (/n(ä|ae)chst|termin|kurs|wann|frei|platz|anmeld|buch/.test(t) || state.ort || state.day !== undefined) {
         var wo = state.ort ? ' in ' + state.ort : '';
         var tag = state.day === 'we' ? ' am Wochenende' : state.day === 'wk' ? ' unter der Woche' : (typeof state.day === 'number' ? ' am ' + ['', 'Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag'][state.day] : '');
@@ -406,7 +390,6 @@
     }
     var fuehrerschein = /führerschein|fuehrerschein|fahrschule|fahrerlaubnis/.test(t);
     var zweck = has(t, cfg.keywords._betrieb);
-    // Ausbildung für Job/Trainer/Verein: erst klären, wie lange der letzte Kurs her ist
     if (a.slug === 'erste-hilfe-ausbildung' && zweck && !fuehrerschein && !/fortbild|auffrisch/.test(t)) {
       askLast(/betrieb|firma|arbeit|job|chef|ersthelfer|bg|berufsgenossen|unternehmen/.test(t) ? 'job' : 'verein');
       return;
@@ -414,7 +397,6 @@
     pick(a.slug, fuehrerschein && a.slug === 'erste-hilfe-ausbildung' ? 'Für den Führerschein brauchst du die komplette Ausbildung.' : '');
   }
 
-  // ---------- Öffnen / Schließen ----------
   function open() {
     box.hidden = false;
     requestAnimationFrame(function () { box.classList.add('is-open'); });

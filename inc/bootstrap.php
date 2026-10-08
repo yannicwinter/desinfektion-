@@ -1,8 +1,4 @@
 <?php
-/**
- * Grundfunktionen: Pfade, Inhalte laden/speichern, Ausgabe-Helfer.
- * Alle Inhalte liegen in data/content.json und werden im Admin-Bereich gepflegt.
- */
 declare(strict_types=1);
 
 const ROOT = __DIR__ . '/..';
@@ -11,7 +7,6 @@ const CACHE_DIR = ROOT . '/cache';
 const UPLOAD_DIR = ROOT . '/uploads';
 const CONTENT_FILE = DATA_DIR . '/content.json';
 
-// Eigene Einstellungen (Wartungsschalter, Mailversand) – Vorlage data/config-beispiel.php, wird bei Updates nie überschrieben
 if (is_file(DATA_DIR . '/config.php')) {
     require_once DATA_DIR . '/config.php';
 }
@@ -19,7 +14,6 @@ if (is_file(DATA_DIR . '/config.php')) {
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Berlin');
 
-/** Basis-Pfad, falls die Seite in einem Unterordner liegt (sonst ""). */
 function base_path(): string
 {
     static $b = null;
@@ -37,7 +31,6 @@ function url(string $path = '/'): string
     return base_path() . '/' . ltrim($path, '/');
 }
 
-/** Absolute URL für Canonical, Sitemap, Open Graph. */
 function abs_url(string $path = '/'): string
 {
     $site = rtrim((string) (content()['site']['url'] ?? ''), '/');
@@ -103,19 +96,16 @@ function page(string $page, string $key): string
     return (string) (content()['pages'][$page][$key] ?? '');
 }
 
-/** Mehrzeiliges Feld als Liste (leere Zeilen entfernt). */
 function lines(?string $s): array
 {
     return array_values(array_filter(array_map('trim', preg_split('/\R/', (string) $s)), 'strlen'));
 }
 
-/** Text in Absätze teilen (getrennt durch Leerzeile). */
 function paragraphs(?string $s): array
 {
     return array_values(array_filter(array_map('trim', preg_split('/\R\s*\R/', trim((string) $s))), 'strlen'));
 }
 
-/** "Label: Wert"-Zeilen als [[Label, Wert], ...]. */
 function pairs(?string $s, string $sep = ':'): array
 {
     $out = [];
@@ -126,10 +116,6 @@ function pairs(?string $s, string $sep = ':'): array
     return $out;
 }
 
-/**
- * Einfache Textformatierung für Admin-Texte:
- * Leerzeile = neuer Absatz, "- " = Liste, **fett**, [Linktext](url).
- */
 function rich(?string $text): string
 {
     $html = '';
@@ -163,7 +149,6 @@ function inline(string $s): string
     }, $s);
 }
 
-/** Aktive Kurse, optional nach Kategorie gefiltert. */
 function courses(?string $category = null): array
 {
     $all = array_filter(content()['courses'] ?? [], fn($c) => !empty($c['active']));
@@ -183,8 +168,6 @@ function course(string $slug): ?array
     return null;
 }
 
-/** Kurse mit HiOrg-Terminliste. */
-/** Dokumente (PDF), im Admin unter „Dokumente“ hochladbar; ohne Upload greift ein mitgeliefertes Standarddokument. */
 function doc_slots(): array
 {
     return [
@@ -202,12 +185,11 @@ function doc_url(string $slot): string
     }
     $def = doc_slots()[$slot][1] ?? '';
     if (str_starts_with($def, 'https://')) {
-        return $def; // Standard: Original-Dokument beim Herausgeber (z. B. DGUV)
+        return $def;
     }
     return $def !== '' && is_file(ROOT . '/' . $def) ? url($def) . '?v=' . filemtime(ROOT . '/' . $def) : '';
 }
 
-/** Hinweis für Termine an einem Ort mit Einschränkungen (Admin → Allgemein: „Hinweis Ort“ + „Hinweis-Text“). */
 function place_notice(array $items = [], bool $always = false): string
 {
     $town = trim(site('hinweis_ort'));
@@ -232,19 +214,16 @@ function place_notice(array $items = [], bool $always = false): string
         . ($pdf ? ' <a href="' . e($pdf) . '" target="_blank" rel="noopener">Skizzen der Bauabschnitte (PDF)</a>' : '') . '</div></div>';
 }
 
-/** BG-Lehrgang (Abrechnung über die Berufsgenossenschaft möglich)? */
 function course_bg(array $c): bool
 {
     return (bool) preg_match('/\bBG\b|Berufsgenossenschaft/u', ($c['facts'] ?? '') . ' ' . ($c['teaser'] ?? '') . ' ' . ($c['title'] ?? ''));
 }
 
-/** Kurse, die in Kurslisten erscheinen (Infoseiten wie „Erste Hilfe im Betrieb“ haben listed = ''). */
 function listed_courses(?string $category = null): array
 {
     return array_values(array_filter(courses($category), fn($c) => ($c['listed'] ?? '1') !== ''));
 }
 
-/** Infoseite mit Terminen anderer Kurse: „Ausbildung:erste-hilfe-ausbildung, Fortbildung:…“ → [[Bezeichnung, Kurs], …]. */
 function dates_sources(array $c): array
 {
     $out = [];
@@ -267,20 +246,17 @@ function course_url(array $c): string
     return url(course_path($c));
 }
 
-/** Einfacher URL-Teil aus einem Text („Familie & Kinder“ → „familie-kinder“). */
 function slugify(string $s): string
 {
     $s = strtr(mb_strtolower($s), ['ä' => 'ae', 'ö' => 'oe', 'ü' => 'ue', 'ß' => 'ss', '&' => ' ']);
     return trim(preg_replace('/[^a-z0-9]+/', '-', $s), '-');
 }
 
-/** Pfad der Kursseite, z. B. "erste-hilfe/erste-hilfe-ausbildung". */
 function course_path(array $c): string
 {
     return (($c['category'] ?? '') === 'brandschutz' ? 'brandschutz' : 'erste-hilfe') . '/' . $c['slug'];
 }
 
-/** Hochgeladenes Bild zu einem Bild-Platz (z. B. "home"), sonst null. */
 function slot_image(string $slot): ?string
 {
     $f = slot_file($slot);
@@ -290,7 +266,6 @@ function slot_image(string $slot): ?string
     return str_starts_with($f, UPLOAD_DIR) ? url('uploads/' . basename($f)) . '?v=' . filemtime($f) : asset('img/foto/' . $slot . '.jpg');
 }
 
-/** Datei eines Bildplatzes: im Admin hochgeladen, sonst Standardfoto (assets/img/foto), sonst null (gezeichnetes Motiv). */
 function slot_file(string $slot): ?string
 {
     foreach (['webp', 'jpg', 'jpeg', 'png'] as $ext) {
@@ -303,7 +278,6 @@ function slot_file(string $slot): ?string
     return is_file($f) ? $f : null;
 }
 
-/** Seitenverhältnis (Breite/Höhe) eines Bildplatzes – damit Kopffotos immer komplett erscheinen. */
 function slot_ratio(string $slot): float
 {
     $f = slot_file($slot);
@@ -311,7 +285,6 @@ function slot_ratio(string $slot): float
     return $s && $s[1] > 0 ? round($s[0] / $s[1], 4) : 2.0;
 }
 
-/** Bildplätze für den Admin: feste Seitenbilder + ein Bild je Kurs. */
 function image_slots(): array
 {
     $slots = [
@@ -344,7 +317,6 @@ function nav_items(): array
     ];
 }
 
-/** Wochentag / Monat auf Deutsch. */
 function de_date(DateTimeInterface $d, string $fmt): string
 {
     static $days = ['So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa'];
@@ -371,13 +343,11 @@ function start_session(): void
     session_start();
 }
 
-/** Wartungsmodus (content.json → wartung): aktiv, titel, text, bis. */
 function maintenance(): array
 {
     return (array) (content()['wartung'] ?? []) + ['aktiv' => '', 'titel' => '', 'text' => '', 'bis' => ''];
 }
 
-/** Ein: Schalter im Admin, WARTUNG = true in data/config.php oder Datei „wartung-an.txt“ im Hauptordner. */
 function maintenance_active(): bool
 {
     return !empty(maintenance()['aktiv']) || maintenance_by_file();
@@ -388,7 +358,6 @@ function maintenance_by_file(): bool
     return (defined('WARTUNG') && WARTUNG === true) || is_file(ROOT . '/wartung-an.txt');
 }
 
-/** Angemeldeter Admin? Sitzung nur öffnen, wenn das Cookie schon da ist – Besucher bekommen keins. */
 function is_admin_visitor(): bool
 {
     if (empty($_COOKIE['drk_sid'])) {
@@ -418,7 +387,6 @@ function csrf_ok(): bool
     return isset($_POST['csrf'], $_SESSION['csrf']) && hash_equals($_SESSION['csrf'], (string) $_POST['csrf']);
 }
 
-/** Geheimschlüssel für Formular-Signaturen (wird einmalig erzeugt). */
 function app_secret(): string
 {
     $f = DATA_DIR . '/secret.key';

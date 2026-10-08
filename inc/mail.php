@@ -1,13 +1,4 @@
 <?php
-/**
- * E-Mail-Versand für das Kontaktformular.
- * 1. Microsoft Graph (Microsoft 365 / Exchange Online): App-Registrierung mit Anwendungsberechtigung
- *    „Mail.Send“, Versand über POST /users/{absender}/sendMail. Die Anfrage geht an dasselbe Postfach
- *    (Absender = Empfänger), Antworten gehen per Reply-To an die anfragende Person.
- *    Zugangsdaten in data/config.php (GRAPH_TENANT_ID, GRAPH_CLIENT_ID, GRAPH_CLIENT_SECRET, GRAPH_SENDER;
- *    Vorlage data/config-beispiel.php) oder im Admin unter „E-Mail“ (data/mail.json). config.php hat Vorrang.
- * 2. Sonst PHP mail() des Servers an den Formular-Empfänger.
- */
 declare(strict_types=1);
 
 const MAIL_FILE = DATA_DIR . '/mail.json';
@@ -17,7 +8,6 @@ if (is_file(DATA_DIR . '/config.php')) {
     require_once DATA_DIR . '/config.php';
 }
 
-/** Zugangsdaten aus config.php? (Platzhalter zählen nicht) */
 function mail_from_config(): bool
 {
     foreach (['GRAPH_TENANT_ID', 'GRAPH_CLIENT_ID', 'GRAPH_CLIENT_SECRET', 'GRAPH_SENDER'] as $k) {
@@ -49,19 +39,16 @@ function mail_uses_graph(): bool
     return !empty($c['tenant']) && !empty($c['client_id']) && !empty($c['secret']) && !empty($c['sender']);
 }
 
-/** Empfänger-Feld: mehrere Adressen durch Komma oder Semikolon getrennt. */
 function mail_recipients(string $to): array
 {
     return array_values(array_filter(array_map('trim', preg_split('/[,;]/', $to) ?: []), fn($a) => (bool) filter_var($a, FILTER_VALIDATE_EMAIL)));
 }
 
-/** Empfänger der Formular-Mails: bei Graph das Absender-Postfach selbst, sonst „Empfänger des Kontaktformulars“. */
 function mail_target(): string
 {
     return mail_uses_graph() ? (string) mail_config()['sender'] : (site('form_recipient') ?: site('email'));
 }
 
-/** Versendet eine Mail (Text, optional zusätzlich HTML). Liefert '' bei Erfolg, sonst eine Fehlerbeschreibung. */
 function send_mail(string $to, string $subject, string $body, string $replyTo = '', string $html = ''): string
 {
     $rcpt = mail_recipients($to);
@@ -88,12 +75,10 @@ function send_mail(string $to, string $subject, string $body, string $replyTo = 
     return @mail(implode(', ', $rcpt), mb_encode_mimeheader($subject), $body, implode("\r\n", $headers)) ? '' : 'mail() des Servers hat den Versand abgelehnt.';
 }
 
-/** Zugriffstoken (Client-Credentials), zwischengespeichert bis kurz vor Ablauf. */
 function graph_token(bool $fresh = false): array
 {
     $c = mail_config();
     $t = is_file(MAIL_TOKEN_FILE) ? (json_decode((string) file_get_contents(MAIL_TOKEN_FILE), true) ?: []) : [];
-    // Token gehört zu genau diesen Zugangsdaten (nach Änderung neu anmelden)
     $key = hash('sha256', $c['tenant'] . '|' . $c['client_id'] . '|' . $c['secret']);
     if (!$fresh && ($t['key'] ?? '') === $key && !empty($t['token']) && ($t['exp'] ?? 0) > time() + 120) {
         return [(string) $t['token'], ''];
@@ -132,7 +117,6 @@ function graph_send(array $rcpt, string $subject, string $body, string $replyTo 
     $payload = json_encode(['message' => $msg, 'saveToSentItems' => false], JSON_UNESCAPED_UNICODE);
     $r = mail_http($url, (string) $payload, ['Authorization: Bearer ' . $token, 'Content-Type: application/json']);
     if ($r['code'] === 401) {
-        // Token zurückgezogen/abgelaufen → einmal neu anmelden
         [$token, $err] = graph_token(true);
         if ($token === '') {
             return $err;
@@ -146,7 +130,6 @@ function graph_send(array $rcpt, string $subject, string $body, string $replyTo 
     return 'Microsoft Graph: ' . ($j['error']['message'] ?? ($r['error'] ?: 'HTTP ' . $r['code']));
 }
 
-/** POST-Anfrage. Rückgabe: code, body, error. */
 function mail_http(string $url, string $data, array $headers): array
 {
     if (function_exists('curl_init')) {

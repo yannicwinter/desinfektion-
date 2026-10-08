@@ -1,5 +1,4 @@
 <?php
-/** Wartungsseite (Wartungsmodus im Admin unter „Wartung“): Antwort 503, damit Google die Seite nicht abwertet. */
 $w = maintenance();
 $until = $w['bis'] !== '' ? strtotime($w['bis']) : false;
 http_response_code(503);

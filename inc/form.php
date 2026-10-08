@@ -1,5 +1,4 @@
 <?php
-/** Kontakt-/Anfrageformular: Verarbeitung (Spam-Schutz, Versand über inc/mail.php: Microsoft Graph oder mail()) und Ausgabe. */
 declare(strict_types=1);
 
 function form_topics(): array
@@ -13,7 +12,6 @@ function form_topics(): array
     return $t;
 }
 
-/** Verarbeitet POST. Rückgabe: [Fehlerliste, alte Eingaben]. Bei Erfolg Redirect. */
 function form_handle(string $returnPath): array
 {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
@@ -25,12 +23,10 @@ function form_handle(string $returnPath): array
     }
     $err = [];
 
-    // Spam-Schutz: Honeypot, Mindest-Ausfüllzeit, CSRF, Limit je IP
     $started = (int) ($_POST['t'] ?? 0);
     if (!empty($_POST['website']) || $started === 0 || time() - $started < 3) {
         redirect($returnPath . '?gesendet=1#formular');
     }
-    // Signiertes Zeitstempel-Token statt Session: keine Cookies auf der öffentlichen Seite
     if (!hash_equals(hash_hmac('sha256', 'form' . $started, app_secret()), (string) ($_POST['sig'] ?? '')) || time() - $started > 86400) {
         $err[] = 'Das Formular ist abgelaufen – bitte noch einmal absenden.';
     }
@@ -46,7 +42,6 @@ function form_handle(string $returnPath): array
     if (empty($_POST['datenschutz'])) {
         $err[] = 'Bitte der Datenschutzerklärung zustimmen.';
     }
-    // Spam-Schutz: gehashte IP je Stunde zählen; Zähldateien nach 2 Std. löschen (siehe Datenschutzerklärung)
     foreach (glob(CACHE_DIR . '/form-*.cnt') ?: [] as $old) {
         if (filemtime($old) < time() - 7200) {
             @unlink($old);
@@ -96,7 +91,6 @@ function form_render(array $err, array $old, string $preset = ''): void
 {
     $topics = form_topics();
     $sel = $old['thema'] ?? $preset;
-    // Vorbelegung aus der Adresse (z. B. vom Kursfinder): nur unkritische Felder, gekürzt und escaped
     $pre = fn($k) => in_array($k, ['teilnehmer', 'nachricht', 'firma'], true) ? mb_substr(trim((string) ($_GET[$k] ?? '')), 0, 500) : '';
     $v = fn($k) => e($old[$k] ?? $pre($k));
     if (!empty($_GET['gesendet'])): ?>

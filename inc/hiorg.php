@@ -1,14 +1,4 @@
 <?php
-/**
- * HiOrg-Server-Anbindung.
- *
- * Statt eines iframes wird die öffentliche Kursliste (kurse_extern.php) serverseitig
- * abgerufen, zwischengespeichert (cache/) und in unser eigenes, mobiles Layout übersetzt.
- * Die eigentliche Anmeldung bleibt bei HiOrg (Link „Buchen“ je Termin).
- *
- * Fällt HiOrg aus, wird die letzte gespeicherte Version gezeigt; gibt es keine,
- * erscheint ein Button zur HiOrg-Seite.
- */
 declare(strict_types=1);
 
 const HIORG_BASE = 'https://www.hiorg-server.de/';
@@ -24,10 +14,6 @@ function hiorg_cache_file(string $id): string
     return CACHE_DIR . '/hiorg-' . preg_replace('/\D/', '', $id) . '.html';
 }
 
-/**
- * Holt mehrere Listen parallel (curl_multi) und aktualisiert den Cache.
- * @return array<string,string> id => HTML ('' wenn nichts verfügbar)
- */
 function hiorg_fetch_many(array $ids, bool $force = false): array
 {
     $ttl = max(5, (int) (site('hiorg_cache_minutes') ?: 30)) * 60;
@@ -53,7 +39,6 @@ function hiorg_fetch_many(array $ids, bool $force = false): array
                 file_put_contents($f, $html, LOCK_EX);
                 $out[$id] = $html;
             } elseif (is_file($f)) {
-                // HiOrg nicht erreichbar: alte Version weiterverwenden, in 5 Min. erneut versuchen
                 touch($f, time() - $ttl + 300);
                 $out[$id] = (string) file_get_contents($f);
             } else {
@@ -109,11 +94,6 @@ function hiorg_fgc(array $ids): array
     return $out;
 }
 
-/**
- * HiOrg-Listen eines Kurses. Feld „hiorg_id“: eine id („3871“) oder mehrere mit Bezeichnung,
- * z. B. „3871:Ausbildung, 3872:Fortbildung“ (Termine werden zusammengeführt und markiert).
- * @return array<int, array{0:string, 1:string}> [[id, Bezeichnung], …]
- */
 function hiorg_ids(array $course): array
 {
     $out = [];
@@ -127,30 +107,24 @@ function hiorg_ids(array $course): array
     return $out;
 }
 
-/** Erste HiOrg-id eines Kurses (für Preis, Cache-Prüfung). */
 function hiorg_first_id(array $course): string
 {
     return hiorg_ids($course)[0][0] ?? '';
 }
 
-/** Termine einer HiOrg-Liste für einen Kurs (mit Bezeichnung „variant“ bei mehreren Listen). */
 function hiorg_items(array $course, string $id, string $label, string $html): array
 {
     $sub = $course;
     $sub['hiorg_id'] = $id;
     $items = hiorg_parse($html, $sub);
     foreach ($items as &$it) {
-        $it['course'] = $course; // Buchung läuft über die Kursseite
+        $it['course'] = $course;
         $it['variant'] = $label;
     }
     unset($it);
     return $items;
 }
 
-/**
- * Termine eines Kurses (sortiert, nur zukünftige).
- * @return array{ok:bool, items:array, source:string}
- */
 function hiorg_dates(array $course, bool $force = false): array
 {
     $ids = hiorg_ids($course);
@@ -168,7 +142,6 @@ function hiorg_dates(array $course, bool $force = false): array
     return ['ok' => $ok, 'items' => $items, 'source' => hiorg_list_url($ids[0][0])];
 }
 
-/** Termine mehrerer Kurse, zusammengeführt und nach Datum sortiert. */
 function hiorg_dates_all(array $courses): array
 {
     $all = [];
@@ -184,7 +157,6 @@ function hiorg_dates_all(array $courses): array
         $ids = hiorg_ids($c);
         foreach ($ids as [$id, $label]) {
             foreach (hiorg_items($c, $id, count($ids) > 1 ? $label : '', $htmls[$id] ?? '') as $it) {
-                // Gleicher Termin bei zwei Kursen (gleiche HiOrg-Liste) nur einmal anzeigen
                 $key = $it['kid'] ?: $id . '|' . $it['ts'];
                 if (isset($seen[$key])) {
                     continue;
@@ -198,11 +170,6 @@ function hiorg_dates_all(array $courses): array
     return $items;
 }
 
-/**
- * Wandelt die HiOrg-HTML-Liste in einheitliche Termin-Datensätze um.
- * Robust gegen Layoutänderungen: Es wird nach Zeilen/Blöcken mit Datum gesucht und
- * Uhrzeit, Preis, freie Plätze und Anmeldelink per Muster erkannt.
- */
 function hiorg_parse(string $html, array $course = []): array
 {
     if (trim($html) === '') {
@@ -211,7 +178,6 @@ function hiorg_parse(string $html, array $course = []): array
     if (!mb_check_encoding($html, 'UTF-8')) {
         $html = mb_convert_encoding($html, 'UTF-8', 'Windows-1252');
     }
-    // Sonderzeichen als Entities → unabhängig von der Zeichensatz-Angabe der Seite
     $html = mb_encode_numericentity($html, [0x80, 0x10FFFF, 0, 0x1FFFFF], 'UTF-8');
     $doc = new DOMDocument();
     libxml_use_internal_errors(true);
@@ -222,13 +188,11 @@ function hiorg_parse(string $html, array $course = []): array
         $n->parentNode->removeChild($n);
     }
 
-    // Aktuelles HiOrg-Layout (div.termine-container) direkt auslesen
     $boxes = $xp->query('//div[contains(concat(" ", normalize-space(@class), " "), " termine-container ")]');
     if ($boxes->length) {
         return hiorg_parse_boxes($xp, $boxes, $course);
     }
 
-    // Rückfallebene für abweichende Layouts: Muster erkennen
     $dateRe = '/\b(\d{1,2})\.(\d{1,2})\.(\d{4}|\d{2})\b/';
     $blocks = [];
     foreach ($xp->query('//tr[td]') as $tr) {
@@ -237,7 +201,6 @@ function hiorg_parse(string $html, array $course = []): array
         }
     }
     if (!$blocks) {
-        // Kein Tabellenlayout: kleinste Blöcke mit Datum + Link verwenden
         foreach ($xp->query('//div|//li|//article|//section') as $el) {
             if (!preg_match($dateRe, hiorg_text($el)) || !$xp->query('.//a[@href]', $el)->length) {
                 continue;
@@ -319,7 +282,6 @@ function hiorg_parse(string $html, array $course = []): array
             }
         }
 
-        // Anmeldelink: bevorzugt Links mit "anmeld"/"buch", sonst erster Link
         $link = '';
         $links = $xp->query('.//a[@href]', $b);
         foreach ($links as $a) {
@@ -334,7 +296,6 @@ function hiorg_parse(string $html, array $course = []): array
         }
         $link = hiorg_abs($link);
 
-        // Restliche Zellen = Ort / Beschreibung
         $details = [];
         foreach ($cells as $c) {
             $rest = trim(preg_replace([
@@ -380,7 +341,6 @@ function hiorg_parse(string $html, array $course = []): array
     return $items;
 }
 
-/** Liest die Termin-Boxen des HiOrg-Layouts „kurse_extern.php“. */
 function hiorg_parse_boxes(DOMXPath $xp, DOMNodeList $boxes, array $course): array
 {
     $cls = fn(string $c) => './/*[contains(concat(" ", normalize-space(@class), " "), " ' . $c . ' ")]';
@@ -444,10 +404,6 @@ function hiorg_parse_boxes(DOMXPath $xp, DOMNodeList $boxes, array $course): arr
     return $items;
 }
 
-/**
- * Kursgebühr aus dem HiOrg-Anmeldeformular (erster Termin der Liste), 12 Std. zwischengespeichert.
- * So stimmt der angezeigte Preis immer mit HiOrg überein.
- */
 function hiorg_price(string $id): string
 {
     $id = preg_replace('/\D/', '', $id);
@@ -481,7 +437,6 @@ function hiorg_price(string $id): string
     return $price;
 }
 
-/** Text eines Knotens; Textteile mit Leerzeichen getrennt, damit Zellen nicht verkleben. */
 function hiorg_text(DOMNode $n): string
 {
     $parts = [];
@@ -491,7 +446,6 @@ function hiorg_text(DOMNode $n): string
     return hiorg_clean(implode(' ', $parts));
 }
 
-/** HiOrg liefert teils HTML5-Entities (&lpar; &NewLine; …) als Text – dekodieren und glätten. */
 function hiorg_clean(string $s): string
 {
     $s = preg_replace('/&(?:amp;)?NewLine;/i', ', ', $s);
@@ -517,7 +471,6 @@ function hiorg_abs(string $href): string
     return HIORG_BASE . ltrim($href, '/');
 }
 
-/** Ort (Stadt) aus der Adresse, z. B. „…, 27283 Verden (Aller)“ → „Verden“. */
 function hiorg_town(string $details): string
 {
     if (preg_match('/\b\d{5}\s+([^,(·]+)/u', $details, $m)) {
@@ -526,7 +479,6 @@ function hiorg_town(string $details): string
     return '';
 }
 
-/** Auswahl-Optionen für den Terminfilter aus den vorhandenen Terminen. */
 function date_filter_options(array $items): array
 {
     static $months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
@@ -548,7 +500,6 @@ function date_filter_options(array $items): array
     return $o;
 }
 
-/** Einzelnen Termin anhand der HiOrg-Kurs-ID (kid) finden. */
 function hiorg_find(array $course, string $kid): ?array
 {
     foreach (hiorg_dates($course)['items'] as $it) {
@@ -559,7 +510,6 @@ function hiorg_find(array $course, string $kid): ?array
     return null;
 }
 
-/** Kurze Ortsangabe: „Aller-Weser-Zentrum, Lindhooper Straße 57, 27283 Verden (Aller)“ → „Aller-Weser-Zentrum · Verden“. */
 function hiorg_place_short(string $details): string
 {
     $town = hiorg_town($details);
@@ -567,14 +517,9 @@ function hiorg_place_short(string $details): string
     if ($name === '' || preg_match('/^\d{5}\b/', $name) || preg_match('/(straße|str\.|weg|platz|allee)\s*\d/iu', $name)) {
         return $town ?: $details;
     }
-    // „DRK Zentrum Achim“ enthält den Ort schon
     return ($town && mb_stripos($name, $town) === false) ? $name . ' · ' . $town : $name;
 }
 
-/**
- * Ausgabe einer Terminliste (auch für /api/termine per fetch).
- * Optionen: limit, show_course (Kursname je Zeile), show_price, months (Monatsüberschriften).
- */
 function render_dates(array $items, array $opt = []): string
 {
     static $months = ['', 'Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember'];
@@ -589,7 +534,6 @@ function render_dates(array $items, array $opt = []): string
     $lastMonth = '';
     ob_start();
     foreach ($items as $it) {
-        /** @var DateTimeImmutable $d */
         $d = $it['date'];
         $c = $it['course'];
         $when = de_date($d, 'WW, D. MMM');

@@ -1,11 +1,6 @@
 <?php
-/**
- * Eigene Illustrationen (SVG) für die Startseite – ersetzen dort die Fotos.
- * Farben: DRK-Rot, Rosé, Anthrazit. Skalieren verlustfrei, wenige KB.
- */
 declare(strict_types=1);
 
-/** Feuerlöscher (Standard-Ansicht, viewBox 0 0 120 200). */
 function illus_extinguisher(string $class = ''): string
 {
     return '<svg class="' . $class . '" viewBox="0 0 120 200" aria-hidden="true">'
@@ -22,7 +17,6 @@ function illus_extinguisher(string $class = ''): string
         . '</svg>';
 }
 
-/** Erste-Hilfe-Koffer (viewBox 0 0 200 150). */
 function illus_kit(string $class = ''): string
 {
     return '<svg class="' . $class . '" viewBox="0 0 200 150" aria-hidden="true">'
@@ -33,7 +27,6 @@ function illus_kit(string $class = ''): string
         . '</svg>';
 }
 
-/** Herz mit EKG-Linie (viewBox 0 0 200 170). */
 function illus_heart(string $class = '', string $fill = '#fff', string $line = '#E60005'): string
 {
     return '<svg class="' . $class . '" viewBox="0 0 200 170" aria-hidden="true">'
@@ -42,7 +35,6 @@ function illus_heart(string $class = '', string $fill = '#fff', string $line = '
         . '</svg>';
 }
 
-/** Arbeitssicherheit: Dokument mit Checkliste, Schutzschild, Feuerlöscher. */
 function illus_safety(): string
 {
     ob_start(); ?>
@@ -69,7 +61,6 @@ function illus_safety(): string
     return (string) ob_get_clean();
 }
 
-/** Motiv je Kurs (Kurskarten, Akkordeon). */
 function illus_course(array $c): string
 {
     $slug = $c['slug'];
@@ -96,7 +87,6 @@ function illus_course(array $c): string
     return '<div class="card__art card__art--' . $tone . '">' . $art . '</div>';
 }
 
-/** Großes Seitenmotiv für Unterseiten (statt Foto). */
 function illus_page(string $page): string
 {
     if ($page === 'brandschutz') {

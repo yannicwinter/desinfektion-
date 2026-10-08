@@ -1,8 +1,4 @@
 <?php
-/**
- * Front-Controller: Alle Anfragen laufen über diese Datei (siehe .htaccess).
- * Saubere URLs ohne .php, z. B. /erste-hilfe, /termine/brandschutzhelfer, /admin
- */
 declare(strict_types=1);
 
 require __DIR__ . '/inc/bootstrap.php';
@@ -22,15 +18,12 @@ $route = $parts[0] ?? '';
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: strict-origin-when-cross-origin');
 
-// Wartungsmodus: Besucher sehen eine Hinweisseite (503), angemeldete Admins die normale Seite;
-// ?vorschau=wartung zeigt angemeldeten Admins die Wartungsseite
 $preview = ($_GET['vorschau'] ?? '') === 'wartung';
 if ($route !== 'admin' && (maintenance_active() || $preview) && (is_admin_visitor() ? $preview : maintenance_active())) {
     require __DIR__ . '/templates/wartung.php';
     exit;
 }
 
-// Alte Adressen des Vorgänger-Entwurfs / alter Seite dauerhaft umleiten
 $legacy = [
     'index' => '/',
     'kurs-erste-hilfe' => 'erste-hilfe/erste-hilfe-ausbildung',
@@ -51,7 +44,6 @@ switch ($route) {
 
     case 'erste-hilfe':
     case 'brandschutz':
-        // /erste-hilfe/{kurs} → Kursseite
         if (count($parts) === 2) {
             $current = course($parts[1]);
             if (!$current || ($current['category'] === 'brandschutz' ? 'brandschutz' : 'erste-hilfe') !== $route) {
@@ -93,7 +85,6 @@ switch ($route) {
         if ($slug !== '' && (!($current = course($slug)) || empty($current['hiorg_id']))) {
             not_found();
         }
-        // /termine/{kurs}/anmeldung/{kid} → Anmeldung eingebettet auf unserer Seite
         if (count($parts) === 4 && $parts[2] === 'anmeldung' && ctype_digit($parts[3])) {
             $kid = $parts[3];
             require __DIR__ . '/templates/anmeldung.php';
@@ -106,18 +97,15 @@ switch ($route) {
         break;
 
     case 'api':
-        // /api/kursfinder?kurs={slug} → freie Termine als JSON für den Kursfinder
         if (($parts[1] ?? '') === 'kursfinder') {
             kursfinder_api((string) ($_GET['kurs'] ?? ''));
             exit;
         }
-        // /api/termine/{slug}?limit=3 → HTML-Fragment für Akkordeon-Vorschau
         if (($parts[1] ?? '') === 'termine' && ($c = course($parts[2] ?? '')) && !empty($c['hiorg_id'])) {
             header('Content-Type: text/html; charset=utf-8');
             header('Cache-Control: public, max-age=300');
             header('X-Robots-Tag: noindex');
             $res = hiorg_dates($c);
-            // Vorschau: nur freie Termine
             $res['items'] = array_values(array_filter($res['items'], fn($it) => $it['status'] !== 'full' && !empty($it['bookable'] ?? true)));
             $limit = min(10, max(1, (int) ($_GET['limit'] ?? 3)));
             if ($res['items']) {

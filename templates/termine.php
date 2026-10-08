@@ -1,8 +1,6 @@
 <?php
-/** /termine (alle Kurse) und /termine/{kurs} */
 $P = fn($k) => page('termine', $k);
 
-// Formular ohne JavaScript: ?kurs=slug → /termine/slug
 if ($slug === '' && !empty($_GET['kurs']) && ($k = course((string) $_GET['kurs'])) && !empty($k['hiorg_id'])) {
     redirect('termine/' . $k['slug'], 302);
 }

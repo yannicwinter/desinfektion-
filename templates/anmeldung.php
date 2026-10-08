@@ -1,8 +1,6 @@
 <?php
-/** /termine/{kurs}/anmeldung/{kid}: HiOrg-Anmeldeformular direkt in unsere Seite eingebettet */
 $it = hiorg_find($current, $kid);
 if (!$it || empty($it['bookable'])) {
-    // Termin ausgebucht, vorbei oder unbekannt → zurück zur Terminliste
     redirect('termine/' . $current['slug'], 302);
 }
 $d = $it['date'];

@@ -1,4 +1,3 @@
-# Kein Zugriff von außen
 <IfModule mod_authz_core.c>
   Require all denied
 </IfModule>

@@ -1,10 +1,6 @@
 <?php
-/** Kopf- und Fußbereich aller öffentlichen Seiten inkl. SEO-Metadaten. */
 declare(strict_types=1);
 
-/**
- * @param array $meta title, description, path, active, schema (Liste JSON-LD-Objekte), noindex, breadcrumb [[Name, Pfad], ...]
- */
 function layout_start(array $meta): void
 {
     $title = $meta['title'] ?? site('name');
@@ -199,7 +195,6 @@ function org_schema(): array
     ];
 }
 
-/** schema.org Course inkl. kommender Termine (für Google-Kurs-Snippets). */
 function course_schema(array $c, array $dates = []): array
 {
     $s = [
@@ -232,7 +227,6 @@ function course_schema(array $c, array $dates = []): array
     return $s;
 }
 
-/** Brotkrumen: [[Name, Pfad], ...], der letzte Eintrag ist die aktuelle Seite. */
 function crumbs_html(array $crumbs): string
 {
     if (!$crumbs) {
@@ -246,10 +240,6 @@ function crumbs_html(array $crumbs): string
     return $h . '</nav>';
 }
 
-/**
- * Seitenkopf. Mit $photo: Foto komplett in eigenem Format (`hero_media`), Titel am Desktop links im Verlauf,
- * mobil darunter. $overlap = true lässt unten Platz für eine überlappende Leiste (Suche, Infoleiste).
- */
 function page_head(string $eyebrow, string $title, string $lead, array $crumbs = [], string $extra = '', string $photo = '', bool $overlap = false): void
 {
     if ($photo && slot_image($photo)) {
@@ -278,7 +268,6 @@ function page_head(string $eyebrow, string $title, string $lead, array $crumbs =
 <?php
 }
 
-/** Abschnittskopf: Dachzeile, Überschrift, Text, Link rechts. */
 function shead(string $eyebrow, string $title, string $text = '', string $link = '', string $href = ''): string
 {
     return '<div class="shead reveal"><div>' . ($eyebrow ? '<p class="eyebrow">' . e($eyebrow) . '</p>' : '') . '<h2>' . e($title) . '</h2>'
@@ -286,12 +275,10 @@ function shead(string $eyebrow, string $title, string $text = '', string $link =
         . ($link ? '<a class="alink" href="' . e($href) . '">' . e($link) . ' ' . icon('arrow') . '</a>' : '') . '</div>';
 }
 
-/** Freie, buchbare Termine eines Kurses (je Aufruf zwischengespeichert). */
 function free_dates(array $c): array
 {
     static $memo = [];
     if ($src = dates_sources($c)) {
-        // Infoseite: Termine der verknüpften Kurse, markiert mit der Bezeichnung (Ausbildung/Fortbildung)
         $all = [];
         foreach ($src as [$label, $sc]) {
             foreach (free_dates($sc) as $it) {
@@ -313,7 +300,6 @@ function free_dates(array $c): array
     return $memo[$key];
 }
 
-/** Wert einer Kurs-Angabe („Dauer: …“) aus dem Feld „Fakten“. */
 function course_fact(array $c, string $label): string
 {
     foreach (pairs($c['facts'] ?? '') as [$k, $v]) {
@@ -324,13 +310,11 @@ function course_fact(array $c, string $label): string
     return '';
 }
 
-/** Kurze Dauer für Karten („9 UE · 08:30–16:30 Uhr“ → „9 UE“). */
 function course_duration(array $c): string
 {
     return trim(explode('·', course_fact($c, 'Dauer'))[0]);
 }
 
-/** Kurskarte mit Foto, Preis, Dauer und nächstem freien Termin. */
 function course_card(array $c): string
 {
     $dates = free_dates($c);
@@ -352,14 +336,12 @@ function course_card(array $c): string
         . '<div class="kcard__foot"><span class="price">' . e($c['price'] ?: 'auf Anfrage') . '</span><span class="alink">Zum Kurs ' . icon('arrow') . '</span></div></div></a>';
 }
 
-/** Themenkarte mit Foto (Startseite, Wegweiser, Leistungen). */
 function topic_card(string $img, string $title, string $text, string $link, string $href): string
 {
     return '<a class="tcard reveal" href="' . e($href) . '"><div class="tcard__img">' . $img . '</div>'
         . '<div class="tcard__body"><h3>' . e($title) . '</h3><p>' . e($text) . '</p><span class="alink">' . e($link) . ' ' . icon('arrow') . '</span></div></a>';
 }
 
-/** Ansprechperson aus den Kontakten (nach Name, sonst die erste). */
 function contact_person(string $name = ''): ?array
 {
     $all = content()['contacts'] ?? [];
@@ -371,14 +353,12 @@ function contact_person(string $name = ''): ?array
     return $all[0] ?? null;
 }
 
-/** Ansprechperson eines Kurses (Feld „contact“), sonst Standard je Bereich. */
 function course_contact(array $c): ?array
 {
     $name = trim((string) ($c['contact'] ?? '')) ?: ($c['category'] === 'brandschutz' ? 'Matthias True' : 'Jan Wille');
     return contact_person($name);
 }
 
-/** Person nach Aufgabe (z. B. „Kosten“), ohne Rückfall auf die erste Person. */
 function contact_by_role(string $role): ?array
 {
     foreach (content()['contacts'] ?? [] as $p) {
@@ -389,7 +369,6 @@ function contact_by_role(string $role): ?array
     return null;
 }
 
-/** Kasten mit Foto, Name, Aufgabe, E-Mail und Telefon einer Ansprechperson. */
 function person_card(?array $p, string $title = 'Noch Fragen?'): string
 {
     if (!$p) {
@@ -414,13 +393,12 @@ function person_photo(?array $p): string
     return ($p && !empty($p['photo']) && is_file(ROOT . '/' . ltrim($p['photo'], '/'))) ? url($p['photo']) : '';
 }
 
-/** Dunkle Box „Persönliche Beratung“ mit Foto der Ansprechperson. */
 function advice_box(?array $p, string $text = ''): string
 {
     $img = person_photo($p);
     $ini = $p ? implode('', array_map(fn($w) => mb_substr($w, 0, 1), array_slice(preg_split('/\s+/', $p['name']), 0, 2))) : 'DRK';
     $text = $text ?: ($p ? $p['name'] . ' · ' . $p['role'] . ' – wir helfen dir, den passenden Kurs zu finden.' : '');
-    $GLOBALS['__flush'] = true; // Box steht direkt über dem Footer
+    $GLOBALS['__flush'] = true;
     return '<section class="advice"><div class="wrap"><div class="cta reveal">'
         . '<svg class="cta__x" viewBox="0 0 100 100" aria-hidden="true"><path d="M35 0h30v35h35v30H65v35H35V65H0V35h35z"/></svg>'
         . ($img ? '<img class="cta__face" src="' . e($img) . '" alt="' . e($p['name']) . '" loading="lazy" width="96" height="96">' : '<span class="cta__ini">' . e($ini) . '</span>')
@@ -430,7 +408,6 @@ function advice_box(?array $p, string $text = ''): string
         . '</div></div></section>';
 }
 
-/** Rotes Band mit Text und Button. */
 function band(string $title, string $text, string $btn, string $href): string
 {
     if ($title === '') {
@@ -441,7 +418,6 @@ function band(string $title, string $text, string $btn, string $href): string
         . ($btn ? '<a class="btn btn--white" href="' . e($href) . '">' . e($btn) . ' ' . icon('arrow') . '</a>' : '') . '</div></section>';
 }
 
-/** Häufige Fragen als Akkordeon (Liste aus content.json → faq). */
 function faq_list(array $items): string
 {
     $h = '<div class="acc">';
@@ -452,7 +428,6 @@ function faq_list(array $items): string
     return $h . '</div>';
 }
 
-/** Tabelle „Welcher Kurs passt?“ (Zeilen: „Kurs | Spalte | …“, erste Zeile = Überschriften). */
 function compare_table(string $data, string $note = '', string $title = 'Welcher Kurs passt zu mir?'): string
 {
     $rows = array_map(fn($l) => array_map('trim', explode('|', $l)), lines($data));
@@ -491,7 +466,6 @@ function compare_table(string $data, string $note = '', string $title = 'Welcher
     return $h . '</div>';
 }
 
-/** Abrechnung über die Berufsgenossenschaft: 3 Schritte + Ausnahmen (site.bg_ausnahme), Formular über doc_url('bg-formular'). */
 function bg_box(string $class = ''): string
 {
     $pdf = doc_url('bg-formular');
@@ -515,7 +489,6 @@ function bg_box(string $class = ''): string
     return $h . '<a class="btn btn--red btn--sm bgbox__btn" href="' . e($pdf) . '" target="_blank" rel="noopener">' . icon('download') . ' Abrechnungsformular (PDF)</a></div>';
 }
 
-/** Foto eines Bildplatzes als <img> (Upload oder Standardfoto), sonst leer. */
 function photo(string $slot, string $alt, string $class = '', bool $lazy = true): string
 {
     $src = slot_image($slot);
@@ -526,7 +499,6 @@ function photo(string $slot, string $alt, string $class = '', bool $lazy = true)
         . (is_ai_slot($slot) ? '<span class="ki-tag" title="Dieses Bild wurde mit künstlicher Intelligenz erzeugt.">KI-generiert</span>' : '');
 }
 
-/** Kopffoto: komplett sichtbar (eigenes Seitenverhältnis, Höhe begrenzt); freie Ränder füllt eine unscharfe Kopie. */
 function hero_media(string $slot, string $alt): string
 {
     $src = slot_image($slot);
@@ -534,7 +506,6 @@ function hero_media(string $slot, string $alt): string
         . '<div class="hero__media" style="--ar:' . slot_ratio($slot) . '">' . photo($slot, $alt, 'hero__img', false) . '</div>';
 }
 
-/** Bild-Slots mit KI-erzeugten Fotos (Admin → Allgemein, „KI-Bilder“) – werden sichtbar gekennzeichnet. */
 function is_ai_slot(string $slot): bool
 {
     static $slots = null;
@@ -542,7 +513,6 @@ function is_ai_slot(string $slot): bool
     return in_array($slot, $slots, true);
 }
 
-/** Kursbild: Foto, sonst gezeichnetes Motiv. */
 function course_media(array $c, string $class = 'card__photo'): string
 {
     return photo('kurs-' . $c['slug'], $c['title'], $class) ?: illus_course($c);
