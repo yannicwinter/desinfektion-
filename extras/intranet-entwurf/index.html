@@ -1,0 +1,1177 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex"></head><body>
+<title>DRK Ausbildungsportal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: dunkle Kopfleiste + Demo-Rollenleiste, links Navigation, rechts Arbeitsfläche; mobil Tab-Leiste unten (wie die Website) */
+:root{
+  --red:#E60005; --red-d:#C70004; --red-ink:#C70004; --red-t:#FCEFEF;
+  --bg:#F5F6F8; --surface:#FFFFFF; --ink:#14161B; --text:#41454F; --muted:#6B7080;
+  --line:#E3E5E9; --line-2:#D3D6DC;
+  --ok:#1C7C3E; --ok-t:#EEF8F1; --warn:#A45A06; --warn-t:#FFF4E2; --info:#2856B0; --info-t:#EEF3FC;
+  --bar:#14161B; --bar-2:#1E2128; --bar-text:#C9CCD3; --bar-muted:#8C91A0;
+  --seat:#4A4F5C; --scrim:rgba(10,11,14,.52);
+  --sh:0 1px 2px rgba(20,22,27,.08),0 24px 48px -18px rgba(20,22,27,.32);
+  --r:6px; --r-lg:8px; --rs:4px;
+  --font:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --red-ink:#FF6064; --red-t:#3A1517;
+  --bg:#0F1115; --surface:#171A20; --ink:#F1F2F4; --text:#C4C7CF; --muted:#8C91A0;
+  --line:#272B33; --line-2:#363B45;
+  --ok:#55C985; --ok-t:#10281A; --warn:#F2A950; --warn-t:#2E2210; --info:#86AAF2; --info-t:#14203A;
+  --bar:#0A0B0E; --bar-2:#15171C; --seat:#9AA0AE; --scrim:rgba(0,0,0,.62);
+  --sh:0 1px 2px rgba(0,0,0,.4),0 24px 48px -18px rgba(0,0,0,.7);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --red-ink:#FF6064; --red-t:#3A1517;
+  --bg:#0F1115; --surface:#171A20; --ink:#F1F2F4; --text:#C4C7CF; --muted:#8C91A0;
+  --line:#272B33; --line-2:#363B45;
+  --ok:#55C985; --ok-t:#10281A; --warn:#F2A950; --warn-t:#2E2210; --info:#86AAF2; --info-t:#14203A;
+  --bar:#0A0B0E; --bar-2:#15171C; --seat:#9AA0AE; --scrim:rgba(0,0,0,.62);
+  --sh:0 1px 2px rgba(0,0,0,.4),0 24px 48px -18px rgba(0,0,0,.7);
+  color-scheme:dark}
+
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 var(--font);letter-spacing:-.006em;-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3,h4{margin:0;color:var(--ink);font-weight:600;letter-spacing:-.02em;line-height:1.18;text-wrap:balance}
+p{margin:0}
+ul{margin:0;padding:0;list-style:none}
+button,input,select,textarea{font:inherit;color:inherit;letter-spacing:inherit}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px;border-radius:var(--rs)}
+.i{width:18px;height:18px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.muted{color:var(--muted)}
+[hidden]{display:none!important}
+.num{font-variant-numeric:tabular-nums}
+
+/* Kopf */
+.head{position:sticky;top:env(safe-area-inset-top,0px);z-index:30}
+.top{background:var(--bar);color:var(--bar-text)}
+.top__in{display:flex;align-items:center;gap:18px;height:60px;padding:0 24px;max-width:1440px;margin:0 auto}
+.logo{height:24px;width:auto;display:block}
+.top__app{font-weight:600;color:#fff;font-size:14px;padding-left:18px;border-left:1px solid rgba(255,255,255,.18);white-space:nowrap}
+.top__sp{flex:1}
+.who{display:flex;align-items:center;gap:11px;font-size:12.5px;line-height:1.3;text-align:right}
+.who b{display:block;color:#fff;font-weight:600;font-size:13.5px}
+.av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--red);color:#fff;font-weight:600;font-size:12.5px;flex-shrink:0;letter-spacing:0}
+.av--n{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+.av--s{width:30px;height:30px;font-size:11.5px}
+.roles{background:var(--bar-2);border-top:1px solid rgba(255,255,255,.07)}
+.roles__in{display:flex;align-items:center;gap:14px;padding:7px 24px;max-width:1440px;margin:0 auto}
+.roles__lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--bar-muted);white-space:nowrap}
+.seg{display:inline-flex;background:rgba(255,255,255,.06);border-radius:var(--r);padding:3px;gap:2px}
+.seg button{border:0;background:none;color:var(--bar-text);padding:6px 12px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;display:inline-flex;gap:7px;align-items:center;white-space:nowrap}
+.seg button:hover{color:#fff}
+.seg button[aria-pressed="true"]{background:#fff;color:#14161B}
+.seg .i{width:15px;height:15px}
+.seg .s{display:none}
+.roles__hint{font-size:12.5px;color:var(--bar-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Gerüst */
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);max-width:1440px;margin:0 auto}
+.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 108px);align-self:start;padding:24px 12px 24px 20px;display:flex;flex-direction:column;gap:2px}
+.nav{display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:var(--r);color:var(--text);font-weight:500;cursor:pointer;border:0;background:none;width:100%;text-align:left}
+.nav:hover{background:var(--surface)}
+.nav[aria-current="page"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 0 0 1px var(--line)}
+.nav[aria-current="page"] .i{color:var(--red)}
+.cnt{margin-left:auto;background:var(--red);color:#fff;font-size:11px;font-weight:700;border-radius:999px;min-width:20px;height:20px;padding:0 6px;display:inline-grid;place-items:center}
+.side__sep{height:1px;background:var(--line);margin:10px 12px}
+.unit{margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:var(--r-lg);font-size:12.5px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.unit b{color:var(--ink);font-size:13.5px;font-weight:600}
+.main{padding:30px 32px 72px;min-width:0}
+
+/* Text & Knöpfe */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.ph > div{min-width:0}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--red-ink);display:flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:18px;height:2px;background:currentColor}
+.h1{font-size:clamp(25px,2.6vw,31px);font-weight:700;letter-spacing:-.028em;margin-top:8px}
+.lead{color:var(--muted);max-width:64ch;margin-top:7px}
+.sec{margin-top:30px}
+.sec__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sec__h h2{font-size:16.5px}
+.sec__h p{font-size:13px;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:0 16px;border:1.5px solid transparent;border-radius:var(--r);font-weight:600;font-size:14px;line-height:1;white-space:nowrap;cursor:pointer;background:var(--bg);color:var(--ink);transition:background .15s,border-color .15s}
+.btn .i{width:16px;height:16px}
+.btn--red{background:var(--red);color:#fff}
+.btn--red:hover{background:var(--red-d)}
+.btn--ghost{background:var(--surface);border-color:var(--line-2)}
+.btn--ghost:hover{border-color:var(--ink)}
+.btn--ok{background:var(--ok);color:var(--surface)}
+.btn--s{min-height:34px;padding:0 12px;font-size:13px}
+.btn--link{background:none;border:0;padding:0 4px;color:var(--red-ink);min-height:34px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn--red:disabled{background:var(--line-2);color:var(--muted);opacity:1}
+.ib{width:30px;height:30px;display:inline-grid;place-items:center;border:1px solid var(--line-2);border-radius:var(--rs);background:var(--surface);cursor:pointer;color:var(--ink)}
+.ib .i{width:15px;height:15px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:3px 9px 3px 8px;border-radius:999px;background:var(--bg);color:var(--text);white-space:nowrap;line-height:1.4}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill--ok{background:var(--ok-t);color:var(--ok)}
+.pill--warn{background:var(--warn-t);color:var(--warn)}
+.pill--info{background:var(--info-t);color:var(--info)}
+.pill--red{background:var(--red-t);color:var(--red-ink)}
+.pill--plain::before{display:none}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line-2);background:var(--surface);border-radius:999px;padding:6px 13px;font-size:13px;font-weight:500;cursor:pointer;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--surface)}
+.search{display:flex;align-items:center;gap:8px;border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r);padding:0 12px;height:38px;min-width:0;flex:0 1 260px}
+.search input{border:0;background:none;outline:0;width:100%;min-width:0;font-size:14px}
+.search .i{color:var(--muted);width:16px;height:16px}
+.bar-tools{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.note{display:flex;gap:12px;align-items:flex-start;padding:13px 16px;border-radius:var(--r-lg);background:var(--info-t);color:var(--ink);font-size:13.5px}
+.note .i{color:var(--info);margin-top:2px}
+.note b{font-weight:600}
+.empty{padding:28px;text-align:center;color:var(--muted);border:1px dashed var(--line-2);border-radius:var(--r-lg)}
+
+/* Kurskarten */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+.kc{display:flex;flex-direction:column;gap:13px;padding:18px}
+.kc__top{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.kat{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.kc h3{font-size:17px;cursor:pointer}
+.kc h3:hover{color:var(--red-ink)}
+.meta{display:flex;flex-direction:column;gap:5px;font-size:13.5px}
+.meta li{display:flex;gap:9px;align-items:flex-start}
+.meta .i{width:16px;height:16px;color:var(--muted);margin-top:2px}
+.seats{display:flex;flex-wrap:wrap;gap:3px}
+.seat{width:12px;height:12px;border-radius:2px;border:1.5px solid var(--line-2)}
+.seat--b{background:var(--seat);border-color:var(--seat)}
+.seat--a{border-color:var(--warn);background:repeating-linear-gradient(135deg,var(--warn) 0 1.5px,transparent 1.5px 4px)}
+.seat--me{background:var(--red);border-color:var(--red)}
+.seats__l{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:7px}
+.seats__l span{display:inline-flex;align-items:center;gap:5px}
+.seats__l .seat{width:9px;height:9px;border-width:1.5px}
+.req{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px}
+.req__l{color:var(--muted);margin-right:2px}
+.rq{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 6px;border-radius:var(--rs);background:var(--bg);font-weight:500}
+.rq .i{width:13px;height:13px;stroke-width:2.4}
+.rq--ok{color:var(--ok);background:var(--ok-t)}
+.rq--no{color:var(--red-ink);background:var(--red-t)}
+.kc__foot{margin-top:auto;padding-top:13px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.kc__foot .grp{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.team-note{font-size:12.5px;color:var(--muted)}
+
+/* Übersicht Helfende */
+.cols{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);gap:22px;align-items:start}
+.stack{display:flex;flex-direction:column;gap:14px}
+.due{padding:16px 18px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 14px;align-items:start}
+.due__ic{width:38px;height:38px;border-radius:var(--r);display:grid;place-items:center;grid-row:span 3}
+.due__ic--warn{background:var(--warn-t);color:var(--warn)}
+.due__ic--red{background:var(--red-t);color:var(--red-ink)}
+.due h3{font-size:15px}
+.due p{font-size:13.5px;color:var(--muted)}
+.due .grp{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.ue{padding:18px}
+.ue__row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.ue__big{font-size:26px;font-weight:700;color:var(--ink);letter-spacing:-.02em}
+.ue__big small{font-size:14px;color:var(--muted);font-weight:500}
+.meter{height:8px;border-radius:4px;background:var(--bg);overflow:hidden;margin:10px 0 8px;display:flex;border:1px solid var(--line)}
+.meter i{display:block;height:100%}
+.meter .m1{background:var(--ink)}
+.meter .m2{background:repeating-linear-gradient(135deg,var(--red) 0 3px,transparent 3px 6px)}
+.ue p{font-size:13px;color:var(--muted)}
+
+.pass{overflow:hidden}
+.pass__h{display:flex;gap:14px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line);position:relative}
+.pass__h::after{content:"";position:absolute;right:0;top:0;width:76px;height:100%;background:linear-gradient(90deg,transparent,var(--red-t))}
+.pass__h b{display:block;color:var(--ink);font-size:15px}
+.pass__h div span{font-size:12.5px;color:var(--muted)}
+.pass__cross{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:26px;height:26px;z-index:1}
+.pass ul{padding:6px 0}
+.pass li{display:flex;align-items:center;gap:10px;padding:8px 18px;font-size:13.5px}
+.pass li .n{color:var(--ink);font-weight:500;flex:1;min-width:0}
+.pass li .d{font-size:12.5px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot--ok{background:var(--ok)} .dot--soon{background:var(--warn)} .dot--exp{background:var(--red)}
+.pass__f{padding:11px 18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.pass__f .i{width:14px;height:14px}
+
+.path{padding:8px 18px 14px}
+.path li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;position:relative;padding:10px 0}
+.path li:not(:last-child)::before{content:"";position:absolute;left:10px;top:32px;bottom:-10px;width:2px;background:var(--line)}
+.path li.done:not(:last-child)::before{background:var(--ok)}
+.path .mk{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line-2);background:var(--surface);position:relative;z-index:1}
+.path .mk .i{width:12px;height:12px;stroke-width:3}
+.path li.done .mk{background:var(--ok);border-color:var(--ok);color:var(--surface)}
+.path li.plan .mk{border-color:var(--red);background:var(--red-t)}
+.path li.plan .mk::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--red)}
+.path b{display:block;color:var(--ink);font-size:14px;font-weight:600}
+.path span{font-size:12.5px;color:var(--muted)}
+
+/* Anmeldungen */
+.rg{padding:16px 18px;display:flex;flex-direction:column;gap:14px}
+.rg__h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.rg__h h3{font-size:15.5px}
+.rg__h p{font-size:13px;color:var(--muted);margin-top:3px}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px}
+.step{font-size:12px;color:var(--muted);display:flex;flex-direction:column;gap:7px;min-width:0}
+.step::before{content:"";height:4px;border-radius:2px;background:var(--line)}
+.step--done{color:var(--text)}
+.step--done::before{background:var(--ok)}
+.step--cur{color:var(--ink);font-weight:600}
+.step--cur::before{background:linear-gradient(90deg,var(--warn) 45%,var(--line) 45%)}
+.step--wl{color:var(--warn);font-weight:600}
+.step--wl::before{background:var(--warn)}
+.step--no{color:var(--red-ink);font-weight:600}
+.step--no::before{background:var(--red)}
+.log{display:flex;flex-direction:column;gap:3px;font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:11px}
+.log li{display:flex;gap:10px}
+.log .t{font-variant-numeric:tabular-nums;width:76px;flex-shrink:0}
+.quote{font-size:13.5px;color:var(--text);padding:8px 12px;border-left:2px solid var(--line-2);background:var(--bg);border-radius:0 var(--rs) var(--rs) 0}
+
+/* Freigaben */
+.fr{padding:16px 18px;display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr) auto;gap:18px;align-items:center}
+.fr__who{display:flex;gap:12px;align-items:flex-start;min-width:0}
+.fr__who b{display:block;color:var(--ink);font-size:14.5px}
+.fr__who .s{font-size:12.5px;color:var(--muted)}
+.fr__k{font-size:13.5px;margin-top:8px;color:var(--ink);font-weight:600}
+.fr__k span{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.fr .quote{margin-top:8px}
+.checks{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.checks li{display:flex;gap:8px;align-items:center}
+.checks .i{width:15px;height:15px;stroke-width:2.4}
+.c-ok{color:var(--ok)} .c-no{color:var(--red-ink)} .c-warn{color:var(--warn)}
+.fr__act{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.sug{padding:16px 18px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;background:var(--surface);border:1px dashed var(--line-2);border-radius:var(--r-lg)}
+.sug__ic{width:38px;height:38px;border-radius:var(--r);display:grid;place-items:center;background:var(--red-t);color:var(--red-ink);flex-shrink:0}
+.sug__t{flex:1;min-width:220px;font-size:13.5px}
+.sug__t b{color:var(--ink);font-size:14.5px;display:block;margin-bottom:2px}
+.avs{display:flex}
+.avs .av{margin-left:-6px;border:2px solid var(--surface)}
+.avs .av:first-child{margin-left:0}
+.rows{display:flex;flex-direction:column}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:11px 16px;border-bottom:1px solid var(--line);font-size:13.5px}
+.row:last-child{border-bottom:0}
+.row b{color:var(--ink);font-weight:600}
+.row .s{color:var(--muted);font-size:12.5px}
+
+/* Kennzahlen + Tabellen */
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{padding:15px 16px}
+.tile .v{font-size:27px;font-weight:700;color:var(--ink);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+.tile .v small{font-size:14px;color:var(--muted);font-weight:500}
+.tile .l{font-size:12.5px;color:var(--muted);margin-top:4px}
+.tile--warn .v{color:var(--warn)} .tile--red .v{color:var(--red-ink)} .tile--ok .v{color:var(--ok)}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap;vertical-align:middle}
+tr:last-child td{border-bottom:0}
+th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;background:var(--bg)}
+th.c,td.c{text-align:center}
+td b{color:var(--ink);font-weight:600}
+td .s{display:block;font-size:12px;color:var(--muted)}
+.who-cell{display:flex;gap:10px;align-items:center}
+.q{display:inline-grid;place-items:center;min-width:26px;height:24px;padding:0 5px;border-radius:var(--rs);font-size:11.5px;font-weight:700;font-variant-numeric:tabular-nums}
+.q .i{width:13px;height:13px;stroke-width:2.6}
+.q--ok{background:var(--ok-t);color:var(--ok)}
+.q--soon{background:var(--warn-t);color:var(--warn)}
+.q--exp{background:var(--red-t);color:var(--red-ink)}
+.q--none{color:var(--line-2)}
+.q--plan{background:var(--info-t);color:var(--info)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:10px}
+.legend span{display:inline-flex;gap:6px;align-items:center}
+.mini{display:flex;align-items:center;gap:9px}
+.mini__b{width:90px;height:6px;border-radius:3px;background:var(--bg);overflow:hidden;border:1px solid var(--line);display:flex}
+.mini__b i{height:100%;display:block;background:var(--ink)}
+.mini__b i.a{background:var(--warn)}
+.stepper{display:inline-flex;align-items:center;gap:4px}
+
+/* Zusagen */
+.grp-c{overflow:hidden}
+.grp-c__h{padding:16px 18px;display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);background:var(--bg)}
+.grp-c__h h3{font-size:15.5px}
+.grp-c__h p{font-size:12.5px;color:var(--muted);margin-top:2px}
+.grp-c__h .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.ar{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center;padding:13px 18px;border-bottom:1px solid var(--line)}
+.ar:last-child{border-bottom:0}
+.ar__p{display:flex;gap:12px;align-items:center;min-width:0}
+.ar__p b{color:var(--ink);font-size:14px;display:block}
+.ar__p .s{font-size:12.5px;color:var(--muted)}
+.ar__act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+
+/* Konzept */
+.flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;counter-reset:f}
+.flow li{padding:16px;display:flex;flex-direction:column;gap:6px;position:relative}
+.flow li::before{counter-increment:f;content:counter(f);width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:13px;display:grid;place-items:center;margin-bottom:4px}
+.flow li.later::before{background:var(--surface);color:var(--muted);border:1.5px dashed var(--line-2)}
+.flow b{color:var(--ink);font-size:14.5px}
+.flow span{font-size:13px;color:var(--muted)}
+.flow .who{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--red-ink);text-align:left;display:block}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.idea{padding:16px;display:flex;flex-direction:column;gap:6px}
+.idea b{color:var(--ink);font-size:14.5px}
+.idea p{font-size:13.5px;color:var(--muted)}
+.idea .pill{align-self:flex-start;margin-bottom:4px}
+.tech{padding:18px 20px;display:flex;flex-direction:column;gap:10px;font-size:14px;max-width:none}
+.tech ul{display:flex;flex-direction:column;gap:6px;padding-left:18px;list-style:disc}
+.tech b{color:var(--ink)}
+
+/* Dialog + Meldung */
+.ov{position:fixed;inset:0;background:var(--scrim);z-index:60;display:grid;place-items:center;padding:16px}
+.dlg{background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh);width:min(580px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:24px;display:flex;flex-direction:column;gap:14px;border:1px solid var(--line)}
+.dlg__h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.dlg__h h2{font-size:19px}
+.dlg__k{padding:12px 14px;background:var(--bg);border-radius:var(--r);font-size:13.5px}
+.dlg__k b{color:var(--ink);display:block;font-size:14.5px;margin-bottom:2px}
+.dlg__info{display:flex;gap:10px;font-size:13px;color:var(--muted)}
+.dlg__info .i{width:16px;height:16px;margin-top:2px}
+.dlg__act{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;padding-top:4px}
+.dlg p{font-size:14px}
+.fl{font-size:13px;font-weight:600;color:var(--ink);display:block;margin-bottom:5px}
+.fi,textarea,select{width:100%;border:1px solid var(--line-2);background:var(--surface);border-radius:var(--r);padding:9px 11px;font-size:14px;outline:0}
+.fi:focus,textarea:focus,select:focus{border-color:var(--ink)}
+textarea{resize:vertical}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 14px}
+.form .full{grid-column:1/-1}
+.checkset{display:flex;flex-wrap:wrap;gap:6px}
+.checkset label{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line-2);border-radius:var(--rs);padding:5px 9px;font-size:13px;cursor:pointer}
+.pick{display:grid;grid-template-columns:auto auto minmax(0,1fr);gap:11px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--line);cursor:pointer;font-size:13.5px}
+.pick:last-child{border-bottom:0}
+.pick b{color:var(--ink);font-weight:600;display:block}
+.pick .s{font-size:12px;color:var(--muted)}
+.pick.dis{opacity:.55;cursor:not-allowed}
+input[type=checkbox]{width:17px;height:17px;accent-color:var(--red);margin:0}
+.err{color:var(--red-ink);font-size:13px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:70;background:var(--ink);color:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh);padding:13px 18px;font-size:14px;display:flex;gap:12px;align-items:flex-start;width:max-content;max-width:min(520px,calc(100% - 32px))}
+.toast .i{color:var(--ok);margin-top:1px}
+.toast small{display:block;opacity:.72;font-size:12.5px;margin-top:2px}
+
+.tabs{display:none}
+
+@media (max-width:1100px){
+  .cols{grid-template-columns:minmax(0,1fr)}
+  .fr{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .fr__act{grid-column:1/-1;justify-content:flex-start}
+  .flow{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}
+  .roles__hint{display:none}
+}
+@media (max-width:900px){
+  .shell{display:block}
+  .side{display:none}
+  .main{padding:22px 16px 104px;max-width:600px;margin:0 auto}
+  .top__in{padding:0 16px;height:54px;gap:12px}
+  .roles__in{padding:7px 16px;gap:10px}
+  .who__t{display:none}
+  .top__app{font-size:13px;padding-left:12px}
+  .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fr{grid-template-columns:minmax(0,1fr)}
+  .ar{grid-template-columns:minmax(0,1fr)}
+  .ar__act{justify-content:flex-start}
+  .form{grid-template-columns:minmax(0,1fr)}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .search{flex:1 1 100%}
+  .tabs{display:grid;position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);padding-bottom:env(safe-area-inset-bottom,0px)}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px 8px;font-size:11px;font-weight:500;color:var(--muted);border:0;background:none;position:relative;cursor:pointer;min-width:0}
+  .tab .i{width:21px;height:21px}
+  .tab[aria-current="page"]{color:var(--red-ink);font-weight:600}
+  .tab .cnt{position:absolute;top:4px;left:calc(50% + 6px);min-width:17px;height:17px;font-size:10px;padding:0 4px}
+  .toast{bottom:84px}
+}
+@media (max-width:560px){
+  .logo{height:17px}
+  .top__app{display:none}
+  .roles__lbl{display:none}
+  .seg{width:100%}
+  .seg button{flex:1;justify-content:center;padding:7px 6px}
+  .seg .l{display:none} .seg .s{display:inline}
+  .steps .step{font-size:11px}
+  .dlg{padding:20px 18px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .main > *{animation:in .28s cubic-bezier(.2,.7,.2,1)}
+  @keyframes in{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+}
+</style>
+
+<div class="head">
+  <header class="top">
+    <div class="top__in">
+      <img class="logo" alt="Deutsches Rotes Kreuz Mittelweser" src="data:image/png;base64,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">
+      <span class="top__app">Ausbildungsportal</span>
+      <span class="top__sp"></span>
+      <div class="who" id="who"></div>
+    </div>
+  </header>
+  <div class="roles">
+    <div class="roles__in">
+      <span class="roles__lbl">Ansicht</span>
+      <div class="seg" id="seg" role="group" aria-label="Rolle wechseln"></div>
+      <span class="roles__hint" id="hint"></span>
+    </div>
+  </div>
+</div>
+<div class="shell">
+  <nav class="side" id="side" aria-label="Bereiche"></nav>
+  <main class="main" id="main"></main>
+</div>
+<nav class="tabs" id="tabs" aria-label="Bereiche"></nav>
+<div id="modal"></div>
+<div id="toast" class="toast" hidden role="status"></div>
+
+<script>
+(function(){
+const TODAY = new Date('2026-10-08T12:00:00');
+const TODAY_S = '08.10.2026';
+
+const IC = {
+  home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/>',
+  book:'<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H20v14H5.5A1.5 1.5 0 0 0 4 19.5z"/><path d="M4 19.5A1.5 1.5 0 0 0 5.5 21H20v-3"/><path d="M9 8h7"/>',
+  list:'<path d="M9 6h11M9 12h11M9 18h11"/><path d="m3.5 6 1 1 2-2M3.5 12l1 1 2-2M3.5 18l1 1 2-2"/>',
+  inbox:'<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13l2.5 8v6H3v-6z"/>',
+  grid:'<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/>',
+  sliders:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+  badge:'<path d="M12 3l2.4 1.8 3-.2.9 2.9 2.5 1.7-1 2.8 1 2.8-2.5 1.7-.9 2.9-3-.2L12 21l-2.4-1.8-3 .2-.9-2.9-2.5-1.7 1-2.8-1-2.8 2.5-1.7.9-2.9 3 .2z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
+  bulb:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.6 10.8c.6.5 1 1.2 1.1 2.2h5c.1-1 .5-1.7 1.1-2.2A6 6 0 0 0 12 3z"/>',
+  cal:'<rect x="3" y="4.5" width="18" height="16.5" rx="2"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',
+  pin:'<path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  check:'<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  x:'<path d="M6 6l12 12M18 6 6 18"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21c.8-4.2 4-6.5 8-6.5s7.2 2.3 8 6.5"/>',
+  users:'<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18 14.8c2 .7 3.2 2.5 3.5 5.2"/>',
+  shield:'<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.2 7.5 9.5 4.4-1.3 7.5-4.9 7.5-9.5V6z"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  minus:'<path d="M5 12h14"/>',
+  alert:'<path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4.5M12 17.2h.01"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.8h.01"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>',
+  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/>',
+  eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  send:'<path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/>',
+  refresh:'<path d="M20 11a8 8 0 0 0-14.6-4.5L4 8M4 4v4h4M4 13a8 8 0 0 0 14.6 4.5L20 16M20 20v-4h-4"/>'
+};
+const icon = (n, c) => '<svg class="i' + (c ? ' ' + c : '') + '" viewBox="0 0 24 24" aria-hidden="true">' + (IC[n] || '') + '</svg>';
+const CROSS = '<svg class="pass__cross" viewBox="0 0 44 44" aria-hidden="true"><rect x="16" y="5" width="12" height="34" fill="#E60005"/><rect x="5" y="16" width="34" height="12" fill="#E60005"/></svg>';
+
+const Q = {
+  eh:{n:'Erste Hilfe', k:'EH'}, hga:{n:'Helfergrundausbildung', k:'HGA'}, san:{n:'Sanitätsdienst', k:'San'},
+  sanfb:{n:'San-Fortbildung', k:'San-FB'}, funk:{n:'BOS-Sprechfunk', k:'Funk'}, bt:{n:'Betreuungsdienst', k:'BtD'},
+  tus:{n:'Technik & Sicherheit', k:'T&S'}, gf:{n:'Gruppenführung', k:'GF'}, c1:{n:'Führerschein C1', k:'C1'}
+};
+const QORDER = ['eh','hga','san','sanfb','funk','bt','tus','gf','c1'];
+const KATS = ['Alle','Grundausbildung','Sanitätsdienst','Fortbildung','Technik & Funk','Betreuung & PSNV','Führung'];
+
+const ROLES = {
+  helfer:{label:'Helfende', short:'Helfende', icon:'user', name:'Lena Brandt', sub:'Bereitschaft Verden',
+    hint:'Kurse ansehen, Teilnahme wünschen, Stand verfolgen',
+    nav:[['home','Übersicht','home','Start'],['kurse','Kursangebot','book','Kurse'],['meine','Meine Anmeldungen','list','Anmeldungen']]},
+  leitung:{label:'Leitung', short:'Leitung', icon:'users', name:'Thomas Meyer', sub:'Bereitschaftsleitung Verden',
+    hint:'Wünsche freigeben, Helfende anmelden, Team im Blick',
+    nav:[['freigaben','Freigaben','inbox','Freigaben'],['team','Mein Team','grid','Team'],['kurse','Kursangebot','book','Kurse']]},
+  admin:{label:'Ausbildungsleitung', short:'Ausbildung', icon:'shield', name:'Birgit Hoops', sub:'Kreisausbildungsleitung',
+    hint:'Kurse veröffentlichen, Plätze zusagen',
+    nav:[['zusagen','Zusagen','badge','Zusagen'],['verwalten','Kurse verwalten','sliders','Kurse']]}
+};
+const ME = 'lena', UNIT = 'Verden';
+
+function seed(){
+  return JSON.parse(JSON.stringify({
+    people:{
+      lena:{n:'Lena Brandt', b:'Verden', seit:'2019', q:{eh:'2026-12-20', hga:1, san:1, sanfb:'2026-12-31', bt:1}, ue:4},
+      jonas:{n:'Jonas Kück', b:'Verden', q:{eh:'2027-08-01', hga:1}},
+      mira:{n:'Mira Schäfer', b:'Verden', q:{eh:'2026-11-02', hga:1, san:1, sanfb:'2027-03-31', funk:1}},
+      tim:{n:'Tim Oetjen', b:'Verden', q:{eh:'2027-05-10', hga:1, san:1, sanfb:'2027-06-30', funk:1, c1:1, tus:1}},
+      sarah:{n:'Sarah Wolters', b:'Verden', q:{eh:'2026-09-15', hga:1, san:1, sanfb:'2026-09-30', bt:1}},
+      ole:{n:'Ole Gerdes', b:'Verden', q:{eh:'2028-02-01', hga:1, san:1, sanfb:'2027-02-28', funk:1, gf:1, c1:1}},
+      aylin:{n:'Aylin Demir', b:'Verden', q:{eh:'2027-11-20', hga:1, bt:1}},
+      paul:{n:'Paul Heinemann', b:'Verden', q:{eh:'2026-08-30', hga:1, san:1, sanfb:'2027-01-31', tus:1}},
+      nils:{n:'Nils Brüning', b:'Achim', q:{eh:'2027-04-01', hga:1}},
+      hanna:{n:'Hanna Rippe', b:'Ottersberg', q:{eh:'2027-03-01', hga:1, san:1}},
+      kai:{n:'Kai Lüdemann', b:'Langwedel', q:{eh:'2027-09-01'}},
+      eva:{n:'Eva Stelljes', b:'Thedinghausen', q:{eh:'2027-06-12', hga:1, san:1, sanfb:'2026-10-31'}}
+    },
+    courses:[
+      {id:'sanfb', t:'San-Fortbildung: Atemwege & Reanimation', kat:'Fortbildung', start:'2026-10-24', when:'Samstag, 9–16 Uhr', ort:'Rettungswache Achim', ue:8, pl:20, ext:16, wlx:0, kont:0, schluss:'2026-10-17', vor:['san'], gibt:'sanfb', st:'live', doz:'Notfallsanitäter-Team Achim', txt:'Pflichtfortbildung für den Sanitätsdienst: Atemwegsmanagement, Reanimation nach aktuellen Leitlinien, Fallbeispiele aus dem Sanitätsdienst.'},
+      {id:'psnv', t:'Psychische Erste Hilfe', kat:'Betreuung & PSNV', start:'2026-11-03', when:'Dienstag, 18–21:30 Uhr', ort:'Online (Videokonferenz)', ue:4, pl:24, ext:8, wlx:0, kont:0, schluss:'2026-11-01', vor:[], gibt:null, st:'live', doz:'PSNV-Team Kreisverband', txt:'Betroffene und Kameradinnen und Kameraden nach belastenden Einsätzen stabilisieren: erkennen, ansprechen, weitervermitteln.'},
+      {id:'san', t:'Sanitätsdienst-Ausbildung', kat:'Sanitätsdienst', start:'2026-11-07', when:'4 Wochenenden, Sa + So', ort:'DRK-Zentrum Verden', ue:48, pl:16, ext:10, wlx:0, kont:4, schluss:'2026-10-24', vor:['eh','hga'], gibt:'san', st:'live', doz:'Ausbildungsteam Kreisverband', txt:'Die Grundlage für jeden Sanitätsdienst: Anatomie, Notfallbilder, Patientenversorgung und Arbeit im Team. Abschluss mit praktischer Prüfung.'},
+      {id:'eh', t:'Erste Hilfe Fortbildung', kat:'Fortbildung', start:'2026-11-14', when:'Samstag, 9–16:30 Uhr', ort:'DRK-Haus Ottersberg', ue:9, pl:15, ext:6, wlx:0, kont:0, schluss:'2026-11-07', vor:[], gibt:'eh', st:'live', doz:'Ausbildungsteam Kreisverband', txt:'Auffrischung alle zwei Jahre. Hält die Erste-Hilfe-Qualifikation für den Dienst gültig.'},
+      {id:'funk', t:'BOS-Digitalfunk Sprechfunk', kat:'Technik & Funk', start:'2026-11-20', when:'Fr 18–21 Uhr + Sa 9–17 Uhr', ort:'DRK-Zentrum Verden', ue:12, pl:12, ext:11, wlx:2, kont:0, schluss:'2026-11-06', vor:['hga'], gibt:'funk', st:'live', doz:'Fachdienst IuK', txt:'Bedienung der Digitalfunkgeräte, Gesprächsdisziplin und Funkverkehr im Einsatz. Mit praktischer Übung.'},
+      {id:'hga', t:'Helfergrundausbildung', kat:'Grundausbildung', start:'2026-12-05', when:'3 Samstage', ort:'DRK-Heim Langwedel', ue:24, pl:18, ext:9, wlx:0, kont:0, schluss:'2026-11-27', vor:['eh'], gibt:'hga', st:'live', doz:'Ausbildungsteam Kreisverband', txt:'Der Einstieg in die Bereitschaften: Rotkreuz-Grundsätze, Aufbau des Verbands, Einsatzgrundlagen und Eigenschutz.'},
+      {id:'bt', t:'Betreuungsdienst-Fachausbildung', kat:'Betreuung & PSNV', start:'2027-01-16', when:'2 Wochenenden', ort:'DRK-Heim Thedinghausen', ue:32, pl:14, ext:4, wlx:0, kont:0, schluss:'2027-01-02', vor:['hga'], gibt:'bt', st:'live', doz:'Fachdienst Betreuung', txt:'Unterbringung, Verpflegung und Betreuung von Betroffenen bei Großlagen und Evakuierungen.'},
+      {id:'tus', t:'Technik & Sicherheit Grundlagen', kat:'Technik & Funk', start:'2027-01-30', when:'Samstag + Sonntag', ort:'Fahrzeughalle Achim', ue:16, pl:12, ext:3, wlx:0, kont:0, schluss:'2027-01-16', vor:['hga'], gibt:'tus', st:'live', doz:'Fachdienst Technik & Sicherheit', txt:'Stromversorgung, Beleuchtung, Zeltbau und sicheres Arbeiten an der Einsatzstelle.'},
+      {id:'hyg', t:'Hygiene & Desinfektion im Sanitätsdienst', kat:'Sanitätsdienst', start:'2027-02-06', when:'Samstag, 9–14 Uhr', ort:'DRK-Zentrum Verden', ue:6, pl:16, ext:0, wlx:0, kont:0, schluss:'2027-01-30', vor:['san'], gibt:null, st:'draft', doz:'Hygienebeauftragte Rettungsdienst', txt:'Infektionsschutz, Flächen- und Gerätedesinfektion, Umgang mit infektiösen Patientinnen und Patienten.'},
+      {id:'gf', t:'Gruppenführung (Führungskräfte I)', kat:'Führung', start:'2027-02-20', when:'5 Tage, Bildungsurlaub möglich', ort:'DRK-Bildungszentrum', ue:40, pl:10, ext:6, wlx:0, kont:2, schluss:'2027-01-31', vor:['san','funk'], gibt:'gf', st:'live', doz:'Landesverband', txt:'Eine Gruppe im Einsatz führen: Führungsvorgang, Lagebeurteilung, Auftragserteilung, Einsatzdokumentation.'}
+    ],
+    regs:[
+      {id:1, p:'lena', c:'funk', st:'bestaetigt', log:[['18.09.2026','Wunsch gesendet'],['19.09.2026','Freigegeben von Thomas Meyer'],['22.09.2026','Platz zugesagt von Birgit Hoops']]},
+      {id:2, p:'jonas', c:'san', st:'wunsch', note:'Ich möchte ab dem Frühjahr im Sanitätsdienst der SEG mitfahren.', log:[['06.10.2026','Wunsch gesendet']]},
+      {id:3, p:'mira', c:'eh', st:'wunsch', note:'Meine Erste Hilfe läuft Anfang November ab.', log:[['07.10.2026','Wunsch gesendet']]},
+      {id:4, p:'aylin', c:'psnv', st:'wunsch', note:'', log:[['07.10.2026','Wunsch gesendet']]},
+      {id:5, p:'sarah', c:'sanfb', st:'freigegeben', by:'Thomas Meyer', log:[['29.09.2026','Wunsch gesendet'],['30.09.2026','Freigegeben von Thomas Meyer']]},
+      {id:6, p:'nils', c:'san', st:'freigegeben', by:'Kerstin Lange', log:[['01.10.2026','Angemeldet von Kerstin Lange']]},
+      {id:7, p:'hanna', c:'funk', st:'freigegeben', by:'Frank Behrens', log:[['02.10.2026','Wunsch gesendet'],['03.10.2026','Freigegeben von Frank Behrens']]},
+      {id:8, p:'kai', c:'hga', st:'freigegeben', by:'Jan Kruse', log:[['05.10.2026','Wunsch gesendet'],['06.10.2026','Freigegeben von Jan Kruse']]},
+      {id:9, p:'tim', c:'gf', st:'bestaetigt', log:[['10.09.2026','Angemeldet von Thomas Meyer'],['12.09.2026','Platz zugesagt von Birgit Hoops']]},
+      {id:10, p:'eva', c:'sanfb', st:'freigegeben', by:'Maren Ahrens', log:[['04.10.2026','Wunsch gesendet'],['05.10.2026','Freigegeben von Maren Ahrens']]}
+    ]
+  }));
+}
+const LEADS = {Achim:'Kerstin Lange', Ottersberg:'Frank Behrens', Langwedel:'Jan Kruse', Thedinghausen:'Maren Ahrens', Verden:'Thomas Meyer'};
+
+let D = seed();
+let S = {role:'helfer', view:'home', kat:'Alle', q:'', seq:100};
+
+/* Hilfsfunktionen */
+const $ = s => document.querySelector(s);
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+const dt = s => new Date(s + 'T12:00:00');
+const p2 = n => String(n).padStart(2,'0');
+const fmt = s => { const x = dt(s); return p2(x.getDate()) + '.' + p2(x.getMonth()+1) + '.' + x.getFullYear(); };
+const fmtS = s => { const x = dt(s); return p2(x.getDate()) + '.' + p2(x.getMonth()+1) + '.'; };
+const wd = s => ['So','Mo','Di','Mi','Do','Fr','Sa'][dt(s).getDay()];
+const days = s => Math.round((dt(s) - TODAY) / 864e5);
+const ini = n => n.split(' ').map(w => w[0]).slice(0,2).join('');
+const P = id => D.people[id];
+const C = id => D.courses.find(c => c.id === id);
+const R = id => D.regs.find(r => r.id === +id);
+const ACTIVE = ['wunsch','freigegeben','bestaetigt','warteliste'];
+
+function qs(pid, q){
+  const v = P(pid).q[q];
+  if (!v) return {s:'none'};
+  if (v === 1) return {s:'ok'};
+  const n = days(v);
+  return {s: n < 0 ? 'exp' : n <= 90 ? 'soon' : 'ok', until:v, n};
+}
+const hasQ = (pid, q) => ['ok','soon'].includes(qs(pid, q).s);
+const missing = (pid, c) => c.vor.filter(q => !hasQ(pid, q));
+const regOf = (pid, cid) => D.regs.find(r => r.p === pid && r.c === cid && r.st !== 'abgelehnt');
+const inPlan = (pid, q) => D.regs.find(r => r.p === pid && ACTIVE.includes(r.st) && C(r.c) && C(r.c).gibt === q);
+
+function stats(c){
+  const r = D.regs.filter(x => x.c === c.id);
+  const conf = c.ext + r.filter(x => x.st === 'bestaetigt').length;
+  return {
+    conf,
+    pend: r.filter(x => x.st === 'freigegeben').length,
+    wish: r.filter(x => x.st === 'wunsch').length,
+    wl: (c.wlx || 0) + r.filter(x => x.st === 'warteliste').length,
+    free: Math.max(0, c.pl - conf)
+  };
+}
+function isMine(pid){
+  if (S.role === 'helfer') return pid === ME;
+  if (S.role === 'leitung') return P(pid).b === UNIT;
+  return false;
+}
+function seatsHtml(c, withLegend){
+  const r = D.regs.filter(x => x.c === c.id);
+  const out = [];
+  for (let i = 0; i < c.ext; i++) out.push('b');
+  r.filter(x => x.st === 'bestaetigt').forEach(x => out.push(isMine(x.p) ? 'me' : 'b'));
+  r.filter(x => x.st === 'freigegeben').forEach(() => { if (out.length < c.pl) out.push('a'); });
+  while (out.length < c.pl) out.push('f');
+  const s = stats(c);
+  const mineN = out.filter(x => x === 'me').length;
+  const aN = out.filter(x => x === 'a').length;
+  const freeN = out.filter(x => x === 'f').length;
+  let h = '<div class="seats" role="img" aria-label="' + s.conf + ' von ' + c.pl + ' Plätzen vergeben">' + out.slice(0, c.pl).map(x => '<span class="seat seat--' + x + '"></span>').join('') + '</div>';
+  if (withLegend !== false){
+    h += '<div class="seats__l num">'
+      + '<span><i class="seat seat--b"></i>' + (s.conf - mineN) + ' belegt</span>'
+      + (mineN ? '<span><i class="seat seat--me"></i>' + mineN + (S.role === 'helfer' ? ' du' : ' aus ' + UNIT) + '</span>' : '')
+      + (aN ? '<span><i class="seat seat--a"></i>' + aN + ' angefragt</span>' : '')
+      + '<span><i class="seat"></i>' + freeN + ' frei</span>'
+      + (s.wl ? '<span>' + s.wl + ' auf Warteliste</span>' : '')
+      + '</div>';
+  }
+  return h;
+}
+function freePill(c){
+  const s = stats(c);
+  if (c.st === 'draft') return '<span class="pill">Entwurf</span>';
+  if (!s.free) return '<span class="pill pill--red">Ausgebucht</span>';
+  if (s.free <= 3) return '<span class="pill pill--warn">Noch ' + s.free + (s.free === 1 ? ' Platz' : ' Plätze') + '</span>';
+  return '<span class="pill pill--ok">' + s.free + ' Plätze frei</span>';
+}
+const ST = {
+  wunsch:['Wartet auf Leitung','warn'], freigegeben:['Wartet auf Zusage','info'], bestaetigt:['Zugesagt','ok'],
+  warteliste:['Warteliste','warn'], abgelehnt:['Abgelehnt','red']
+};
+const statusPill = r => '<span class="pill pill--' + ST[r.st][1] + '">' + ST[r.st][0] + '</span>';
+
+function stepper(r){
+  const c = C(r.c);
+  const lbl = ['Wunsch','Leitung','Ausbildung', 'Kurs'];
+  let cls = ['','','',''];
+  if (r.st === 'wunsch') cls = ['done','cur','',''];
+  if (r.st === 'freigegeben') cls = ['done','done','cur',''];
+  if (r.st === 'bestaetigt') { cls = ['done','done','done','cur']; lbl[3] = days(c.start) > 0 ? 'in ' + days(c.start) + ' Tagen' : 'Kurs'; }
+  if (r.st === 'warteliste') { cls = ['done','done','wl','']; lbl[2] = 'Warteliste'; }
+  if (r.st === 'abgelehnt') { cls = r.by === 'leitung' ? ['done','no','',''] : ['done','done','no','']; }
+  return '<div class="steps">' + lbl.map((l,i) => '<span class="step' + (cls[i] ? ' step--' + cls[i] : '') + '">' + l + '</span>').join('') + '</div>';
+}
+function metaList(c){
+  return '<ul class="meta">'
+    + '<li>' + icon('cal') + '<span>' + wd(c.start) + ', ' + fmt(c.start) + ' · ' + esc(c.when) + '</span></li>'
+    + '<li>' + icon('pin') + '<span>' + esc(c.ort) + '</span></li>'
+    + '<li>' + icon('clock') + '<span class="num">' + c.ue + ' UE · Anmeldeschluss ' + fmtS(c.schluss) + '</span></li>'
+    + '</ul>';
+}
+function reqHtml(c, pid){
+  if (!c.vor.length) return '<div class="req"><span class="req__l">Voraussetzung</span><span class="rq">keine</span></div>';
+  return '<div class="req"><span class="req__l">Voraussetzung</span>' + c.vor.map(q => {
+    if (!pid) return '<span class="rq">' + Q[q].n + '</span>';
+    const ok = hasQ(pid, q);
+    return '<span class="rq rq--' + (ok ? 'ok' : 'no') + '">' + icon(ok ? 'check' : 'x') + Q[q].n + '</span>';
+  }).join('') + '</div>';
+}
+function helperAction(c){
+  const reg = regOf(ME, c.id);
+  if (reg) return statusPill(reg) + '<button class="btn btn--link btn--s" data-act="go" data-v="meine">Stand ansehen</button>';
+  if (missing(ME, c).length) return '<button class="btn btn--s" disabled>Voraussetzung fehlt</button>';
+  if (days(c.schluss) < 0) return '<button class="btn btn--s" disabled>Anmeldeschluss vorbei</button>';
+  return '<button class="btn btn--red btn--s" data-act="wish" data-c="' + c.id + '">' + (stats(c).free ? 'Teilnahme wünschen' : 'Auf Warteliste wünschen') + '</button>';
+}
+function courseCard(c){
+  let foot;
+  if (S.role === 'helfer') {
+    foot = '<div class="grp">' + helperAction(c) + '</div>';
+  } else {
+    const team = D.regs.filter(r => r.c === c.id && P(r.p).b === UNIT && r.st !== 'abgelehnt').length;
+    foot = '<span class="team-note">' + (team ? team + ' aus ' + UNIT + ' dabei' : 'Noch niemand aus ' + UNIT) + '</span>'
+      + '<button class="btn btn--red btn--s" data-act="assign" data-c="' + c.id + '">' + icon('plus') + 'Helfende anmelden</button>';
+  }
+  return '<article class="card kc">'
+    + '<div class="kc__top"><span class="kat">' + esc(c.kat) + '</span>' + freePill(c) + '</div>'
+    + '<h3 data-act="detail" data-c="' + c.id + '" tabindex="0">' + esc(c.t) + '</h3>'
+    + metaList(c)
+    + '<div>' + seatsHtml(c) + '</div>'
+    + reqHtml(c, S.role === 'helfer' ? ME : null)
+    + '<div class="kc__foot">' + foot + '</div>'
+    + '</article>';
+}
+const liveCourses = () => D.courses.filter(c => c.st === 'live').sort((a,b) => a.start.localeCompare(b.start));
+function courseMini(c){
+  return '<b>' + esc(c.t) + '</b>' + wd(c.start) + ', ' + fmt(c.start) + ' · ' + esc(c.ort) + ' · ' + c.ue + ' UE';
+}
+
+/* ---------- Ansichten ---------- */
+const V = {};
+
+V.home = function(){
+  const me = P(ME);
+  const due = ['eh','sanfb'].map(q => ({q, s:qs(ME, q)})).filter(x => x.s.s === 'soon' || x.s.s === 'exp');
+  const dueHtml = due.map(x => {
+    const c = liveCourses().find(k => k.gibt === x.q && days(k.schluss) >= 0);
+    const reg = c && regOf(ME, c.id);
+    const exp = x.s.s === 'exp';
+    return '<div class="card due">'
+      + '<span class="due__ic due__ic--' + (exp ? 'red' : 'warn') + '">' + icon('alert') + '</span>'
+      + '<h3>' + Q[x.q].n + (exp ? ' ist abgelaufen' : ' läuft am ' + fmt(x.s.until) + ' ab') + '</h3>'
+      + '<p>' + (c ? 'Passender Termin: <b>' + esc(c.t) + '</b>, ' + wd(c.start) + ' ' + fmt(c.start) + ' in ' + esc(c.ort.replace(/^.*? /, '')) + '. ' + stats(c).free + ' Plätze frei.' : 'Aktuell ist kein passender Termin ausgeschrieben.') + '</p>'
+      + (c ? '<div class="grp">' + (reg ? statusPill(reg) : '<button class="btn btn--red btn--s" data-act="wish" data-c="' + c.id + '">Teilnahme wünschen</button>') + '<button class="btn btn--link btn--s" data-act="detail" data-c="' + c.id + '">Details</button></div>' : '')
+      + '</div>';
+  }).join('');
+
+  const mine = D.regs.filter(r => r.p === ME);
+  const regsHtml = mine.length ? mine.map(regCard).join('') : '<div class="empty">Noch keine Anmeldungen. Im Kursangebot findest du alle ausgeschriebenen Lehrgänge.</div>';
+
+  const planned = D.regs.filter(r => r.p === ME && ACTIVE.includes(r.st) && C(r.c).kat === 'Fortbildung').reduce((a, r) => a + C(r.c).ue, 0);
+  const goal = 8, done = me.ue;
+  const ue = '<div class="card ue">'
+    + '<div class="ue__row"><h3>Fortbildung 2026</h3><span class="ue__big num">' + done + ' <small>von ' + goal + ' UE</small></span></div>'
+    + '<div class="meter"><i class="m1" style="width:' + Math.min(100, done / goal * 100) + '%"></i><i class="m2" style="width:' + Math.min(100 - done / goal * 100, planned / goal * 100) + '%"></i></div>'
+    + '<p>' + (planned ? 'Mit deinen geplanten Kursen kommst du auf ' + (done + planned) + ' UE. ' : '') + 'Für den Sanitätsdienst brauchst du 8 Unterrichtseinheiten Fortbildung im Jahr.</p>'
+    + '</div>';
+
+  const passItems = QORDER.filter(q => me.q[q]).map(q => {
+    const s = qs(ME, q);
+    const d = s.until ? (s.s === 'exp' ? 'abgelaufen' : 'bis ' + fmt(s.until)) : 'unbefristet';
+    return '<li><span class="dot dot--' + s.s + '"></span><span class="n">' + Q[q].n + '</span><span class="d num">' + d + '</span></li>';
+  }).join('');
+  const pass = '<div class="card pass">'
+    + '<div class="pass__h"><span class="av">' + ini(me.n) + '</span><div><b>' + me.n + '</b><span>Bereitschaft ' + me.b + ' · dabei seit ' + me.seit + '</span></div>' + CROSS + '</div>'
+    + '<ul>' + passItems + '</ul>'
+    + '<div class="pass__f">' + icon('info') + 'Nach jedem Kurs trägt die Ausbildungsleitung die Qualifikation hier ein.</div>'
+    + '</div>';
+
+  const steps = [
+    ['eh','Erste Hilfe'], ['hga','Helfergrundausbildung'], ['san','Sanitätsdienst'], ['funk','BOS-Sprechfunk'], ['gf','Gruppenführung']
+  ].map(([q, n]) => {
+    const has = !!me.q[q];
+    const reg = inPlan(ME, q);
+    const gfC = C('gf');
+    let sub = has ? 'Abgeschlossen' : reg ? ST[reg.st][0] + ' · ' + fmt(C(reg.c).start) : 'Offen';
+    if (q === 'gf' && !has) sub = 'Voraussetzung: Sanitätsdienst und Sprechfunk' + (gfC ? ' · nächster Lehrgang ' + fmt(gfC.start) : '');
+    return '<li class="' + (has ? 'done' : reg ? 'plan' : '') + '"><span class="mk">' + (has ? icon('check') : '') + '</span><div><b>' + n + '</b><span>' + sub + '</span></div></li>';
+  }).join('');
+
+  return '<div class="ph"><div><div class="eyebrow">Bereitschaft ' + me.b + '</div><h1 class="h1">Moin, Lena.</h1><p class="lead">Deine Qualifikationen, was bald abläuft und wie weit deine Anmeldungen sind.</p></div>'
+    + '<button class="btn btn--red" data-act="go" data-v="kurse">' + icon('book') + 'Zum Kursangebot</button></div>'
+    + demoNote()
+    + '<div class="cols sec">'
+    + '<div class="stack">'
+    + (due.length ? '<div class="sec__h" style="margin:0"><h2>Bald fällig</h2><p>Damit du einsatzfähig bleibst</p></div>' + dueHtml : '')
+    + ue
+    + '<div class="sec__h" style="margin:8px 0 0"><h2>Meine Anmeldungen</h2><button class="btn btn--link btn--s" data-act="go" data-v="meine">Alle ansehen</button></div>'
+    + regsHtml
+    + '</div>'
+    + '<div class="stack">' + pass
+    + '<div class="card"><div class="sec__h" style="padding:16px 18px 0;margin:0"><h2>Mein Ausbildungsweg</h2></div><ul class="path">' + steps + '</ul></div>'
+    + '</div></div>';
+};
+
+function demoNote(){
+  return '<div class="note">' + icon('info') + '<div><b>So testest du den Ablauf:</b> Als Lena einen Kurs wünschen, oben zu „Leitung“ wechseln und freigeben, dann als „Ausbildungsleitung“ den Platz zusagen. Alle Personen und Termine sind Beispieldaten.</div></div>';
+}
+
+function regCard(r){
+  const c = C(r.c);
+  const last = r.log[r.log.length - 1];
+  return '<article class="card rg">'
+    + '<div class="rg__h"><div><h3>' + esc(c.t) + '</h3><p>' + wd(c.start) + ', ' + fmt(c.start) + ' · ' + esc(c.ort) + '</p></div>' + statusPill(r) + '</div>'
+    + stepper(r)
+    + (r.reason ? '<div class="quote">Begründung: ' + esc(r.reason) + '</div>' : '')
+    + '<ul class="log">' + r.log.slice().reverse().map(l => '<li><span class="t">' + l[0] + '</span><span>' + esc(l[1]) + '</span></li>').join('') + '</ul>'
+    + '</article>';
+}
+
+V.meine = function(){
+  const mine = D.regs.filter(r => r.p === ME);
+  return '<div class="ph"><div><div class="eyebrow">Lena Brandt</div><h1 class="h1">Meine Anmeldungen</h1><p class="lead">Jeder Wunsch geht erst an deine Leitung, dann an die Ausbildungsleitung. Hier siehst du, wo er gerade ist.</p></div></div>'
+    + '<div class="stack">' + (mine.length ? mine.slice().reverse().map(regCard).join('') : '<div class="empty">Noch keine Anmeldungen.</div>') + '</div>';
+};
+
+V.kurse = function(){
+  let list = liveCourses();
+  if (S.kat !== 'Alle') list = list.filter(c => c.kat === S.kat);
+  if (S.q) { const q = S.q.toLowerCase(); list = list.filter(c => (c.t + ' ' + c.ort + ' ' + c.kat + ' ' + c.txt).toLowerCase().includes(q)); }
+  const lead = S.role === 'helfer'
+    ? 'Alle ausgeschriebenen Lehrgänge im Kreisverband. Wo dir eine Voraussetzung fehlt, siehst du es direkt an der Karte.'
+    : 'Melde Helfende aus ' + UNIT + ' direkt an. Die Ausbildungsleitung sagt die Plätze danach zu.';
+  return '<div class="ph"><div><div class="eyebrow">Kreisverband · Winter 2026/27</div><h1 class="h1">Kursangebot</h1><p class="lead">' + lead + '</p></div></div>'
+    + '<div class="bar-tools"><div class="chips" role="group" aria-label="Bereich">' + KATS.map(k => '<button class="chip" data-act="kat" data-v="' + k + '" aria-pressed="' + (S.kat === k) + '">' + k + '</button>').join('') + '</div>'
+    + '<label class="search">' + icon('search') + '<input id="q" type="search" placeholder="Kurs oder Ort suchen" value="' + esc(S.q) + '" aria-label="Kurs oder Ort suchen"></label></div>'
+    + (list.length ? '<div class="grid">' + list.map(courseCard).join('') + '</div>' : '<div class="empty">Kein Kurs passt zu dieser Auswahl.</div>');
+};
+
+/* Leitung */
+const leitungOpen = () => D.regs.filter(r => r.st === 'wunsch' && P(r.p).b === UNIT);
+function kontInfo(c){
+  if (!c.kont) return null;
+  const used = D.regs.filter(r => r.c === c.id && P(r.p).b === UNIT && ['freigegeben','bestaetigt','warteliste'].includes(r.st)).length;
+  return {used, max:c.kont};
+}
+function suggestions(){
+  const team = Object.keys(D.people).filter(id => P(id).b === UNIT);
+  const out = [];
+  ['eh','sanfb'].forEach(q => {
+    const c = liveCourses().find(k => k.gibt === q && days(k.schluss) >= 0 && stats(k).free > 0);
+    if (!c) return;
+    const who = team.filter(id => P(id).q[q] && ['soon','exp'].includes(qs(id, q).s) && !inPlan(id, q) && !missing(id, c).length);
+    if (who.length) out.push({q, c, who});
+  });
+  return out;
+}
+V.freigaben = function(){
+  const open = leitungOpen();
+  const cards = open.map(r => {
+    const c = C(r.c), p = P(r.p), s = stats(c), miss = missing(r.p, c), k = kontInfo(c);
+    const checks = [
+      miss.length ? ['no','x','Fehlt: ' + miss.map(q => Q[q].n).join(', ')] : ['ok','check', c.vor.length ? 'Voraussetzungen erfüllt' : 'Keine Voraussetzungen'],
+      s.free ? [s.free <= 3 ? 'warn' : 'ok', s.free <= 3 ? 'alert' : 'check', s.free + ' von ' + c.pl + ' Plätzen frei'] : ['warn','alert','Ausgebucht, nur Warteliste'],
+      k ? [k.used < k.max ? 'ok' : 'warn', k.used < k.max ? 'check' : 'alert', 'Kontingent ' + UNIT + ': ' + k.used + ' von ' + k.max] : null
+    ].filter(Boolean);
+    return '<article class="card fr">'
+      + '<div><div class="fr__who"><span class="av av--n">' + ini(p.n) + '</span><div><b>' + p.n + '</b><span class="s">Wunsch vom ' + r.log[0][0] + '</span></div></div>'
+      + '<div class="fr__k">' + esc(c.t) + '<span>' + wd(c.start) + ', ' + fmt(c.start) + ' · ' + esc(c.ort) + '</span></div>'
+      + (r.note ? '<div class="quote">„' + esc(r.note) + '“</div>' : '') + '</div>'
+      + '<ul class="checks">' + checks.map(x => '<li class="c-' + x[0] + '">' + icon(x[1]) + '<span>' + x[2] + '</span></li>').join('') + '</ul>'
+      + '<div class="fr__act"><button class="btn btn--ghost btn--s" data-act="reject" data-r="' + r.id + '">Ablehnen</button>'
+      + '<button class="btn btn--red btn--s" data-act="approve" data-r="' + r.id + '"' + (miss.length ? ' disabled title="Voraussetzung fehlt"' : '') + '>' + icon('check') + 'Freigeben & anmelden</button></div>'
+      + '</article>';
+  }).join('');
+
+  const sug = suggestions().map(x => '<div class="sug">'
+    + '<span class="sug__ic">' + icon('spark') + '</span>'
+    + '<div class="sug__t"><b>' + x.who.length + (x.who.length === 1 ? ' Person braucht' : ' Helfende brauchen') + ' ' + (x.q === 'eh' ? 'die Erste Hilfe Fortbildung' : 'die San-Fortbildung') + '</b>'
+    + x.who.map(id => P(id).n).join(', ') + '. Am ' + fmt(x.c.start) + ' (' + esc(x.c.ort) + ') sind noch ' + stats(x.c).free + ' Plätze frei.</div>'
+    + '<div class="avs">' + x.who.map(id => '<span class="av av--n av--s">' + ini(P(id).n) + '</span>').join('') + '</div>'
+    + '<button class="btn btn--ghost btn--s" data-act="assign" data-c="' + x.c.id + '" data-pre="' + x.who.join(',') + '">Anmelden …</button>'
+    + '</div>').join('');
+
+  const moving = D.regs.filter(r => P(r.p).b === UNIT && ['freigegeben','bestaetigt','warteliste','abgelehnt'].includes(r.st));
+  const rows = moving.slice().reverse().map(r => '<div class="row"><div><b>' + P(r.p).n + '</b> · ' + esc(C(r.c).t) + '<div class="s">' + fmt(C(r.c).start) + ' · ' + esc(r.log[r.log.length-1][1]) + '</div></div>' + statusPill(r) + '</div>').join('');
+
+  return '<div class="ph"><div><div class="eyebrow">Bereitschaft ' + UNIT + '</div><h1 class="h1">Freigaben</h1><p class="lead">Wünsche aus deiner Einheit. Mit der Freigabe meldest du die Person an, die Ausbildungsleitung sagt danach den Platz zu.</p></div></div>'
+    + '<div class="sec__h" style="margin-top:0"><h2>Offen <span class="muted num">(' + open.length + ')</span></h2></div>'
+    + '<div class="stack">' + (cards || '<div class="empty">Keine offenen Wünsche. Neue Wünsche aus ' + UNIT + ' erscheinen hier.</div>') + '</div>'
+    + (sug ? '<div class="sec"><div class="sec__h"><h2>Vorschläge</h2><p>Aus den Ablaufdaten deines Teams</p></div><div class="stack">' + sug + '</div></div>' : '')
+    + '<div class="sec"><div class="sec__h"><h2>Bereits bearbeitet</h2><p>Stand bei der Ausbildungsleitung</p></div><div class="card rows">' + (rows || '<div class="row muted">Noch nichts bearbeitet.</div>') + '</div></div>';
+};
+
+V.team = function(){
+  const team = Object.keys(D.people).filter(id => P(id).b === UNIT);
+  let soon = 0, exp = 0;
+  team.forEach(id => QORDER.forEach(q => { const s = qs(id, q).s; if (s === 'soon') soon++; if (s === 'exp') exp++; }));
+  const ready = team.filter(id => hasQ(id,'san') && hasQ(id,'sanfb') && hasQ(id,'eh')).length;
+  const inAus = new Set(D.regs.filter(r => P(r.p).b === UNIT && ACTIVE.includes(r.st)).map(r => r.p)).size;
+  const cell = (id, q) => {
+    const s = qs(id, q), plan = inPlan(id, q);
+    if (s.s === 'ok') return '<span class="q q--ok" title="gültig' + (s.until ? ' bis ' + fmt(s.until) : '') + '">' + icon('check') + '</span>';
+    if (s.s === 'soon') return '<span class="q q--soon" title="läuft ab am ' + fmt(s.until) + '">' + fmtS(s.until) + '</span>';
+    if (s.s === 'exp') return '<span class="q q--exp" title="abgelaufen am ' + fmt(s.until) + '">' + fmtS(s.until) + '</span>';
+    if (plan) return '<span class="q q--plan" title="' + ST[plan.st][0] + ': ' + esc(C(plan.c).t) + '">' + fmtS(C(plan.c).start) + '</span>';
+    return '<span class="q q--none" aria-label="fehlt">–</span>';
+  };
+  return '<div class="ph"><div><div class="eyebrow">Bereitschaft ' + UNIT + '</div><h1 class="h1">Mein Team</h1><p class="lead">Wer ist wofür ausgebildet, und was läuft bald ab? Die Grundlage für eure Ausbildungsplanung.</p></div>'
+    + '<button class="btn btn--ghost" data-act="go" data-v="kurse">' + icon('plus') + 'Helfende anmelden</button></div>'
+    + '<div class="tiles">'
+    + '<div class="card tile tile--ok"><div class="v">' + ready + ' <small>von ' + team.length + '</small></div><div class="l">Sanitätsdienst einsatzfähig</div></div>'
+    + '<div class="card tile tile--warn"><div class="v">' + soon + '</div><div class="l">Laufen in 90 Tagen ab</div></div>'
+    + '<div class="card tile tile--red"><div class="v">' + exp + '</div><div class="l">Abgelaufen</div></div>'
+    + '<div class="card tile"><div class="v">' + inAus + '</div><div class="l">Gerade in Ausbildung</div></div>'
+    + '</div>'
+    + '<div class="sec"><div class="sec__h"><h2>Qualifikationen</h2><p>Stand ' + TODAY_S + '</p></div>'
+    + '<div class="tbl"><table><thead><tr><th>Name</th>' + QORDER.map(q => '<th class="c" title="' + Q[q].n + '">' + Q[q].k + '</th>').join('') + '</tr></thead><tbody>'
+    + team.map(id => '<tr><td><div class="who-cell"><span class="av av--n av--s">' + ini(P(id).n) + '</span><b>' + P(id).n + '</b></div></td>' + QORDER.map(q => '<td class="c">' + cell(id, q) + '</td>').join('') + '</tr>').join('')
+    + '</tbody></table></div>'
+    + '<div class="legend"><span><i class="q q--ok">' + icon('check') + '</i>gültig</span><span><i class="q q--soon">TT.MM.</i>läuft bald ab</span><span><i class="q q--exp">TT.MM.</i>abgelaufen</span><span><i class="q q--plan">TT.MM.</i>Kurs geplant</span><span>EH Erste Hilfe · HGA Helfergrundausbildung · San-FB Fortbildung · BtD Betreuungsdienst · T&amp;S Technik &amp; Sicherheit · GF Gruppenführung</span></div>'
+    + '</div>';
+};
+
+/* Ausbildungsleitung */
+const adminOpen = () => D.regs.filter(r => r.st === 'freigegeben');
+V.zusagen = function(){
+  const ids = [...new Set(D.regs.filter(r => r.st === 'freigegeben' || r.st === 'warteliste').map(r => r.c))];
+  const groups = D.courses.filter(c => ids.includes(c.id)).sort((a,b) => a.start.localeCompare(b.start)).map(c => {
+    const s = stats(c);
+    const regs = D.regs.filter(r => r.c === c.id && (r.st === 'freigegeben' || r.st === 'warteliste'));
+    const pend = regs.filter(r => r.st === 'freigegeben').length;
+    return '<section class="card grp-c">'
+      + '<div class="grp-c__h"><div><h3>' + esc(c.t) + '</h3><p>' + wd(c.start) + ', ' + fmt(c.start) + ' · ' + esc(c.ort) + ' · Anmeldeschluss ' + fmtS(c.schluss) + '</p><div style="margin-top:10px">' + seatsHtml(c) + '</div></div>'
+      + '<div class="right">' + freePill(c) + (pend > 1 && pend <= s.free ? '<button class="btn btn--ghost btn--s" data-act="confirm-all" data-c="' + c.id + '">Alle ' + pend + ' zusagen</button>' : '') + '</div></div>'
+      + regs.map(r => {
+        const p = P(r.p), wl = r.st === 'warteliste';
+        return '<div class="ar"><div class="ar__p"><span class="av av--n av--s">' + ini(p.n) + '</span><div><b>' + p.n + '</b><span class="s">Bereitschaft ' + p.b + ' · ' + (wl ? 'auf der Warteliste' : 'freigegeben von ' + esc(r.by || LEADS[p.b])) + '</span></div></div>'
+          + '<div class="ar__act">'
+          + '<button class="btn btn--ghost btn--s" data-act="decline" data-r="' + r.id + '">Absagen</button>'
+          + (wl ? '' : '<button class="btn btn--ghost btn--s" data-act="wait" data-r="' + r.id + '">Warteliste</button>')
+          + '<button class="btn btn--red btn--s" data-act="confirm" data-r="' + r.id + '"' + (s.free ? '' : ' disabled title="Kein Platz frei"') + '>' + icon('check') + (wl ? 'Nachrücken' : 'Zusagen') + '</button>'
+          + '</div></div>';
+      }).join('')
+      + '</section>';
+  }).join('');
+  return '<div class="ph"><div><div class="eyebrow">Kreisverband</div><h1 class="h1">Zusagen</h1><p class="lead">Von den Leitungen freigegebene Anmeldungen. Mit der Zusage ist der Platz fest vergeben, die Person und ihre Leitung sehen es sofort.</p></div></div>'
+    + '<div class="stack">' + (groups || '<div class="empty">Alles erledigt. Neue Freigaben aus den Bereitschaften erscheinen hier.</div>') + '</div>';
+};
+
+V.verwalten = function(){
+  const all = D.courses.slice().sort((a,b) => a.start.localeCompare(b.start));
+  const live = all.filter(c => c.st === 'live');
+  const free = live.reduce((a,c) => a + stats(c).free, 0);
+  const rows = all.map(c => {
+    const s = stats(c);
+    const conf = Math.min(100, s.conf / c.pl * 100), pend = Math.min(100 - conf, s.pend / c.pl * 100);
+    const status = c.st === 'draft' ? '<span class="pill">Entwurf</span>' : !s.free ? '<span class="pill pill--red">Ausgebucht</span>' : '<span class="pill pill--ok">Veröffentlicht</span>';
+    return '<tr><td><b>' + esc(c.t) + '</b><span class="s">' + esc(c.kat) + (c.kont ? ' · Kontingent ' + c.kont + ' je Bereitschaft' : '') + '</span></td>'
+      + '<td class="num">' + wd(c.start) + ' ' + fmt(c.start) + '<span class="s">Schluss ' + fmtS(c.schluss) + '</span></td>'
+      + '<td>' + esc(c.ort) + '</td>'
+      + '<td><div class="mini"><span class="mini__b"><i style="width:' + conf + '%"></i><i class="a" style="width:' + pend + '%"></i></span><span class="num">' + s.conf + '/' + c.pl + '</span></div>'
+      + '<span class="s">' + (s.pend ? s.pend + ' zuzusagen' : '') + (s.pend && s.wl ? ' · ' : '') + (s.wl ? s.wl + ' Warteliste' : '') + '</span></td>'
+      + '<td class="c"><div class="stepper"><button class="ib" data-act="seat" data-c="' + c.id + '" data-d="-1" aria-label="Einen Platz weniger">' + icon('minus') + '</button><button class="ib" data-act="seat" data-c="' + c.id + '" data-d="1" aria-label="Einen Platz mehr">' + icon('plus') + '</button></div></td>'
+      + '<td>' + status + '</td>'
+      + '<td><div class="stepper"><button class="btn btn--ghost btn--s" data-act="people" data-c="' + c.id + '">Teilnehmende</button>'
+      + (c.st === 'draft' ? '<button class="btn btn--red btn--s" data-act="publish" data-c="' + c.id + '">Veröffentlichen</button>' : '<button class="btn btn--link btn--s" data-act="publish" data-c="' + c.id + '">Zurückziehen</button>')
+      + '</div></td></tr>';
+  }).join('');
+  return '<div class="ph"><div><div class="eyebrow">Kreisverband</div><h1 class="h1">Kurse verwalten</h1><p class="lead">Lehrgänge anlegen, veröffentlichen und Plätze steuern. Entwürfe sind nur hier sichtbar.</p></div>'
+    + '<button class="btn btn--red" data-act="new">' + icon('plus') + 'Neuer Kurs</button></div>'
+    + '<div class="tiles">'
+    + '<div class="card tile"><div class="v">' + live.length + '</div><div class="l">Kurse veröffentlicht</div></div>'
+    + '<div class="card tile tile--ok"><div class="v">' + free + '</div><div class="l">Plätze frei</div></div>'
+    + '<div class="card tile tile--warn"><div class="v">' + adminOpen().length + '</div><div class="l">Warten auf Zusage</div></div>'
+    + '<div class="card tile"><div class="v">' + all.filter(c => c.st === 'draft').length + '</div><div class="l">Entwürfe</div></div>'
+    + '</div>'
+    + '<div class="sec"><div class="tbl"><table><thead><tr><th>Kurs</th><th>Beginn</th><th>Ort</th><th>Belegung</th><th class="c">Plätze</th><th>Status</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div></div>';
+};
+
+V.konzept = function(){
+  const flow = [
+    ['Ausbildungsleitung','Veröffentlichen','Kurs anlegen: Termine, Ort, Plätze, Voraussetzungen, auf Wunsch Kontingent je Bereitschaft.'],
+    ['Helfende','Wünschen','Passende Kurse mit freien Plätzen sehen und Teilnahme wünschen. Fehlende Voraussetzungen stehen direkt dran.'],
+    ['Leitung','Freigeben','Die Leitung der Einheit prüft und meldet an. Sie kann auch selbst Helfende anmelden.'],
+    ['Ausbildungsleitung','Zusagen','Platz zusagen oder auf die Warteliste setzen. Alle Beteiligten sehen den Stand sofort.'],
+    ['Ausbildungsleitung','Abschließen','Teilnahme bestätigen, Qualifikation landet automatisch im Pass. (Ausbaustufe)', true]
+  ];
+  const yes = '<span class="q q--ok">' + icon('check') + '</span>', no = '<span class="q q--none">–</span>';
+  const rights = [
+    ['Kursangebot und freie Plätze sehen', yes, yes, yes],
+    ['Eigene Qualifikationen und Anmeldungen sehen', yes, yes, yes],
+    ['Teilnahme wünschen', yes, no, no],
+    ['Wünsche freigeben, Helfende direkt anmelden', no, '<span class="s">eigene Einheit</span>', no],
+    ['Qualifikationen des Teams sehen', no, '<span class="s">eigene Einheit</span>', '<span class="s">alle</span>'],
+    ['Plätze zusagen, Warteliste führen', no, no, yes],
+    ['Kurse anlegen und veröffentlichen', no, no, yes]
+  ];
+  const ideas = [
+    ['Qualifikationspass', 'Jede Person sieht ihre Qualifikationen mit Ablaufdatum. Was in 90 Tagen abläuft, steht oben, mit passendem Termin.', 1],
+    ['Team-Matrix', 'Die Leitung sieht auf einen Blick, wer wofür ausgebildet ist und wie viele im Sanitätsdienst einsatzfähig sind.', 1],
+    ['Vorschläge', 'Das Portal erkennt, wer zur Fortbildung muss, und schlägt den nächsten Kurs mit freien Plätzen vor.', 1],
+    ['Sitzplan statt Zahl', 'Jeder Platz ist ein Kästchen: belegt, angefragt, frei, eigene Einheit in Rot. Engpässe sieht man sofort.', 1],
+    ['Kontingente', 'Bei gefragten Lehrgängen bekommt jede Bereitschaft feste Plätze, damit nicht eine Einheit alles belegt.', 1],
+    ['Fortbildungsstunden', 'Zähler für Unterrichtseinheiten pro Jahr, mit den schon geplanten Kursen als Vorschau.', 1],
+    ['Warteliste rückt nach', 'Sagt jemand ab, rückt die nächste Person nach und bekommt eine E-Mail. Versand über das vorhandene Microsoft-Graph-Modul der Website.', 0],
+    ['Login mit HiOrg-Server', 'Anmelden mit dem HiOrg-Konto, das die Bereitschaften schon nutzen, und Qualifikationen von dort übernehmen. Vorher prüfen, was die HiOrg-Schnittstelle dafür hergibt.', 0],
+    ['Anwesenheit per QR-Code', 'Am Kurstag scannen die Teilnehmenden einen Code. Danach Bescheinigung als PDF und Eintrag im Pass.', 0],
+    ['Kalenderdatei', 'Zugesagte Kurse als .ics für den eigenen Kalender, mit Erinnerung eine Woche vorher.', 0]
+  ];
+  return '<div class="ph"><div><div class="eyebrow">Entwurf</div><h1 class="h1">Ausbildungsplanung im Intranet</h1><p class="lead">Ein Ort für alle Lehrgänge der Bereitschaften: Helfende sehen das Angebot und melden Wünsche, Leitungskräfte geben frei und melden an, die Ausbildungsleitung veröffentlicht Kurse und vergibt die Plätze.</p></div>'
+    + '<button class="btn btn--ghost" data-act="reset">' + icon('refresh') + 'Demo zurücksetzen</button></div>'
+    + '<div class="sec__h"><h2>Ablauf einer Anmeldung</h2></div>'
+    + '<ol class="flow" style="list-style:none;margin:0;padding:0">' + flow.map(f => '<li class="card' + (f[3] ? ' later' : '') + '"><span class="who">' + f[0] + '</span><b>' + f[1] + '</b><span>' + f[2] + '</span></li>').join('') + '</ol>'
+    + '<div class="sec"><div class="sec__h"><h2>Wer darf was</h2></div><div class="tbl"><table><thead><tr><th></th><th class="c">Helfende</th><th class="c">Leitung</th><th class="c">Ausbildungsleitung</th></tr></thead><tbody>'
+    + rights.map(r => '<tr><td>' + r[0] + '</td><td class="c">' + r[1] + '</td><td class="c">' + r[2] + '</td><td class="c">' + r[3] + '</td></tr>').join('')
+    + '</tbody></table></div></div>'
+    + '<div class="sec"><div class="sec__h"><h2>Ideen</h2><p>„Im Entwurf“ kannst du oben schon ausprobieren</p></div><div class="ideas">'
+    + ideas.map(i => '<div class="card idea"><span class="pill ' + (i[2] ? 'pill--ok' : 'pill--plain') + '">' + (i[2] ? 'Im Entwurf' : 'Ausbaustufe') + '</span><b>' + i[0] + '</b><p>' + i[1] + '</p></div>').join('')
+    + '</div></div>'
+    + '<div class="sec"><div class="sec__h"><h2>Umsetzung</h2></div><div class="card tech">'
+    + '<p>Passt auf das vorhandene PHP-Gerüst der Website, ohne neuen Server:</p><ul>'
+    + '<li><b>Eigener Bereich /intranet</b> mit Login und Sitzung. Die öffentlichen Seiten bleiben cookiefrei.</li>'
+    + '<li><b>Drei Rollen:</b> helfende, leitung (an eine Bereitschaft gebunden), ausbildung. Jede Person sieht nur, was ihre Rolle braucht.</li>'
+    + '<li><b>Daten</b> zuerst in SQLite oder JSON-Dateien außerhalb des Web-Ordners. Personendaten so knapp wie möglich: Name, Einheit, Qualifikationen mit Datum.</li>'
+    + '<li><b>E-Mails</b> bei Freigabe, Zusage und Nachrücken über das schon eingerichtete Graph-Modul.</li>'
+    + '</ul></div></div>';
+};
+
+/* ---------- Dialoge ---------- */
+function openModal(html){
+  $('#modal').innerHTML = '<div class="ov" data-act="ov"><div class="dlg" role="dialog" aria-modal="true">' + html + '</div></div>';
+  const f = $('#modal').querySelector('textarea, input:not([disabled]), select, .btn--red');
+  if (f) f.focus();
+}
+function closeModal(){ $('#modal').innerHTML = ''; }
+const dlgHead = t => '<div class="dlg__h"><h2>' + t + '</h2><button class="ib" data-act="close" aria-label="Schließen">' + icon('x') + '</button></div>';
+
+function detailModal(cid){
+  const c = C(cid);
+  let act = '';
+  if (S.role === 'helfer') act = helperAction(c);
+  else if (S.role === 'leitung') act = '<button class="btn btn--red btn--s" data-act="assign" data-c="' + c.id + '">' + icon('plus') + 'Helfende anmelden</button>';
+  openModal(dlgHead(esc(c.t))
+    + '<div class="kc__top"><span class="kat">' + esc(c.kat) + '</span>' + freePill(c) + '</div>'
+    + '<p>' + esc(c.txt) + '</p>'
+    + metaList(c)
+    + '<p class="muted" style="font-size:13px">Leitung: ' + esc(c.doz) + (c.gibt ? ' · Vermittelt: ' + Q[c.gibt].n : '') + (c.kont ? ' · Kontingent ' + c.kont + ' Plätze je Bereitschaft' : '') + '</p>'
+    + '<div>' + seatsHtml(c) + '</div>'
+    + reqHtml(c, S.role === 'helfer' ? ME : null)
+    + (act ? '<div class="dlg__act" style="justify-content:flex-start;align-items:center">' + act + '</div>' : ''));
+}
+function wishModal(cid){
+  const c = C(cid), free = stats(c).free;
+  openModal(dlgHead(free ? 'Teilnahme wünschen' : 'Für die Warteliste wünschen')
+    + '<div class="dlg__k">' + courseMini(c) + '</div>'
+    + '<div><label class="fl" for="f-note">Nachricht an Thomas Meyer <span class="muted" style="font-weight:400">(optional)</span></label>'
+    + '<textarea id="f-note" rows="3" placeholder="Zum Beispiel, warum du den Kurs machen möchtest"></textarea></div>'
+    + '<p class="dlg__info">' + icon('info') + '<span>Thomas Meyer gibt deinen Wunsch frei, danach sagt die Ausbildungsleitung den Platz zu. Den Stand siehst du unter „Meine Anmeldungen“.</span></p>'
+    + '<div class="dlg__act"><button class="btn btn--ghost" data-act="close">Abbrechen</button><button class="btn btn--red" data-act="wish-send" data-c="' + cid + '">' + icon('send') + 'Wunsch senden</button></div>');
+}
+function assignModal(cid, pre){
+  const c = C(cid), preset = (pre || '').split(',').filter(Boolean);
+  const team = Object.keys(D.people).filter(id => P(id).b === UNIT);
+  const items = team.map(id => {
+    const reg = regOf(id, cid), miss = missing(id, c);
+    const dis = !!reg || miss.length > 0;
+    const why = reg ? ST[reg.st][0] : miss.length ? 'Fehlt: ' + miss.map(q => Q[q].n).join(', ') : (c.gibt && P(id).q[c.gibt] ? Q[c.gibt].n + ' ' + (qs(id, c.gibt).until ? 'bis ' + fmt(qs(id, c.gibt).until) : 'vorhanden') : 'Voraussetzungen erfüllt');
+    return '<label class="pick' + (dis ? ' dis' : '') + '"><input type="checkbox" id="pk-' + id + '" value="' + id + '"' + (dis ? ' disabled' : '') + (!dis && preset.includes(id) ? ' checked' : '') + '><span class="av av--n av--s">' + ini(P(id).n) + '</span><span><b>' + P(id).n + '</b><span class="s">' + esc(why) + '</span></span></label>';
+  }).join('');
+  const k = kontInfo(c), s = stats(c);
+  openModal(dlgHead('Helfende anmelden')
+    + '<div class="dlg__k">' + courseMini(c) + '<div style="margin-top:6px" class="num">' + s.free + ' von ' + c.pl + ' Plätzen frei' + (k ? ' · Kontingent ' + UNIT + ': ' + k.used + ' von ' + k.max : '') + '</div></div>'
+    + '<div>' + items + '</div>'
+    + '<p class="err" id="assign-err" hidden>Wähle mindestens eine Person aus.</p>'
+    + '<p class="dlg__info">' + icon('info') + '<span>Die Anmeldung gilt als freigegeben und geht direkt an die Ausbildungsleitung.</span></p>'
+    + '<div class="dlg__act"><button class="btn btn--ghost" data-act="close">Abbrechen</button><button class="btn btn--red" data-act="assign-send" data-c="' + cid + '">' + icon('send') + 'Anmelden</button></div>');
+}
+function reasonModal(rid, by){
+  const r = R(rid), c = C(r.c);
+  openModal(dlgHead(by === 'leitung' ? 'Wunsch ablehnen' : 'Platz absagen')
+    + '<div class="dlg__k"><b>' + P(r.p).n + '</b>' + esc(c.t) + ', ' + fmt(c.start) + '</div>'
+    + '<div><label class="fl" for="f-reason">Begründung für ' + P(r.p).n.split(' ')[0] + '</label>'
+    + '<textarea id="f-reason" rows="3" placeholder="' + (by === 'leitung' ? 'Zum Beispiel: Bitte erst die Helfergrundausbildung abschließen.' : 'Zum Beispiel: Kurs wird verschoben, neue Termine folgen.') + '"></textarea></div>'
+    + '<div class="dlg__act"><button class="btn btn--ghost" data-act="close">Abbrechen</button><button class="btn btn--red" data-act="reason-send" data-r="' + rid + '" data-by="' + by + '">' + (by === 'leitung' ? 'Ablehnen' : 'Absagen') + '</button></div>');
+}
+function peopleModal(cid){
+  const c = C(cid), s = stats(c);
+  const groups = [['bestaetigt','Zugesagt'],['freigegeben','Wartet auf Zusage'],['warteliste','Warteliste']].map(([st, l]) => {
+    const list = D.regs.filter(r => r.c === cid && r.st === st);
+    if (!list.length) return '';
+    return '<div><div class="fl">' + l + ' <span class="muted num">(' + list.length + ')</span></div><div class="card rows">' + list.map(r => '<div class="row"><div><b>' + P(r.p).n + '</b><div class="s">Bereitschaft ' + P(r.p).b + '</div></div>' + statusPill(r) + '</div>').join('') + '</div></div>';
+  }).join('');
+  openModal(dlgHead('Teilnehmende')
+    + '<div class="dlg__k">' + courseMini(c) + '</div>'
+    + seatsHtml(c)
+    + (groups || '<p class="muted">Noch keine Anmeldungen über das Portal.</p>')
+    + (c.ext ? '<p class="muted" style="font-size:13px">Dazu ' + c.ext + ' Plätze, die schon vor dem Portal vergeben wurden.' + (c.wlx ? ' ' + c.wlx + ' weitere auf der Warteliste.' : '') + '</p>' : ''));
+}
+function newModal(){
+  const opts = KATS.slice(1).map(k => '<option>' + k + '</option>').join('');
+  openModal(dlgHead('Neuer Kurs')
+    + '<div class="form">'
+    + '<div class="full"><label class="fl" for="nk-t">Titel</label><input class="fi" id="nk-t" placeholder="z. B. Einsatzfahrer-Schulung"></div>'
+    + '<div><label class="fl" for="nk-kat">Bereich</label><select id="nk-kat">' + opts + '</select></div>'
+    + '<div><label class="fl" for="nk-ort">Ort</label><input class="fi" id="nk-ort" value="DRK-Zentrum Verden"></div>'
+    + '<div><label class="fl" for="nk-start">Beginn</label><input class="fi" id="nk-start" type="date" value="2027-03-06"></div>'
+    + '<div><label class="fl" for="nk-when">Termine</label><input class="fi" id="nk-when" value="Samstag, 9–16 Uhr"></div>'
+    + '<div><label class="fl" for="nk-pl">Plätze</label><input class="fi" id="nk-pl" type="number" min="1" max="60" value="16"></div>'
+    + '<div><label class="fl" for="nk-ue">Unterrichtseinheiten</label><input class="fi" id="nk-ue" type="number" min="1" max="200" value="8"></div>'
+    + '<div><label class="fl" for="nk-kont">Kontingent je Bereitschaft</label><input class="fi" id="nk-kont" type="number" min="0" max="20" value="0"><span class="muted" style="font-size:12px">0 = ohne Kontingent</span></div>'
+    + '<div><label class="fl" for="nk-gibt">Vermittelt Qualifikation</label><select id="nk-gibt"><option value="">keine</option>' + QORDER.map(q => '<option value="' + q + '">' + Q[q].n + '</option>').join('') + '</select></div>'
+    + '<div class="full"><span class="fl">Voraussetzungen</span><div class="checkset">' + QORDER.map(q => '<label><input type="checkbox" id="nk-v-' + q + '" value="' + q + '">' + Q[q].n + '</label>').join('') + '</div></div>'
+    + '<div class="full"><label class="fl" for="nk-txt">Beschreibung</label><textarea id="nk-txt" rows="3" placeholder="Worum geht es, was sollen die Teilnehmenden mitbringen?"></textarea></div>'
+    + '</div>'
+    + '<p class="err" id="nk-err" hidden>Bitte Titel und Beginn angeben.</p>'
+    + '<div class="dlg__act"><button class="btn btn--ghost" data-act="new-save" data-mode="draft">Als Entwurf speichern</button><button class="btn btn--red" data-act="new-save" data-mode="live">Veröffentlichen</button></div>');
+}
+
+/* ---------- Meldung ---------- */
+let tt;
+function toast(msg, sub){
+  const t = $('#toast');
+  t.innerHTML = icon('check') + '<div>' + msg + (sub ? '<small>' + sub + '</small>' : '') + '</div>';
+  t.hidden = false;
+  clearTimeout(tt);
+  tt = setTimeout(() => { t.hidden = true; }, 5200);
+}
+
+/* ---------- Rendern ---------- */
+function render(){
+  const RL = ROLES[S.role];
+  $('#seg').innerHTML = Object.entries(ROLES).map(([k, r]) => '<button data-act="role" data-v="' + k + '" aria-pressed="' + (k === S.role) + '">' + icon(r.icon) + '<span class="l">' + r.label + '</span><span class="s">' + r.short + '</span></button>').join('');
+  $('#hint').textContent = RL.hint;
+  $('#who').innerHTML = '<div class="who__t"><b>' + RL.name + '</b>' + RL.sub + '</div><span class="av">' + ini(RL.name) + '</span>';
+  const counts = {freigaben: leitungOpen().length, zusagen: adminOpen().length};
+  const nav = RL.nav.concat([['konzept','Idee & Ablauf','bulb','Idee']]);
+  const unit = {
+    helfer:'<b>Deine Leitung</b><span>Thomas Meyer, Bereitschaftsleitung Verden</span>',
+    leitung:'<b>Bereitschaft Verden</b><span>' + Object.values(D.people).filter(p => p.b === UNIT).length + ' Helfende im Portal</span>',
+    admin:'<b>Kreisverband</b><span>5 Bereitschaften: Verden, Achim, Ottersberg, Langwedel, Thedinghausen</span>'
+  }[S.role];
+  $('#side').innerHTML = nav.map((n, i) => (i === RL.nav.length ? '<div class="side__sep"></div>' : '')
+    + '<button class="nav" data-act="go" data-v="' + n[0] + '"' + (S.view === n[0] ? ' aria-current="page"' : '') + '>' + icon(n[2]) + '<span>' + n[1] + '</span>' + (counts[n[0]] ? '<span class="cnt">' + counts[n[0]] + '</span>' : '') + '</button>').join('')
+    + '<div class="unit">' + unit + '</div>';
+  $('#tabs').innerHTML = nav.map(n => '<button class="tab" data-act="go" data-v="' + n[0] + '"' + (S.view === n[0] ? ' aria-current="page"' : '') + '>' + icon(n[2]) + '<span>' + n[3] + '</span>' + (counts[n[0]] ? '<span class="cnt">' + counts[n[0]] + '</span>' : '') + '</button>').join('');
+  $('#main').innerHTML = (V[S.view] || V.konzept)();
+}
+function go(v){ S.view = v; render(); window.scrollTo({top:0}); }
+const log = (r, txt) => r.log.push([TODAY_S, txt]);
+
+/* ---------- Aktionen ---------- */
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-act]');
+  if (!b) return;
+  const a = b.dataset.act;
+  if (a === 'ov' && e.target !== b) return;
+  if (b.disabled) return;
+  const cid = b.dataset.c, rid = b.dataset.r;
+
+  switch (a) {
+    case 'ov': case 'close': closeModal(); break;
+    case 'role': S.role = b.dataset.v; S.view = ROLES[S.role].nav[0][0]; closeModal(); render(); window.scrollTo({top:0}); break;
+    case 'go': closeModal(); go(b.dataset.v); break;
+    case 'kat': S.kat = b.dataset.v; render(); break;
+    case 'detail': detailModal(cid); break;
+    case 'wish': wishModal(cid); break;
+    case 'wish-send': {
+      const note = ($('#f-note') || {}).value || '';
+      D.regs.push({id:++S.seq, p:ME, c:cid, st:'wunsch', note:note.trim(), log:[[TODAY_S,'Wunsch gesendet']]});
+      closeModal(); render();
+      toast('Wunsch an Thomas Meyer gesendet.', 'Weiter im Ablauf: oben zu „Leitung“ wechseln und freigeben.');
+      break;
+    }
+    case 'assign': assignModal(cid, b.dataset.pre); break;
+    case 'assign-send': {
+      const ids = [...document.querySelectorAll('#modal .pick input:checked')].map(i => i.value);
+      if (!ids.length) { $('#assign-err').hidden = false; return; }
+      ids.forEach(id => D.regs.push({id:++S.seq, p:id, c:cid, st:'freigegeben', by:'Thomas Meyer', log:[[TODAY_S,'Angemeldet von Thomas Meyer']]}));
+      closeModal(); render();
+      toast(ids.length === 1 ? P(ids[0]).n + ' ist angemeldet.' : ids.length + ' Helfende sind angemeldet.', 'Die Ausbildungsleitung sagt die Plätze zu.');
+      break;
+    }
+    case 'approve': {
+      const r = R(rid); r.st = 'freigegeben'; r.by = 'Thomas Meyer'; log(r, 'Freigegeben von Thomas Meyer');
+      render(); toast(P(r.p).n + ' ist angemeldet.', 'Weiter im Ablauf: zu „Ausbildungsleitung“ wechseln und zusagen.');
+      break;
+    }
+    case 'reject': reasonModal(rid, 'leitung'); break;
+    case 'decline': reasonModal(rid, 'admin'); break;
+    case 'reason-send': {
+      const r = R(rid), by = b.dataset.by, why = (($('#f-reason') || {}).value || '').trim();
+      r.st = 'abgelehnt'; r.by = by; r.reason = why;
+      log(r, by === 'leitung' ? 'Abgelehnt von Thomas Meyer' : 'Abgesagt von Birgit Hoops');
+      closeModal(); render(); toast(by === 'leitung' ? 'Wunsch abgelehnt.' : 'Platz abgesagt.', P(r.p).n + ' sieht die Begründung in der eigenen Übersicht.');
+      break;
+    }
+    case 'confirm': {
+      const r = R(rid);
+      if (!stats(C(r.c)).free) return;
+      const wl = r.st === 'warteliste';
+      r.st = 'bestaetigt'; log(r, (wl ? 'Von der Warteliste nachgerückt, ' : 'Platz zugesagt von ') + 'Birgit Hoops');
+      render(); toast('Platz für ' + P(r.p).n + ' zugesagt.', 'Bei der Person und ihrer Leitung steht jetzt „Zugesagt“.');
+      break;
+    }
+    case 'confirm-all': {
+      const list = D.regs.filter(r => r.c === cid && r.st === 'freigegeben');
+      list.forEach(r => { r.st = 'bestaetigt'; log(r, 'Platz zugesagt von Birgit Hoops'); });
+      render(); toast(list.length + ' Plätze zugesagt.');
+      break;
+    }
+    case 'wait': {
+      const r = R(rid); r.st = 'warteliste'; log(r, 'Auf die Warteliste gesetzt');
+      render(); toast(P(r.p).n + ' steht auf der Warteliste.', 'Wird ein Platz frei, kann die Person nachrücken.');
+      break;
+    }
+    case 'publish': {
+      const c = C(cid); c.st = c.st === 'draft' ? 'live' : 'draft';
+      render(); toast(c.st === 'live' ? 'Veröffentlicht: ' + esc(c.t) : 'Zurückgezogen: ' + esc(c.t), c.st === 'live' ? 'Der Kurs steht jetzt im Kursangebot aller Helfenden.' : 'Nur noch hier als Entwurf sichtbar.');
+      break;
+    }
+    case 'seat': {
+      const c = C(cid), d = +b.dataset.d, min = stats(c).conf;
+      if (c.pl + d < Math.max(1, min)) { toast('Weniger geht nicht.', min + ' Plätze sind schon zugesagt.'); return; }
+      c.pl += d; render();
+      const s = stats(c);
+      if (d > 0 && s.wl) toast('Ein Platz mehr.', s.wl + ' auf der Warteliste. Unter „Zusagen“ kann jemand nachrücken.');
+      break;
+    }
+    case 'people': peopleModal(cid); break;
+    case 'new': newModal(); break;
+    case 'new-save': {
+      const v = id => ($('#' + id) || {}).value || '';
+      const t = v('nk-t').trim(), start = v('nk-start');
+      if (!t || !start) { $('#nk-err').hidden = false; return; }
+      const sd = dt(start); sd.setDate(sd.getDate() - 14);
+      const c = {id:'n' + (++S.seq), t, kat:v('nk-kat'), start, when:v('nk-when') || 'Termine folgen', ort:v('nk-ort') || 'Ort folgt',
+        ue:Math.max(1, +v('nk-ue') || 8), pl:Math.max(1, +v('nk-pl') || 12), ext:0, wlx:0, kont:Math.max(0, +v('nk-kont') || 0),
+        schluss:sd.getFullYear() + '-' + p2(sd.getMonth()+1) + '-' + p2(sd.getDate()),
+        vor:QORDER.filter(q => { const x = $('#nk-v-' + q); return x && x.checked; }), gibt:v('nk-gibt') || null,
+        st:b.dataset.mode, doz:'Ausbildungsteam Kreisverband', txt:v('nk-txt').trim() || 'Beschreibung folgt.'};
+      D.courses.push(c);
+      closeModal(); render();
+      toast(c.st === 'live' ? 'Kurs veröffentlicht.' : 'Entwurf gespeichert.', c.st === 'live' ? 'Wechsle zu „Helfende“, um ihn im Kursangebot zu sehen.' : '');
+      break;
+    }
+    case 'reset': D = seed(); S.kat = 'Alle'; S.q = ''; render(); toast('Demo zurückgesetzt.'); break;
+  }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && $('#modal').innerHTML) closeModal();
+  if (e.key === 'Enter' && e.target.matches('h3[data-act="detail"]')) detailModal(e.target.dataset.c);
+});
+document.addEventListener('input', e => {
+  if (e.target.id !== 'q') return;
+  S.q = e.target.value;
+  const pos = e.target.selectionStart;
+  render();
+  const q = $('#q'); if (q) { q.focus(); try { q.setSelectionRange(pos, pos); } catch (_) {} }
+});
+
+render();
+})();
+</script>
+</body></html>
