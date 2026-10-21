@@ -267,6 +267,14 @@ function admin_home(): void
         ['email', 'E-Mail-Versand', 'Kontaktformular über Microsoft 365 (Graph) versenden.'],
         ['wartung', 'Wartungsmodus', 'Website vorübergehend durch eine Hinweisseite ersetzen.'],
     ];
+    $php = php_status();
+    if ($php[0] === 'ok') {
+        echo '<div class="notice">PHP ' . e($php[1]) . ' – Sicherheitsstand aktuell.</div>';
+    } else {
+        echo '<div class="notice notice--err"><b>PHP ' . e($php[1]) . ' ist veraltet und hat bekannte Sicherheitslücken.</b> '
+            . ($php[0] === 'update' ? 'Mindestens PHP ' . e($php[2]) . ' nötig' : 'Diese PHP-Reihe bekommt keine Sicherheitsupdates mehr – bitte PHP 8.4 oder 8.5 wählen')
+            . ' (cPanel → „MultiPHP Manager“ bzw. „PHP-Version wählen“, sonst beim Hoster anfragen).</div>';
+    }
     if (maintenance_active()) {
         echo '<div class="notice notice--err">Der Wartungsmodus ist eingeschaltet – Besucher sehen nur die Wartungsseite. <a href="' . url('admin/wartung') . '">Ändern</a></div>';
     }

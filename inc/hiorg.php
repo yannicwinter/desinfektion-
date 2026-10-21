@@ -55,7 +55,7 @@ function hiorg_curl_multi(array $ids): array
     $handles = [];
     foreach ($ids as $id) {
         $ch = curl_init(hiorg_list_url($id));
-        curl_setopt_array($ch, [
+        curl_setopt_array($ch, curl_safe([
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_MAXREDIRS => 3,
@@ -64,7 +64,7 @@ function hiorg_curl_multi(array $ids): array
             CURLOPT_ENCODING => '',
             CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)',
             CURLOPT_HTTPHEADER => ['Accept-Language: de-DE,de;q=0.9'],
-        ]);
+        ]));
         curl_multi_add_handle($mh, $ch);
         $handles[$id] = $ch;
     }
@@ -86,7 +86,7 @@ function hiorg_curl_multi(array $ids): array
 
 function hiorg_fgc(array $ids): array
 {
-    $ctx = stream_context_create(['http' => ['timeout' => 8, 'user_agent' => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)']]);
+    $ctx = stream_safe(['timeout' => 8, 'user_agent' => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)']);
     $out = [];
     foreach ($ids as $id) {
         $out[$id] = (string) @file_get_contents(hiorg_list_url($id), false, $ctx);
@@ -421,7 +421,7 @@ function hiorg_price(string $id): string
     $html = '';
     if (function_exists('curl_init')) {
         $ch = curl_init(hiorg_abs($m[1]));
-        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 5, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_ENCODING => '', CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)']);
+        curl_setopt_array($ch, curl_safe([CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 5, CURLOPT_CONNECTTIMEOUT => 3, CURLOPT_ENCODING => '', CURLOPT_USERAGENT => 'Mozilla/5.0 (compatible; DRK-Website Kursliste)']));
         $html = (string) curl_exec($ch);
         curl_close($ch);
     }

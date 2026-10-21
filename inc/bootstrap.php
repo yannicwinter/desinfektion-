@@ -397,6 +397,35 @@ function app_secret(): string
     return trim((string) file_get_contents($f));
 }
 
+function curl_safe(array $opts): array
+{
+    return $opts + [
+        CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+        CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTPS,
+        CURLOPT_SSL_VERIFYPEER => true,
+        CURLOPT_SSL_VERIFYHOST => 2,
+        CURLOPT_MAXREDIRS => 3,
+    ];
+}
+
+function stream_safe(array $http, bool $redirects = true): mixed
+{
+    return stream_context_create([
+        'http' => $http + ['follow_location' => $redirects ? 1 : 0, 'max_redirects' => 3],
+        'ssl' => ['verify_peer' => true, 'verify_peer_name' => true],
+    ]);
+}
+
+function php_status(): array
+{
+    $fixed = ['8.2' => '8.2.34', '8.3' => '8.3.35', '8.4' => '8.4.26', '8.5' => '8.5.11'];
+    $branch = PHP_MAJOR_VERSION . '.' . PHP_MINOR_VERSION;
+    if (!isset($fixed[$branch])) {
+        return version_compare($branch, '8.5', '>') ? ['ok', PHP_VERSION] : ['old', PHP_VERSION];
+    }
+    return [version_compare(PHP_VERSION, $fixed[$branch], '>=') ? 'ok' : 'update', PHP_VERSION, $fixed[$branch]];
+}
+
 function redirect(string $path, int $code = 303): void
 {
     header('Location: ' . (preg_match('~^https?://~', $path) ? $path : url($path)), true, $code);

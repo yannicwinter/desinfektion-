@@ -139,16 +139,17 @@ function mail_http(string $url, string $data, array $headers): array
 {
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
-        curl_setopt_array($ch, [
+        curl_setopt_array($ch, curl_safe([
             CURLOPT_POST => true, CURLOPT_POSTFIELDS => $data, CURLOPT_HTTPHEADER => $headers,
             CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 6,
-        ]);
+            CURLOPT_FOLLOWLOCATION => false,
+        ]));
         $body = (string) curl_exec($ch);
         $res = ['code' => (int) curl_getinfo($ch, CURLINFO_HTTP_CODE), 'body' => $body, 'error' => curl_error($ch)];
         curl_close($ch);
         return $res;
     }
-    $ctx = stream_context_create(['http' => ['method' => 'POST', 'header' => implode("\r\n", $headers), 'content' => $data, 'timeout' => 15, 'ignore_errors' => true]]);
+    $ctx = stream_safe(['method' => 'POST', 'header' => implode("\r\n", $headers), 'content' => $data, 'timeout' => 15, 'ignore_errors' => true], false);
     $body = (string) @file_get_contents($url, false, $ctx);
     $code = isset($http_response_header[0]) && preg_match('/\s(\d{3})\s/', $http_response_header[0], $m) ? (int) $m[1] : 0;
     return ['code' => $code, 'body' => $body, 'error' => $code ? '' : 'keine Verbindung'];

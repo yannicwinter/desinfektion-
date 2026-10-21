@@ -133,10 +133,10 @@ function instagram_manual_posts(): array
 function instagram_get(string $url): string
 {
     if (!function_exists('curl_init')) {
-        return (string) @file_get_contents($url);
+        return (string) @file_get_contents($url, false, stream_safe(['timeout' => 8]));
     }
     $ch = curl_init($url);
-    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_FOLLOWLOCATION => true]);
+    curl_setopt_array($ch, curl_safe([CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 8, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_FOLLOWLOCATION => true]));
     $r = (string) curl_exec($ch);
     curl_close($ch);
     return $r;
