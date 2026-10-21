@@ -56,6 +56,8 @@ function mail_test_target(): string
 
 function send_mail(string $to, string $subject, string $body, string $replyTo = '', string $html = ''): string
 {
+    $subject = trim((string) preg_replace('/[\x00-\x1F\x7F]+/u', ' ', $subject));
+    $replyTo = filter_var($replyTo, FILTER_VALIDATE_EMAIL) ? $replyTo : '';
     $rcpt = mail_recipients($to);
     if (!$rcpt) {
         return 'Kein gültiger Empfänger eingetragen.';

@@ -718,7 +718,7 @@ function admin_mail(): void
     }
     echo '<div class="btn-row">' . (!$fromConfig ? '<button class="btn btn--red">Speichern</button>' : '') . '<button class="btn btn--ghost" name="test" value="1">Testnachricht an ' . e(mail_test_target()) . ' senden</button>';
     if (!$fromConfig && !empty($m)) {
-        echo '<button class="btn btn--ghost" name="remove" value="1" onclick="return confirm(\'Verbindung wirklich entfernen?\')">Verbindung entfernen</button>';
+        echo '<button class="btn btn--ghost" name="remove" value="1" data-confirm="Verbindung wirklich entfernen?">Verbindung entfernen</button>';
     }
     echo '</div></form>';
     echo '<div class="panel stack" style="margin-top:20px"><h2 class="h5">Einrichtung in Microsoft 365 (einmalig)</h2><ol class="small">'

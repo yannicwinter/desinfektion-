@@ -11,6 +11,13 @@ if (is_file(DATA_DIR . '/config.php')) {
     require_once DATA_DIR . '/config.php';
 }
 
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('expose_php', '0');
+if (!headers_sent()) {
+    header_remove('X-Powered-By');
+}
+
 mb_internal_encoding('UTF-8');
 date_default_timezone_set('Europe/Berlin');
 
@@ -338,6 +345,8 @@ function start_session(): void
         return;
     }
     $secure = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+    ini_set('session.use_strict_mode', '1');
+    ini_set('session.use_only_cookies', '1');
     session_name('drk_sid');
     session_set_cookie_params(['lifetime' => 0, 'path' => base_path() . '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Lax']);
     session_start();

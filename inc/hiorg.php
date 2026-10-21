@@ -462,11 +462,13 @@ function hiorg_abs(string $href): string
     if ($href === '' || str_starts_with($href, '#') || stripos($href, 'javascript:') === 0) {
         return '';
     }
-    if (preg_match('~^https?://~i', $href)) {
-        return $href;
-    }
     if (str_starts_with($href, '//')) {
-        return 'https:' . $href;
+        $href = 'https:' . $href;
+    }
+    if (preg_match('~^[a-z][a-z0-9+.-]*:~i', $href)) {
+        $host = strtolower((string) parse_url($href, PHP_URL_HOST));
+        $ok = preg_match('~^https?://~i', $href) && ($host === 'hiorg-server.de' || str_ends_with($host, '.hiorg-server.de'));
+        return $ok ? preg_replace('~^http://~i', 'https://', $href) : '';
     }
     return HIORG_BASE . ltrim($href, '/');
 }
