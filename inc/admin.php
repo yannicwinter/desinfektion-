@@ -179,8 +179,23 @@ function login_throttle_file(): string
     return CACHE_DIR . '/login-' . hash('sha256', ($_SERVER['REMOTE_ADDR'] ?? '') . floor(time() / 900)) . '.cnt';
 }
 
+function login_throttle_all(): string
+{
+    return CACHE_DIR . '/login-all-' . floor(time() / 900) . '.cnt';
+}
+
 function admin_setup(): void
 {
+    if (!(defined('ADMIN_EINRICHTEN') && ADMIN_EINRICHTEN === true)) {
+        http_response_code(403);
+        admin_start('Admin-Zugang einrichten');
+        echo '<div class="panel admin__narrow stack"><p>Es ist noch kein Admin-Zugang angelegt.</p>'
+            . '<p>Zum Einrichten in <code>data/config.php</code> diese Zeile eintragen bzw. auf <code>true</code> setzen und die Seite neu laden:</p>'
+            . '<pre>if (!defined(\'ADMIN_EINRICHTEN\')) define(\'ADMIN_EINRICHTEN\', true);</pre>'
+            . '<p>Nach dem Anlegen wieder auf <code>false</code> setzen.</p></div>';
+        admin_end();
+        return;
+    }
     $err = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $u = trim((string) ($_POST['user'] ?? ''));
@@ -220,9 +235,15 @@ function admin_login(array $account): void
 {
     $err = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        foreach (glob(CACHE_DIR . '/login-*.cnt') ?: [] as $old) {
+            if (filemtime($old) < time() - 1800) {
+                @unlink($old);
+            }
+        }
         $tf = login_throttle_file();
         $tries = is_file($tf) ? (int) file_get_contents($tf) : 0;
-        if ($tries >= 8) {
+        $all = is_file(login_throttle_all()) ? (int) file_get_contents(login_throttle_all()) : 0;
+        if ($tries >= 8 || $all >= 40) {
             $err = 'Zu viele Versuche. Bitte in 15 Minuten erneut versuchen.';
         } elseif (!csrf_ok()) {
             $err = 'Sitzung abgelaufen, bitte erneut versuchen.';
@@ -234,6 +255,7 @@ function admin_login(array $account): void
             redirect('admin');
         } else {
             @file_put_contents($tf, (string) ($tries + 1));
+            @file_put_contents(login_throttle_all(), (string) ($all + 1), LOCK_EX);
             usleep(500000);
             $err = 'Benutzername oder Passwort falsch.';
         }

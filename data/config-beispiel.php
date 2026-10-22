@@ -1,5 +1,6 @@
 <?php
 if (!defined('WARTUNG')) define('WARTUNG', false);
+if (!defined('ADMIN_EINRICHTEN')) define('ADMIN_EINRICHTEN', false);
 
 if (!defined('GRAPH_TENANT_ID'))     define('GRAPH_TENANT_ID',     'PLATZHALTER');
 if (!defined('GRAPH_CLIENT_ID'))     define('GRAPH_CLIENT_ID',     'PLATZHALTER');
